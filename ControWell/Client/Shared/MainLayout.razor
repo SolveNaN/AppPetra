@@ -1,0 +1,33 @@
+﻿@inherits LayoutComponentBase
+
+<div class="page">
+   @if(token == false){
+        
+      <div class="sidebar">
+          <Menu />
+      </div>
+      <article class="content px-4" id="content-article">
+        @Body
+        <br />
+      </article>
+    }
+    else
+    {
+      <Login />
+    }
+
+</div>
+
+<style>
+    #content-article{
+        width: 100%;
+        margin-left: 40px;
+        margin-top: 8px;
+    }
+</style>
+
+@code{
+    private Boolean token = false;
+}
+
+

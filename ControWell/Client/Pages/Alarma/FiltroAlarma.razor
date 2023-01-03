@@ -1,0 +1,151 @@
+﻿@page "/filtroalarma"
+@using ControWell.Client.Services.RegistroService;
+@using ControWell.Client.Services.PozoService;
+@using ControWell.Client.Services.VariableProcesoService;
+@inject HttpClient Http
+@inject NavigationManager NanigationManager
+@inject IRegistroService RegistroService
+@using ControWell.Shared
+@using System.Net.Http.Json
+@using System.Linq
+
+<h3>FiltroAlarma</h3>
+<h3>Alarmas por pozo</h3>
+<EditForm Model="registro" OnSubmit="EnviarRegistro">
+    <label>Pozo</label>
+    <InputSelect @bind-Value="pozo.Id" class="form-select">
+        @foreach (var pozo in Pozos)
+        {
+                <option value="@pozo.Id">@pozo.NombrePozo</option>
+        }
+
+    </InputSelect>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Alarma</th>
+                <th>Nombre</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var ala in Alarmas)
+            {
+                var rep = "h";
+                if(ala.PozoId==pozo.Id)
+                foreach(var v in Variables)
+                {
+                        if (!(Alarmas.Exists(a => a.VariableProcesoId == variable.Id)))
+                        {
+                            if (rep == "h")
+                            {
+                                <tr>
+                                    <td>@ala.VariableProceso.Nombre</td>
+                                    <td></td>
+                                </tr>                                 
+                            }
+                            rep = v.Nombre;
+                        }
+
+                    }
+            }
+
+
+        </tbody>
+    </table>
+
+</EditForm>
+
+<h3>Por pozo variables de proceso sin alarma</h3>
+
+<EditForm Model="registro" OnSubmit="EnviarRegistro">
+    <label>Pozo</label>
+    <InputSelect @bind-Value="pozo.Id" class="form-select">
+        @foreach (var pozo in Pozos)
+        {
+            <option value="@pozo.Id">@pozo.NombrePozo</option>
+        }
+
+    </InputSelect>
+
+     <table class="table">
+        <thead>
+            <tr>
+                <th>Alarma</th>
+                <th>Nombre</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach(var v in Variables)
+            {
+                miVariables.Add(v);
+                foreach(var a in Alarmas)
+                {
+                    if ((v.Nombre == a.VariableProceso.Nombre) && (pozo.Id == a.PozoId)&&a.Habilitado==1)
+                    {
+                        miVariables.Remove(v);
+                    }                    
+                }
+            }
+
+        </tbody>
+    </table>
+</EditForm>
+
+@code {
+    [Parameter]
+
+    public int? Id { get; set; }
+
+    Registro registro = new Registro();
+    VariableProceso variable = new VariableProceso();
+
+    Pozo pozo = new Pozo();
+    Alarma alarma = new Alarma();
+
+
+    public static List<VariableProceso> Variables = new List<VariableProceso>();
+
+    public static List<Pozo> Pozos = new List<Pozo>();
+    public static List<Registro> Registros = new List<Registro>();
+    public static List<Alarma> Alarmas = new List<Alarma>();
+
+
+    public static List<VariableProceso> miVariables = new List<VariableProceso>();
+    public static List<Alarma> miAlarmas = new List<Alarma>();
+
+    
+    
+
+    protected override async Task OnInitializedAsync()
+    {
+        var mivariable = await Http.GetFromJsonAsync<List<VariableProceso>>("api/VariableProceso");
+        if (mivariable != null)
+            Variables = mivariable;
+
+
+        var mipozo = await Http.GetFromJsonAsync<List<Pozo>>("api/Pozo");
+        if (mipozo != null)
+            Pozos = mipozo;
+
+        var miregistro = await Http.GetFromJsonAsync<List<Registro>>("api/Registro");
+        if (miregistro != null)
+            Registros = miregistro;
+
+        var mialarma = await Http.GetFromJsonAsync<List<Alarma>>("api/Alarma");
+        if (mialarma != null)
+            Alarmas = mialarma;
+    }
+
+    async Task EnviarRegistro()
+    {
+        await RegistroService.CreateRegistro(registro);
+
+    }
+
+    void VolverAnterior()
+    {
+        NanigationManager.NavigateTo("/alarmalist");
+    }
+}

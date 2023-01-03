@@ -1,0 +1,50 @@
+﻿@page "/creartanque"
+@using ControWell.Client.Services.TanqueService;
+@inject ITanqueService TanqueService;
+@inject HttpClient Http
+@inject NavigationManager NanigationManager
+
+<h3>CrearVariableProceso</h3>
+
+<EditForm Model="tanque" OnSubmit="EnviarTanque">
+    <div>
+        <label for="nombre">Nombre Tanque</label>
+        <InputText id="nombre" @bind-Value="tanque.NombreTanque" class="form-control"></InputText>
+    </div>
+    <div>
+        <label for="lastname">Capacidad</label>
+        <InputText id="lastname" @bind-Value="tanque.Capacidad" class="form-control"></InputText>
+    </div>
+    <div>
+        <label for="lastname">Tipo de fluido</label>
+        <InputText id="lastname" @bind-Value="tanque.TipoFluido" class="form-control"></InputText>
+    </div>
+
+    <br />
+
+    <button type="submit" class="btn btn-primary" @onclick=EnviarTanque>Confirmar</button>
+    <button class="btn btn-outline-warning" @onclick="VolverAnterior">Volver</button>
+    <br />
+    <br />
+</EditForm>
+
+
+@code {
+    [Parameter]
+
+    public int? Id { get; set; }
+
+    Tanque tanque = new Tanque();
+
+
+    async Task EnviarTanque()
+    {
+        await TanqueService.CreateTanque(tanque);
+
+    }
+
+    void VolverAnterior()
+    {
+        NanigationManager.NavigateTo("/tanquelist");
+    }
+}

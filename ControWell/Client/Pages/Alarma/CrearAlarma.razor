@@ -1,0 +1,95 @@
+﻿@page "/crearalarma"
+@using ControWell.Client.Services.AlarmaService;
+@using ControWell.Client.Services.PozoService;
+@using ControWell.Client.Services.VariableProcesoService;
+@inject IAlarmaService AlarmaService
+@inject IPozoService PozoService
+@inject IVariableProcesoService VariableProcesoService
+@inject HttpClient Http
+@inject NavigationManager NanigationManager
+@using ControWell.Shared
+@using System.Net.Http.Json
+
+<h3>CrearAlarma</h3>
+
+<EditForm Model="alarma" OnSubmit="EviarAlarma">
+    <label>Pozo</label>
+      <InputSelect @bind-Value="alarma.PozoId" class="form-select">
+            @foreach(var pozo in Pozos)
+            {
+                <option value="@pozo.Id">@pozo.NombrePozo</option>
+            }
+
+   </InputSelect>
+   <label>Variable</label>
+  <InputSelect @bind-Value="alarma.VariableProcesoId" class="form-select">
+            @foreach(var variableProceso in Variables)
+            {
+                <option value="@variableProceso.Id">@variableProceso.Nombre en @variableProceso.Unidad</option>
+            }
+
+   </InputSelect>
+    <div>
+        <label for="">Valor maximo</label>
+        <InputNumber id="max" @bind-Value="alarma.Max" class="form-control"></InputNumber>
+    </div>
+    <div>
+        <label for="">Valor minimo</label>
+        <InputNumber id="max" @bind-Value="alarma.Min" class="form-control"></InputNumber>
+    </div>
+    <div>
+        <InputSelect @bind-Value=alarma.Habilitado>
+
+            <option value="1">Activar</option>
+            <option value="0">Desactivar</option>
+
+        </InputSelect>
+    </div>
+<br />
+
+    <button type="submit" class="btn btn-primary">Confirmar</button>
+    <button class="btn btn-outline-warning" @onclick="VolverAnterior">Volver</button>
+    <br />
+    <br />
+</EditForm>
+
+
+@code {
+    [Parameter]
+
+    public int? Id { get; set; }
+
+    Alarma alarma = new Alarma();
+    VariableProceso variable = new VariableProceso();
+
+    Pozo pozo = new Pozo();
+
+    public static List<VariableProceso> Variables = new List<VariableProceso>();
+
+    public static List<Pozo> Pozos = new List<Pozo>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var resultado = await Http.GetFromJsonAsync<List<VariableProceso>>("api/VariableProceso");
+        if (resultado != null)
+            Variables = resultado;
+
+
+        var resultad = await Http.GetFromJsonAsync<List<Pozo>>("api/Pozo");
+        if (resultad != null)
+            Pozos = resultad;
+    }
+  
+
+
+    async Task EviarAlarma()
+    {
+        await AlarmaService.CreateAlarma(alarma);
+
+    }
+
+    void VolverAnterior()
+    {
+        NanigationManager.NavigateTo("/alarmalist");
+    }
+}

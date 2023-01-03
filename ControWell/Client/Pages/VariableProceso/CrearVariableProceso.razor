@@ -1,0 +1,46 @@
+﻿@page "/crearvariable"
+@using ControWell.Client.Services.VariableProcesoService;
+@inject IVariableProcesoService VariableProcesoService
+@inject HttpClient Http
+@inject NavigationManager NanigationManager
+
+<h3>CrearVariableProceso</h3>
+
+<EditForm Model="variable" OnSubmit="EviarVariable">
+    <div>
+        <label for="nombre">Nombre variable</label>
+        <InputText id="nombre" @bind-Value="variable.Nombre" class="form-control"></InputText>
+    </div>
+    <div>
+        <label for="lastname">Unidad de medida</label>
+        <InputText id="lastname" @bind-Value="variable.Unidad" class="form-control"></InputText>
+    </div>
+    
+<br />
+
+    <button type="submit" class="btn btn-primary">Confirmar</button>
+    <button class="btn btn-outline-warning" @onclick="VolverAnterior">Volver</button>
+    <br />
+    <br />
+</EditForm>
+
+
+@code {
+    [Parameter]
+
+    public int? Id { get; set; }
+
+    VariableProceso variable = new VariableProceso();
+
+
+    async Task EviarVariable()
+    {
+        await VariableProcesoService.CreateVariableProceso(variable);
+
+    }
+
+    void VolverAnterior()
+    {
+        NanigationManager.NavigateTo("/variableprocesolist");
+    }
+   }

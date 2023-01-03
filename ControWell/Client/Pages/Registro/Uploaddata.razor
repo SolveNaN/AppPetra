@@ -1,0 +1,189 @@
+﻿@page "/uploaddata"
+@using ControWell.Client.Services.RegistroService;
+@inject IRegistroService RegistroService
+@inject HttpClient Http
+@inject NavigationManager NanigationManager
+@using ControWell.Shared
+@using System.Data
+@using System.IO
+@using NPOI.XSSF.UserModel
+@using NPOI.SS.UserModel
+
+
+<h3>CrearPozo</h3>
+
+
+    <InputFile OnChange="@ImportExcelFile" />
+
+
+    <p>Ingresar pozos.</p>
+
+
+    <button class="btn btn-primary" @onclick=procesar>Confirmar</button>
+<button class="btn btn-info" @onclick=ver>Ver</button>
+<button class="btn btn-warning" @onclick=volver>Descartar</button>
+     <table class="table">
+        <thead> 
+            <tr>
+            @foreach (DataColumn col in dt.Columns)
+            {
+                            <th>@col.ColumnName</th>
+            }                           
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (DataRow row in dt.Rows)
+        {             
+
+                   <tr>
+                @foreach (DataColumn col in dt.Columns)
+                {
+
+                         <td>@row[col.ColumnName]</td>               
+
+                }
+                  </tr>
+
+
+        }
+        </tbody>
+    </table>
+
+
+
+
+
+@code {
+    //Funcion para administrar excel
+    DataTable dt = new DataTable();
+
+    async Task ImportExcelFile(InputFileChangeEventArgs e)
+    {
+        var fileStream = e.File.OpenReadStream();
+        var ms = new MemoryStream();
+        await fileStream.CopyToAsync(ms);
+        fileStream.Close();
+        ms.Position = 0;
+
+        ISheet sheet;
+        var xsswb = new XSSFWorkbook(ms);
+
+        sheet = xsswb.GetSheetAt(0);
+        IRow hr = sheet.GetRow(0);
+        var rl = new List<string>();
+
+        int cc = hr.LastCellNum;
+        for (var j = 0; j < cc; j++)
+        {
+            ICell cell = hr.GetCell(j);
+            dt.Columns.Add(cell.ToString());
+        }
+
+        for (var j = (sheet.FirstRowNum + 1); j <= sheet.LastRowNum; j++)
+        {
+            var r = sheet.GetRow(j);
+            for (var i = r.FirstCellNum; i < cc; i++)
+            {
+                rl.Add(r.GetCell(i).ToString());
+            }
+            if (rl.Count > 0)
+            {
+                dt.Rows.Add(rl.ToArray());
+            }
+            rl.Clear();
+        }
+    }
+
+    //Fin de funcion para administrar excel
+
+    //Funcion para tomar los datos del excel
+    [Parameter]
+
+    public int? Id { get; set; }
+    /*Objeto reistro*/
+    Registro registro = new Registro();
+
+
+    async Task EviarRegistro()
+    {
+        await RegistroService.CreateRegistro(registro);
+
+    }
+    //Fin de funcion para tomar datos de excel
+
+    //Funcion para enviar los datos a la base
+    async Task procesar()
+    {
+        foreach (DataRow row in dt.Rows)
+        {
+
+            foreach (DataColumn col in dt.Columns)
+            {
+                var celda = row[col.ColumnName];
+                var columna = col.ColumnName;
+                columna = columna.ToString();
+
+                if (columna == "Fecha")
+                {
+                    registro.FechaHora = Convert.ToDateTime(celda.ToString());
+
+                }
+                if (columna == "Pozo")
+                {
+                    foreach (var pozo in Pozos)
+                    {
+                        if (pozo.NombrePozo == celda.ToString())
+                        {
+                            registro.PozoId = pozo.Id;
+                        }
+                    }
+                }
+                foreach (var variable in Variables)
+                {
+
+                    if (variable.Nombre == columna)
+                    {
+                        registro.VariableProcesoId = variable.Id;
+                        registro.Medida = Convert.ToSingle(celda.ToString());
+                        RegistroService.CreateRegistro(registro);
+
+                    }
+                }
+            }
+
+        }
+    }
+    //Fin de funcion para enviar los datos a la base
+
+
+    //Inicio del codigo para obtener todos los pozos y las variables//
+    public static List<Pozo> Pozos = new List<Pozo>();
+    public static List<VariableProceso> Variables = new List<VariableProceso>();
+    public static List<Registro> Registros = new List<Registro>();
+    protected override async Task OnInitializedAsync()
+    {
+        var mipozo = await Http.GetFromJsonAsync<List<Pozo>>("api/Pozo");
+        if (mipozo != null)
+            Pozos = mipozo;
+
+        var mivariable = await Http.GetFromJsonAsync<List<VariableProceso>>("api/VariableProceso");
+        if (mivariable != null)
+            Variables = mivariable;
+        
+        var miregistro = await Http.GetFromJsonAsync<List<Registro>>("api/Registro");
+        if (miregistro != null)
+            Registros = miregistro;
+    }
+    //fin del codigo para obtener los pozos
+
+    //funcion para volver
+    public void volver()
+    {
+        NanigationManager.NavigateTo("/registrolist");
+    }
+    //fucion para ver el excel
+    public void ver()
+    {
+        
+    }
+}

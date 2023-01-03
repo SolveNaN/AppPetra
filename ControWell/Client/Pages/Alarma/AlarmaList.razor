@@ -1,0 +1,75 @@
+﻿@page "/alarmalist"
+@inject IAlarmaService AlarmarSerice
+@inject HttpClient Http
+@inject NavigationManager NanigationManager
+@using ControWell.Client.Services.AlarmaService;
+@using ControWell.Shared
+@using System.Net.Http.Json
+
+<h3>Listado de Alarmas</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Pozos</th>
+            <th>Variable</th>
+            <th>Max</th>
+            <th>Min</th>
+            <th>U</th>
+            <th>Habilitada</th>            
+            <th>Edit</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var Alarma in Alarmas)
+        {
+                                <tr>
+                                    <td>@Alarma.Id</td>
+                                    <td>@Alarma.Pozo.NombrePozo</td>
+                                    <td>@Alarma.VariableProceso.Nombre</td>
+                                    <td>@Alarma.Max</td>
+                                    <td>@Alarma.Min</td>
+                                    <td>@Alarma.VariableProceso.Unidad</td>                                    
+                                    <td>
+                    <div class="form-check form-switch">
+                        @if(Alarma.Habilitado==1){
+                                <input class="form-check-input" value="@Alarma.Habilitado" type="checkbox" role="checkbox" id="flexSwitchCheckChecked" checked>
+                        }
+                        else{
+                                 <input class="form-check-input" value="@Alarma.Habilitado" type="checkbox" role="checkbox" id="flexSwitchCheckChecked" unchecked>
+                        }
+                        
+                        
+                    </div>
+                                    </td>
+                                    <td>
+                    <button class="btn btn-primary" @onclick="()=>MostrarUnaAlarma(Alarma.Id)"><i class="oi oi-pencil"></i></button>
+                                    </td>
+
+                                </tr>
+        }
+    </tbody>
+</table>
+<button class="btn btn-outline-success" @onclick="NevegarVariablesLista">Ajustar Nueva Alarma</button>
+@code {
+    public static List<Alarma> Alarmas = new List<Alarma>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var resultado = await Http.GetFromJsonAsync<List<Alarma>>("api/Alarma");
+        if (resultado != null)
+            Alarmas = resultado;
+
+    }
+
+
+    void NevegarVariablesLista()
+    {
+        NanigationManager.NavigateTo("/crearalarma");
+    }
+    void MostrarUnaAlarma(int id)
+    {
+        NanigationManager.NavigateTo($"singlealarma/{id}");
+    }
+}

@@ -1,0 +1,230 @@
+﻿@page "/pozolist"
+@using ControWell.Client.Services.PozoService;
+@using ControWell.Shared
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject IPozoService PozoService
+<h3>Pozos</h3>
+
+<div class="table-container-scroll">
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Ubicacion</th>
+            <th>Operadora</th>
+            <th>Comentario</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var Pozo in Pozos)
+        {
+            <tr>
+                <td>@Pozo.Id</td>
+                <td>@Pozo.NombrePozo</td>
+                <td>@Pozo.Ubicacion</td>
+                <td>@Pozo.Operadora</td>
+                <td>@Pozo.Comentario</td>
+                <td>
+                    <button class="btn btn-primary"><i class="oi oi-pencil"></i></button>
+                </td>
+
+            </tr>
+       
+        }
+    </tbody>
+</table>
+</div>
+
+@if (state == true){
+    <button class="btn btn-success" @onclick="NevegarVariablesLista" hidden >Nuevo Pozo</button>
+}else
+{<button class="btn btn-success" @onclick="NevegarVariablesLista">Nuevo Pozo</button> }
+
+@if (state == true)
+ {
+  <div class="create-pozo-container">
+    <div class="add-pozo-card">
+       <EditForm Model="pozo" OnSubmit="EviarPozo">
+        <br />
+        <div>
+            <label for="nombre">Nombre pozo</label>
+            <InputText id="nombre" @bind-Value="pozo.NombrePozo" class="form-control"></InputText>
+        </div>
+        <div>
+            <label for="lastname">Ubicacion</label>
+            <InputText id="lastname" @bind-Value="pozo.Ubicacion" class="form-control"></InputText>
+        </div>
+        <div>
+            <label for="lastname">Operadora</label>
+            <InputText id="lastname" @bind-Value="pozo.Operadora" class="form-control"></InputText>
+        </div>
+        <div>
+            <label for="lastname">Comentario</label>
+            <InputText id="lastname" @bind-Value="pozo.Comentario" class="form-control"></InputText>
+        </div>
+
+        <br />
+        <div class="button-group">
+          <button type="submit" class="btn btn-success">Guardar</button>
+          <button class="btn btn-danger" @onclick="Cancelar">Cancelar</button>
+        </div>
+        <br />
+        <br />
+    </EditForm>
+    </div>
+  </div>
+ }else{
+  <h1></h1>    
+  }
+
+<style scoped lang="scss">
+
+ body{
+   font-family: Arial;
+  }
+
+/* estilos de la tabla */
+
+  .table-container-scroll{
+          overflow:scroll;
+         height:500px;
+         width:100%;
+
+  }
+
+    table{
+        background-color: white;
+        text-align: left;
+        border-collapse: collapse;
+        width: 100%;
+
+    }
+
+    th, td{
+        padding: 100px;
+        margin-left: 40px;
+    }
+
+    thead{
+        background-color: #388e3c;
+        border-bottom: solid 3px #0F362D;
+        color: #eeeeee;
+        position: sticky;
+        top: 0px;
+
+    }
+
+    tr:nth-child(even){
+        background-color: #ddd;
+    }
+
+    tr:hover td{
+        background-color: #369681;
+        color: white;
+    }
+
+ /* estilos formulario agregar pozo*/
+ .create-pozo-container{
+       position: absolute;
+       top: 55px;
+       left: 250px;
+       padding: 12px;
+       width: 1110px;
+       height: 570px;
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       background: rgba(0, 0, 0, 0.45);
+ }
+
+ .add-pozo-card{
+      width: 280px;
+      height: 400px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(223, 230, 233,1.0);
+      border-radius: 8px;
+      color: rgba(0, 0, 0,1.0);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.45);
+
+   }
+
+ .add-pozo-card label {
+     margin-bottom: 5px;
+     margin-top: 6px;
+ }
+ .button-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+ }
+
+</style>
+@code {
+
+    Boolean state = false;
+
+    public static List<Pozo> Pozos = new List<Pozo>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var resultado = await Http.GetFromJsonAsync<List<Pozo>>("api/Pozo");
+        if (resultado != null)
+            Pozos = resultado;
+    }
+
+    [Parameter]
+
+    public int? Id { get; set; }
+
+    Pozo pozo = new Pozo();
+
+
+    async Task EviarPozo()
+    {
+        Console.WriteLine("hola dentro de la funcion enviar pozo");
+
+
+        try
+        {
+            await PozoService.CreatePozo(pozo);
+            Console.WriteLine("dentro del try");
+
+        }
+        catch (InvalidCastException e)
+        {
+            Console.WriteLine(e);
+            Console.WriteLine("dentro del chatch");
+
+            state = false;
+            NavigationManager.NavigateTo("/pozolist");
+        }
+        finally
+        {
+            Console.WriteLine("ejecutando el finally");
+
+          state = false;
+          NavigationManager.NavigateTo("/pozolist");
+        }
+    }
+
+    void Cancelar()
+    {
+        state = false;
+    }
+
+    void NevegarVariablesLista()
+    {
+        //NanigationManager.NavigateTo("/crearpozo");
+        state = true;
+    }
+    void MostrarUnPozo(int id)
+    {
+        NavigationManager.NavigateTo($"singlePozo/{id}");
+    }
+}
+

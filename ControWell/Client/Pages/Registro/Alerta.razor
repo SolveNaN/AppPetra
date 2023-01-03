@@ -1,0 +1,49 @@
+﻿@page "/alerta"
+@inject HttpClient Http
+@inject NavigationManager NanigationManager
+@using ControWell.Client.Services.AlarmaService;
+@using ControWell.Shared
+@using System.Net.Http.Json
+<h3>Alerta</h3>
+<h3>Pozo con alerta</h3>
+
+@foreach(var r in Registros)
+{
+    foreach(var a in Alarmas)
+    {
+        if (r.PozoId == a.PozoId)
+        {
+            if((r.Medida>=a.Max || r.Medida <= a.Min)&&(r.VariableProceso.Nombre==a.VariableProceso.Nombre)&&(a.Habilitado==1))
+            {
+                Alertas.Add(r);
+                <p>@Alertas.Count alerta para el pozo @r.Pozo.NombrePozo en la variable @a.VariableProceso.Nombre</p>
+                
+            }
+        }
+    }
+}
+
+@code {
+    public static List<Registro> Registros = new List<Registro>();
+
+    /*Esta es la lista para traaer valores de alarmas aqui*/
+
+    public static List<Alarma> Alarmas = new List<Alarma>();
+
+    public static List<Registro> Alertas = new List<Registro>();
+
+    
+
+    protected override async Task OnInitializedAsync()
+    {
+        var resultadoRegistro = await Http.GetFromJsonAsync<List<Registro>>("api/Registro");
+        if (resultadoRegistro != null)
+            Registros = resultadoRegistro;
+
+        /*Traer los valores de alarma aqui*/
+        var resultadoAlarma = await Http.GetFromJsonAsync<List<Alarma>>("api/Alarma");
+        if (resultadoAlarma != null)
+            Alarmas = resultadoAlarma;
+
+    }
+}

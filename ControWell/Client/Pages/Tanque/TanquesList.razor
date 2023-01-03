@@ -1,0 +1,109 @@
+﻿@page "/tanquelist"
+@using ControWell.Shared
+@using System.Net.Http.Json
+@inject NavigationManager NanigationManager
+@inject HttpClient Http
+<h3>Administrar Tanques</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre del Tanque</th>
+            <th>Capacidad</th>
+            <th>Tipo de Fluido</th>
+            <th>Editar</th>
+            <th>Aforo</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var Tanque in Tanques)
+        {
+            <tr>
+                <td>@Tanque.Id</td>
+                <td>@Tanque.NombreTanque</td>
+                <td>@Tanque.Capacidad</td>
+                <td>@Tanque.TipoFluido</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="()=>Editar(Tanque.Id)"><i class="oi oi-pencil"></i></button>
+                </td>
+                <td>
+                    <button class="btn btn-info" @onclick="()=>Aforo(Tanque.Id)"><i class="oi oi-basket"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<button class="btn btn-success" @onclick=Nuevo>Nuevo</button>
+<style>
+    body {
+        font-family: Arial;
+    }
+
+    /* estilos de la tabla */
+
+    .table-container-scroll {
+        overflow: scroll;
+        height: 500px;
+        width: 100%;
+    }
+
+    table {
+        background-color: white;
+        text-align: left;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        padding: 100px;
+        margin-left: 40px;
+    }
+
+    thead {
+        background-color: #388e3c;
+        border-bottom: solid 3px #0F362D;
+        color: #eeeeee;
+        position: sticky;
+        top: 0px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #ddd;
+    }
+
+    tr:hover td {
+        background-color: #369681;
+        color: white;
+    }
+
+    .table-wrapper table tbody td {
+        border: 1px solid #000;
+        background-color: #FFF;
+    }
+
+</style>
+
+@code {
+    public static List<Tanque> Tanques = new List<Tanque>();
+    protected override async Task OnInitializedAsync()
+    {
+        var resultado = await Http.GetFromJsonAsync<List<Tanque>>("api/Tanque");
+        if(resultado!=null)
+            Tanques = resultado;
+    }
+
+    public void Nuevo()
+    {
+        NanigationManager.NavigateTo("/creartanque");
+    }
+    public void Editar(int id)
+    {
+        NanigationManager.NavigateTo($"/singletanque/{id}");
+    }
+    public void Aforo(int id)
+    {
+        NanigationManager.NavigateTo($"/aforotk/{id}");
+    }
+}

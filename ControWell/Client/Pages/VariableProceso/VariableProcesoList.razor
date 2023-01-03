@@ -1,0 +1,57 @@
+﻿@page "/variableprocesolist"
+@using ControWell.Client.Services.VariableProcesoService;
+@using ControWell.Shared
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager NanigationManager
+@inject IVariableProcesoService VariableProcesoService
+<h3>Variable ProcesoList</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>           
+            <th>Nombre</th>
+            <th>Unidad</th>
+            <th>Detalle</th>            
+        </tr>
+    </thead>
+    <tbody>
+        
+        @foreach (var VariableProceso in Variables)
+        {
+           
+            <tr>
+                <td>@VariableProceso.Id</td>               
+                <td>@VariableProceso.Nombre</td>
+                <td>@VariableProceso.Unidad</td>
+                <td>
+                    <button class="btn btn-primary"@onclick="()=>MostrarUnaVariable(VariableProceso.Id)"><i class="oi oi-pencil"></i></button>
+                </td>
+                
+            </tr>
+          
+        }
+    </tbody>
+</table>
+<button class="btn btn-outline-success" @onclick="NevegarVariablesLista">Nueva Variable</button>
+<br />
+<br />
+@code {
+    public static List<VariableProceso> Variables = new List<VariableProceso>();
+    protected override async Task OnInitializedAsync()
+    {
+        var resultado = await Http.GetFromJsonAsync<List<VariableProceso>>("api/VariableProceso");
+        if (resultado != null)
+            Variables = resultado;
+    }
+
+    void NevegarVariablesLista()
+    {
+        NanigationManager.NavigateTo("/crearvariable");
+    }
+    void MostrarUnaVariable(int id)
+    {
+        NanigationManager.NavigateTo($"singlevariableproceso/{id}");
+    }
+}

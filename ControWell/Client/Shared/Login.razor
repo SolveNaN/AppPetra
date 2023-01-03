@@ -1,0 +1,135 @@
+﻿@page "/login"
+
+<!-- Section: Design Block -->
+<section class="background-radial-gradient overflow-hidden">
+    <style>
+        .background-radial-gradient {
+            background-color: hsl(218, 41%, 15%);
+            background-image: radial-gradient(650px circle at 0% 0%, hsl(218, 41%, 35%) 15%, hsl(218, 41%, 30%) 35%, hsl(218, 41%, 20%) 75%, hsl(218, 41%, 19%) 80%, transparent 100%), radial-gradient(1250px circle at 100% 100%, hsl(218, 41%, 45%) 15%, hsl(218, 41%, 30%) 35%, hsl(218, 41%, 20%) 75%, hsl(218, 41%, 19%) 80%, transparent 100%);
+        }
+
+        #radius-shape-1 {
+            height: 220px;
+            width: 220px;
+            top: -60px;
+            left: -130px;
+            background: radial-gradient(#44006b, #ad1fff);
+            overflow: hidden;
+        }
+
+        #radius-shape-2 {
+            border-radius: 38% 62% 63% 37% / 70% 33% 67% 30%;
+            bottom: -60px;
+            right: -110px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(#44006b, #ad1fff);
+            overflow: hidden;
+        }
+
+        .bg-glass {
+            background-color: hsla(0, 0%, 100%, 0.9) !important;
+            backdrop-filter: saturate(200%) blur(25px);
+        }
+
+        .container-login {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card{
+            background-color: whitesmoke;
+            width: 60%;
+            margin-left: 150px;
+            margin-top: 30px;
+        }
+
+        .row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
+            height: 585px;
+            margin: 20px;
+        }
+
+        #saludo-petra{
+            width:50%;
+        }
+
+
+       
+
+    </style>
+@*    class="container px-4 py-5 px-md-5 text-center text-lg-start my-5"
+*@    <div class="container-login">
+        <div class="row" >
+
+            <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10" id="saludo-petra">
+                <h1 class="my-5 display-5 fw-bold ls-tight" style="color: hsl(218, 81%, 95%)">
+                    Petra Services <br />
+                    <span style="color: hsl(218, 81%, 75%)">Soluciones que transcienden</span>
+                </h1>
+                <p class="mb-4 opacity-70" style="color: hsl(218, 81%, 85%)">
+                    Si buscas un impecable servicio al cliente, llegaste al lugar indicado. 
+                    Con Petra Services tienes la solución que buscas al alcance de la mano. 
+                    ¡Contactanos para trabajar en tus necesidades en ingeniería de procesos y 
+                    aplicación a la tecnología y tu satisfacción estará garantizada!
+                </p>
+            </div>
+
+            <div class="col-lg-6 mb-5 mb-lg-0 position-relative" id="login-container">
+                <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
+                <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
+
+                <div class="card">
+                    <div class="card-body px-4 py-5 px-md-5">
+                        <form>
+                            <!-- Email input -->
+                            <div class="form-outline mb-4">
+                                <label class="form-label" for="form3Example3">Email address</label>
+                                <input type="email" id="form3Example3" class="form-control" />
+                            </div>
+
+                            <!-- Password input -->
+                            <div class="form-outline mb-4">
+                                <label class="form-label" for="form3Example4">Password</label>
+                                <input type="password" id="form3Example4" class="form-control" />
+                            </div>
+
+                            <!-- Submit button -->
+                            <button type="submit" class="btn btn-success btn-block mb-4">
+                                Sign up
+                            </button>
+                      
+                            <!-- Checkbox -->
+                            <div class="form-check d-flex justify-content-center mb-4">
+                                <input class="form-check-input me-2" type="checkbox" value="" id="form2Example33" checked />
+                                <label class="form-check-label" for="form2Example33">
+                                    Keep me signed
+                                </label>
+                            </div>
+
+
+                            <!-- Register buttons -->
+                            <div class="text-center">
+                                <p>¿requieres de nuestros servicios ? </p>
+                                <a type="button" class="btn btn-link btn-floating mx-1" href="https://petraservices.co/contacto">
+                                    Contact us
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Section: Design Block -->
+
+@code {
+
+}

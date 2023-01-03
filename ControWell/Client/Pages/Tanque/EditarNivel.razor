@@ -1,0 +1,60 @@
+﻿@page "/editarnivel"
+@page "/editarnivel/{id:int}";
+@using ControWell.Shared
+@using System.Net.Http.Json
+@using ControWell.Client.Services.AforoService;
+@inject IAforoService AforoService
+@inject HttpClient Http
+@inject NavigationManager NanigationManager
+
+<h3>CrearTanque</h3>
+
+<EditForm Model="aforo">
+
+
+    <br />
+
+    <button type="button" class="btn btn-primary" @onclick="UpdateAforo">Actualizar</button>
+    <button type="button" class="btn btn-danger" @onclick="DeleteAforo">Eliminar</button>
+    <button class="btn btn-outline-warning" @onclick="VolverAnterior">Volver</button>
+</EditForm>
+
+
+@code {
+    [Parameter]
+
+    public int? Id { get; set; }
+
+    AforoTK aforo = new AforoTK();
+
+
+    async Task EnviarAforo()
+    {
+        await AforoService.UpdateAforo(aforo);
+
+    }
+
+    void VolverAnterior()
+    {
+        NanigationManager.NavigateTo("/aforotklist");
+    }
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+
+        aforo = await AforoService.GetSingleAforo((int)Id);
+    }
+
+    async Task DeleteAforo()
+    {
+        await AforoService.DeleteAforo(aforo.Id);
+    }
+
+    async Task UpdateAforo()
+    {
+        await AforoService.UpdateAforo(aforo);
+    }
+
+
+}

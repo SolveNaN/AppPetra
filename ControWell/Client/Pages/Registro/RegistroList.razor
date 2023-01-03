@@ -1,0 +1,91 @@
+﻿@page "/registroList"
+@inject HttpClient Http
+@inject NavigationManager NanigationManager
+@using ControWell.Client.Services.AlarmaService;
+@using ControWell.Shared
+@using System.Net.Http.Json
+
+<h3>Listado de Registros</h3>
+
+<table class="table">
+    <thead>
+        <tr style="background-color:antiquewhite">
+            <th>Id</th>
+            <th>Fecha</th>
+            <th>Pozo</th>
+            <th>Variable</th>
+            <th>Medida</th>
+            <th>Unidad</th>
+            <th>Editar</th>
+        </tr>
+    </thead>
+    <tbody>
+         @foreach (var Registro in Registros)
+        {
+            <tr>
+               <td>@Registro.Id</td>
+               <td>@Registro.FechaHora</td>
+               <td>@Registro.Pozo.NombrePozo</td>
+               <td>@Registro.VariableProceso.Nombre</td>
+               <td>@Registro.Medida</td>
+               <td>@Registro.VariableProceso.Unidad</td>
+               <td>
+                    
+                    @foreach(var a in Alarmas)
+                    {
+                        
+                        if (a.PozoId==Registro.Pozo.Id && a.VariableProceso.Nombre==Registro.VariableProceso.Nombre)
+                        {
+                            if ((Registro.Medida >= a.Max || Registro.Medida<=a.Min)&&a.Habilitado==1)
+                            {
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input"  value="" type="checkbox" role="checkbox" id="flexSwitchCheckChecked" checked>
+                                </div>
+                            }
+                           
+                        }
+                    }
+                </td>
+               <td>
+                  <button class="btn btn-primary" @onclick="()=>MostrarUnRegistro(Registro.Id)"><i class="oi oi-pencil"></i></button>
+               </td>
+
+            </tr>
+        }                                     
+    </tbody>
+</table>
+<button class="btn btn-outline-success" @onclick="NevegarRegistroLista">Nuevo Registro</button>
+@code {
+    public static List<Registro> Registros = new List<Registro>();
+    
+    /*Esta es la lista para traaer valores de alarmas aqui*/
+
+    public static List<Alarma> Alarmas = new List<Alarma>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var resultadoRegistro = await Http.GetFromJsonAsync<List<Registro>>("api/Registro");
+        if (resultadoRegistro != null)
+            Registros = resultadoRegistro;
+ 
+        /*Traer los valores de alarma aqui*/
+        var resultadoAlarma = await Http.GetFromJsonAsync<List<Alarma>>("api/Alarma");
+        if (resultadoAlarma != null)
+            Alarmas = resultadoAlarma;
+
+    }
+
+
+    void NevegarRegistroLista()
+    {
+        NanigationManager.NavigateTo("/crearregistro");
+    }
+    void MostrarUnRegistro(int id)
+    {
+        NanigationManager.NavigateTo($"singleregistro/{id}");
+    }
+
+  
+
+    }
+
