@@ -13,6 +13,7 @@ using ControWell.Client.Services.SuperHeroService;
 using ControWell.Client.Services.VariableProcesoService;
 using ControWell.Client.Services.AlarmaService;
 using ControWell.Client.Services.RegistroService;
+using CurrieTechnologies.Razor.SweetAlert2;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -25,6 +26,7 @@ builder.Services.AddScoped<IVariableProcesoService, VariableProcesoService>();
 builder.Services.AddScoped<IAlarmaService, AlarmaService>();
 builder.Services.AddScoped<IRegistroService, RegistroService>();
 builder.Services.AddScoped<ITanqueService, TanqueService>();
+builder.Services.AddSweetAlert2();
 
 //Agregado para ver excel
 
