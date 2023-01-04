@@ -1,0 +1,60 @@
+﻿@page "/agregaraforo"
+@page "/agregaraforo/{id:int}"
+@inject ITanqueService TanqueService
+@inject IAforoService AforoService
+@inject NavigationManager NanigationManager
+@using ControWell.Shared
+@using System.Net.Http.Json
+@using ControWell.Client.Services.TanqueService;
+@using ControWell.Client.Services.AforoService;
+<h3>AgregarAforo</h3>
+
+<EditForm Model="aforo" OnSubmit="()=>EnviarAforo(tanque.Id)">
+    <div>
+        <label for="nombre">Tanque</label>
+        <InputText id="nombre" @bind-Value="tanque.NombreTanque" class="form-control"></InputText>
+    </div>
+    <div>
+        <label for="nombre">Nivel</label>
+        <InputNumber id="nombre" @bind-Value="aforo.Nivel" class="form-control"></InputNumber>
+    </div>
+    <div>
+        <label for="lastname">Volumen Bls</label>
+        <InputNumber id="lastname" @bind-Value="aforo.Volunen" class="form-control"></InputNumber>
+    </div>
+
+
+    <br />
+
+    <button type="submit" class="btn btn-primary">Confirmar</button>
+    <button class="btn btn-outline-warning" @onclick="()=>VolverAnterior(tanque.Id)">Volver</button>
+
+</EditForm>
+
+@code {
+    [Parameter]
+
+    public int? Id { get; set; }
+
+    Tanque tanque = new Tanque();
+
+    AforoTK aforo = new AforoTK();
+
+    protected override async Task OnParametersSetAsync()
+    {
+
+        tanque = await TanqueService.GetSingleTanque((int)Id);
+    }
+
+    async Task EnviarAforo(int id)
+    {
+        aforo.TanqueId = tanque.Id;
+        await AforoService.CreateAforo(aforo);
+        NanigationManager.NavigateTo($"/aforotk/{id}");
+
+    }
+    void VolverAnterior(int id)
+    {
+        NanigationManager.NavigateTo($"/aforotk/{id}");
+    }
+}

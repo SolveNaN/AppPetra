@@ -46,3 +46,15 @@ C:\Users\Dagoberto\Downloads\AppPetra\ControWell\Shared\obj\Debug\net6.0\ControW
 C:\Users\Dagoberto\Downloads\AppPetra\ControWell\Shared\obj\Debug\net6.0\refint\ControWell.Shared.dll
 C:\Users\Dagoberto\Downloads\AppPetra\ControWell\Shared\obj\Debug\net6.0\ControWell.Shared.pdb
 C:\Users\Dagoberto\Downloads\AppPetra\ControWell\Shared\obj\Debug\net6.0\ref\ControWell.Shared.dll
+C:\Users\Dagoberto\Documents\AppPetra\ControWell\Shared\bin\Debug\net6.0\ControWell.Shared.deps.json
+C:\Users\Dagoberto\Documents\AppPetra\ControWell\Shared\bin\Debug\net6.0\ControWell.Shared.dll
+C:\Users\Dagoberto\Documents\AppPetra\ControWell\Shared\bin\Debug\net6.0\ControWell.Shared.pdb
+C:\Users\Dagoberto\Documents\AppPetra\ControWell\Shared\obj\Debug\net6.0\ControWell.Shared.csproj.AssemblyReference.cache
+C:\Users\Dagoberto\Documents\AppPetra\ControWell\Shared\obj\Debug\net6.0\ControWell.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Dagoberto\Documents\AppPetra\ControWell\Shared\obj\Debug\net6.0\ControWell.Shared.AssemblyInfoInputs.cache
+C:\Users\Dagoberto\Documents\AppPetra\ControWell\Shared\obj\Debug\net6.0\ControWell.Shared.AssemblyInfo.cs
+C:\Users\Dagoberto\Documents\AppPetra\ControWell\Shared\obj\Debug\net6.0\ControWell.Shared.csproj.CoreCompileInputs.cache
+C:\Users\Dagoberto\Documents\AppPetra\ControWell\Shared\obj\Debug\net6.0\ControWell.Shared.dll
+C:\Users\Dagoberto\Documents\AppPetra\ControWell\Shared\obj\Debug\net6.0\refint\ControWell.Shared.dll
+C:\Users\Dagoberto\Documents\AppPetra\ControWell\Shared\obj\Debug\net6.0\ControWell.Shared.pdb
+C:\Users\Dagoberto\Documents\AppPetra\ControWell\Shared\obj\Debug\net6.0\ref\ControWell.Shared.dll

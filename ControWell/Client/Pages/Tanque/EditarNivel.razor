@@ -9,14 +9,21 @@
 
 <h3>CrearTanque</h3>
 
-<EditForm Model="aforo">
-
+<EditForm Model="Aforo">
+    <div>
+        <label for="nivel">Nivel</label>
+        <InputNumber id="nombre" @bind-Value="Aforo.Nivel" class="form-control"></InputNumber>
+    </div>
+    <div>
+        <label for="nivel">Volumen</label>
+        <InputNumber id="nombre" @bind-Value="Aforo.Volunen" class="form-control"></InputNumber>
+    </div>
 
     <br />
 
-    <button type="button" class="btn btn-primary" @onclick="UpdateAforo">Actualizar</button>
-    <button type="button" class="btn btn-danger" @onclick="DeleteAforo">Eliminar</button>
-    <button class="btn btn-outline-warning" @onclick="VolverAnterior">Volver</button>
+    <button type="button" class="btn btn-primary" @onclick="()=>ActualizarAforo(Aforo.TanqueId)">Actualizar</button>
+    <button type="button" class="btn btn-danger" @onclick="()=>EliminarAforo(Aforo.TanqueId)">Eliminar</button>
+    <button class="btn btn-outline-warning" @onclick="()=>Volver(Aforo.TanqueId)">Volver</button>
 </EditForm>
 
 
@@ -25,35 +32,37 @@
 
     public int? Id { get; set; }
 
-    AforoTK aforo = new AforoTK();
+    AforoTK Aforo = new AforoTK();
 
 
     async Task EnviarAforo()
     {
-        await AforoService.UpdateAforo(aforo);
+        await AforoService.UpdateAforo(Aforo);
 
     }
 
-    void VolverAnterior()
+    void Volver(int id)
     {
-        NanigationManager.NavigateTo("/aforotklist");
+        NanigationManager.NavigateTo($"/aforotk/{id}");
     }
 
 
     protected override async Task OnParametersSetAsync()
     {
 
-        aforo = await AforoService.GetSingleAforo((int)Id);
+        Aforo = await AforoService.GetSingleAforo((int)Id);
     }
 
-    async Task DeleteAforo()
+    async Task EliminarAforo(int id)
     {
-        await AforoService.DeleteAforo(aforo.Id);
+        await AforoService.DeleteAforo(Aforo.Id);
+        NanigationManager.NavigateTo($"/aforotk/{id}");
     }
 
-    async Task UpdateAforo()
+    async Task ActualizarAforo(int id)
     {
-        await AforoService.UpdateAforo(aforo);
+        await AforoService.UpdateAforo(Aforo);
+        NanigationManager.NavigateTo($"/aforotk/{id}");
     }
 
 

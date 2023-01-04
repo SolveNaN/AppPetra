@@ -36,6 +36,7 @@
     </tbody>
 </table>
 <button class="btn btn-success" @onclick=Nuevo>Nuevo</button>
+<button class="btn btn-info" @onclick=VerAforos>Actualizar Aforos</button>
 <style>
     body {
         font-family: Arial;
@@ -97,6 +98,10 @@
     public void Nuevo()
     {
         NanigationManager.NavigateTo("/creartanque");
+    }
+    public void VerAforos()
+    {
+        NanigationManager.NavigateTo("/uploadaforo");
     }
     public void Editar(int id)
     {

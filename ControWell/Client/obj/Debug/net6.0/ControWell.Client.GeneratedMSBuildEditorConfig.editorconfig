@@ -9,165 +9,169 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = browser
 build_property.RootNamespace = ControWell.Client
 build_property.RootNamespace = ControWell.Client
-build_property.ProjectDir = C:\Users\Dagoberto\Downloads\AppPetra\ControWell\Client\
+build_property.ProjectDir = C:\Users\Dagoberto\Documents\AppPetra\ControWell\Client\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\Dagoberto\Downloads\AppPetra\ControWell\Client
+build_property.MSBuildProjectDirectory = C:\Users\Dagoberto\Documents\AppPetra\ControWell\Client
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/App.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/App.razor]
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Alarma/AlarmaList.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Alarma/AlarmaList.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWxhcm1hXEFsYXJtYUxpc3QucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Alarma/CrearAlarma.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Alarma/CrearAlarma.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWxhcm1hXENyZWFyQWxhcm1hLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Alarma/FiltroAlarma.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Alarma/FiltroAlarma.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWxhcm1hXEZpbHRyb0FsYXJtYS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Alarma/SingleAlarma.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Alarma/SingleAlarma.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWxhcm1hXFNpbmdsZUFsYXJtYS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Counter.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Counter.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ291bnRlci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Excel/Datos.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Excel/Datos.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXhjZWxcRGF0b3MucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Excel/ExcelAdd.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Excel/ExcelAdd.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXhjZWxcRXhjZWxBZGQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/FetchData.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/FetchData.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRmV0Y2hEYXRhLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Index.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Index.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Pozo/AddExcel.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Pozo/AddExcel.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUG96b1xBZGRFeGNlbC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Pozo/PozoList.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Pozo/PozoList.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUG96b1xQb3pvTGlzdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Pozo/SinglePozo.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Pozo/SinglePozo.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUG96b1xTaW5nbGVQb3pvLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Registro/Alerta.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Registro/Alerta.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVnaXN0cm9cQWxlcnRhLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Registro/ConsultaRegistros.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Registro/ConsultaRegistros.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVnaXN0cm9cQ29uc3VsdGFSZWdpc3Ryb3MucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Registro/CrearRegistro.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Registro/CrearRegistro.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVnaXN0cm9cQ3JlYXJSZWdpc3Ryby5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Registro/FiltroRegistro.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Registro/FiltroRegistro.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVnaXN0cm9cRmlsdHJvUmVnaXN0cm8ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Registro/RegistroList.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Registro/RegistroList.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVnaXN0cm9cUmVnaXN0cm9MaXN0LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Registro/SingleRegistro.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Registro/SingleRegistro.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVnaXN0cm9cU2luZ2xlUmVnaXN0cm8ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Registro/Uploaddata.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Registro/Uploaddata.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVnaXN0cm9cVXBsb2FkZGF0YS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/SuperHero/Hero.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/SuperHero/Hero.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3VwZXJIZXJvXEhlcm8ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/SuperHero/SuperHeroes.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/SuperHero/SuperHeroes.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3VwZXJIZXJvXFN1cGVySGVyb2VzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Tanque/AforoTKList.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Tanque/AforoTKList.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGFucXVlXEFmb3JvVEtMaXN0LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Tanque/CrearTanque.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Tanque/AgregarAforo.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGFucXVlXEFncmVnYXJBZm9yby5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Tanque/CrearTanque.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGFucXVlXENyZWFyVGFucXVlLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Tanque/EditarNivel.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Tanque/EditarNivel.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGFucXVlXEVkaXRhck5pdmVsLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Tanque/SingleTanque.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Tanque/SingleTanque.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGFucXVlXFNpbmdsZVRhbnF1ZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Tanque/TanquesList.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Tanque/TanquesList.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGFucXVlXFRhbnF1ZXNMaXN0LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Tanque/UploadAforo.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Tanque/UploadAforo.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGFucXVlXFVwbG9hZEFmb3JvLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Usuario/UsuarioDetalle.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Usuario/UsuarioDetalle.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXN1YXJpb1xVc3VhcmlvRGV0YWxsZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/Usuario/UsuarioList.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/Usuario/UsuarioList.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXN1YXJpb1xVc3VhcmlvTGlzdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/VariableProceso/CrearVariableProceso.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/VariableProceso/CrearVariableProceso.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVmFyaWFibGVQcm9jZXNvXENyZWFyVmFyaWFibGVQcm9jZXNvLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/VariableProceso/SingleVariableProceso.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/VariableProceso/SingleVariableProceso.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVmFyaWFibGVQcm9jZXNvXFNpbmdsZVZhcmlhYmxlUHJvY2Vzby5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Pages/VariableProceso/VariableProcesoList.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Pages/VariableProceso/VariableProcesoList.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVmFyaWFibGVQcm9jZXNvXFZhcmlhYmxlUHJvY2Vzb0xpc3QucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Shared/Login.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Shared/Login.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXExvZ2luLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Shared/Menu.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Shared/Menu.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1lbnUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Shared/SurveyPrompt.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Shared/SurveyPrompt.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFN1cnZleVByb21wdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/_Imports.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Shared/MainLayout.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Shared/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-fx0juhdfvs
 
-[C:/Users/Dagoberto/Downloads/AppPetra/ControWell/Client/Shared/NavMenu.razor]
+[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Client/Shared/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE5hdk1lbnUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-xjecy8nknt

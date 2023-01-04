@@ -22,7 +22,7 @@ namespace ControWell.Client.Services.AforoService
 
         public async Task CreateAforo(AforoTK aforo)
         {
-            var result = await _http.PostAsJsonAsync("api/Afoto", aforo);
+            var result = await _http.PostAsJsonAsync("api/Aforo", aforo);
             await SetAforo(result);
         }
 
@@ -30,7 +30,7 @@ namespace ControWell.Client.Services.AforoService
         {
             var response = await result.Content.ReadFromJsonAsync<List<AforoTK>>();
             Aforos = response;
-            _navigationManager.NavigateTo("tanquelist");
+            
         }
 
         public async Task<AforoTK> GetSingleAforo(int id)

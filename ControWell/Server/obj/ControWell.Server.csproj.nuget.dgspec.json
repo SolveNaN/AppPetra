@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Dagoberto\\Downloads\\AppPetra\\ControWell\\Server\\ControWell.Server.csproj": {}
+    "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Server\\ControWell.Server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Dagoberto\\Downloads\\AppPetra\\ControWell\\Client\\ControWell.Client.csproj": {
+    "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Client\\ControWell.Client.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Dagoberto\\Downloads\\AppPetra\\ControWell\\Client\\ControWell.Client.csproj",
+        "projectUniqueName": "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Client\\ControWell.Client.csproj",
         "projectName": "ControWell.Client",
-        "projectPath": "C:\\Users\\Dagoberto\\Downloads\\AppPetra\\ControWell\\Client\\ControWell.Client.csproj",
+        "projectPath": "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Client\\ControWell.Client.csproj",
         "packagesPath": "C:\\Users\\Dagoberto\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Dagoberto\\Downloads\\AppPetra\\ControWell\\Client\\obj\\",
+        "outputPath": "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Client\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Dagoberto\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -28,8 +28,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\Dagoberto\\Downloads\\AppPetra\\ControWell\\Shared\\ControWell.Shared.csproj": {
-                "projectPath": "C:\\Users\\Dagoberto\\Downloads\\AppPetra\\ControWell\\Shared\\ControWell.Shared.csproj"
+              "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Shared\\ControWell.Shared.csproj": {
+                "projectPath": "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Shared\\ControWell.Shared.csproj"
               }
             }
           }
@@ -47,6 +47,10 @@
             "ClosedXML": {
               "target": "Package",
               "version": "[0.97.0, )"
+            },
+            "CurrieTechnologies.Razor.SweetAlert2": {
+              "target": "Package",
+              "version": "[5.4.0, )"
             },
             "EPPlus": {
               "target": "Package",
@@ -105,14 +109,14 @@
         }
       }
     },
-    "C:\\Users\\Dagoberto\\Downloads\\AppPetra\\ControWell\\Server\\ControWell.Server.csproj": {
+    "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Server\\ControWell.Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Dagoberto\\Downloads\\AppPetra\\ControWell\\Server\\ControWell.Server.csproj",
+        "projectUniqueName": "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Server\\ControWell.Server.csproj",
         "projectName": "ControWell.Server",
-        "projectPath": "C:\\Users\\Dagoberto\\Downloads\\AppPetra\\ControWell\\Server\\ControWell.Server.csproj",
+        "projectPath": "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Server\\ControWell.Server.csproj",
         "packagesPath": "C:\\Users\\Dagoberto\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Dagoberto\\Downloads\\AppPetra\\ControWell\\Server\\obj\\",
+        "outputPath": "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Server\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Dagoberto\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -129,11 +133,11 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\Dagoberto\\Downloads\\AppPetra\\ControWell\\Client\\ControWell.Client.csproj": {
-                "projectPath": "C:\\Users\\Dagoberto\\Downloads\\AppPetra\\ControWell\\Client\\ControWell.Client.csproj"
+              "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Client\\ControWell.Client.csproj": {
+                "projectPath": "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Client\\ControWell.Client.csproj"
               },
-              "C:\\Users\\Dagoberto\\Downloads\\AppPetra\\ControWell\\Shared\\ControWell.Shared.csproj": {
-                "projectPath": "C:\\Users\\Dagoberto\\Downloads\\AppPetra\\ControWell\\Shared\\ControWell.Shared.csproj"
+              "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Shared\\ControWell.Shared.csproj": {
+                "projectPath": "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Shared\\ControWell.Shared.csproj"
               }
             }
           }
@@ -210,14 +214,14 @@
         }
       }
     },
-    "C:\\Users\\Dagoberto\\Downloads\\AppPetra\\ControWell\\Shared\\ControWell.Shared.csproj": {
+    "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Shared\\ControWell.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Dagoberto\\Downloads\\AppPetra\\ControWell\\Shared\\ControWell.Shared.csproj",
+        "projectUniqueName": "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Shared\\ControWell.Shared.csproj",
         "projectName": "ControWell.Shared",
-        "projectPath": "C:\\Users\\Dagoberto\\Downloads\\AppPetra\\ControWell\\Shared\\ControWell.Shared.csproj",
+        "projectPath": "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Shared\\ControWell.Shared.csproj",
         "packagesPath": "C:\\Users\\Dagoberto\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Dagoberto\\Downloads\\AppPetra\\ControWell\\Shared\\obj\\",
+        "outputPath": "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Shared\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Dagoberto\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -8,6 +8,7 @@
   "resources": {
     "assembly": {
       "ClosedXML.dll": "sha256-gXVfzbQRMRQFMLrrrUcS+M+4eKMBg3h\/3PaPc6xHoXM=",
+      "CurrieTechnologies.Razor.SweetAlert2.dll": "sha256-Xu9vo31BOwW4q0c\/sW3VhknMpOLLjWCkeYjx5reFQio=",
       "DocumentFormat.OpenXml.dll": "sha256-WI0HvcDdgox9sH0Er0LEfUiwktks7Lt\/9uY\/l0G0iXQ=",
       "EPPlus.dll": "sha256-1YLMEwDBHc8bGerCw9Rm2LOv3ZtNNAzZeinCW+WmCOs=",
       "EPPlus.Core.dll": "sha256-ddvIuO3qccSOV7tG49NClQFEmwSyAQRSZIvbbt\/QHbY=",
@@ -223,15 +224,15 @@
       "mscorlib.dll": "sha256-cx\/3nJhFns3tZhQNQOyiRyKJESKxOjLVufzWnri6KSA=",
       "netstandard.dll": "sha256-yWufW5W4SSfjocBcWTEDqnFwTd\/VYtLMc2Y9mPmlggc=",
       "System.Private.CoreLib.dll": "sha256-H009wzPwRoDZlwvpN4KLCsUwN7Y1AmjKB3PIEHA7ObQ=",
-      "ControWell.Shared.dll": "sha256-XGdB1EFwHWAbR0ygbDLUG1+\/LJCcTOLxux7fOZxW93Q=",
-      "ControWell.Client.dll": "sha256-o7\/4kfvi6henmWO0\/EoblgjyrnyaAPwiRao7qEgtmqg="
+      "ControWell.Shared.dll": "sha256-q\/AfZJT9Ab9GWCGtpIpapnn0nlxZOmhw2STK\/eKP\/nE=",
+      "ControWell.Client.dll": "sha256-frWgQr\/ahjsbvIbe+naFvjC+lytYEKf1NTJcH6i6Y9I="
     },
     "extensions": null,
     "lazyAssembly": null,
     "libraryInitializers": null,
     "pdb": {
-      "ControWell.Shared.pdb": "sha256-KoJyJ1R0\/TglHTIi\/881ufa6iKS9GW9ykUb+7pcJ\/nw=",
-      "ControWell.Client.pdb": "sha256-ts6mrMwNSZBh6A2\/Z54K04RcrR+6x7qkGFjejPWgbdQ="
+      "ControWell.Shared.pdb": "sha256-WJpY6qRe3qThS5FFa5QxtlBNfkd2J6pALHVfREYiziU=",
+      "ControWell.Client.pdb": "sha256-xQWRwXQNLerOQQe2CSJv7BN4cnDKzpRO2RVzyET5d3k="
     },
     "runtime": {
       "dotnet.6.0.11.h8aoq2305r.js": "sha256-F30V+6jU3jwJYFZoLuwMAqzTiOXu6q7zGgOdjYBofDI=",

@@ -42,6 +42,18 @@
           }
         }
       },
+      "CurrieTechnologies.Razor.SweetAlert2/5.4.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Components": "6.0.10",
+          "Microsoft.AspNetCore.Components.Web": "6.0.10"
+        },
+        "runtime": {
+          "lib/net6.0/CurrieTechnologies.Razor.SweetAlert2.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "DocumentFormat.OpenXml/2.16.0": {
         "dependencies": {
           "System.IO.Packaging": "4.7.0"
@@ -1757,6 +1769,7 @@
         "dependencies": {
           "ClosedXML": "0.97.0",
           "ControWell.Shared": "1.0.0",
+          "CurrieTechnologies.Razor.SweetAlert2": "5.4.0",
           "EPPlus": "6.1.1",
           "EPPlus.Core": "1.5.4",
           "Microsoft.AspNetCore.Components.WebAssembly": "6.0.10",
@@ -1786,6 +1799,13 @@
       "sha512": "sha512-L+uiMgnyd5s11YSGmPWmJ30Rg57BNqgOxabfYmFaqVjqOGM5TQv2olc9E/1qiEZzxyR8pgFIGAEcK4yFzN2S6g==",
       "path": "closedxml/0.97.0",
       "hashPath": "closedxml.0.97.0.nupkg.sha512"
+    },
+    "CurrieTechnologies.Razor.SweetAlert2/5.4.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-gDHNb0xG7+KNJ8DBSQXZb6ZF9YCMUK6EoUc6uQSPAduF8+QvJPxbRL0WjaMv/TtGuuj80QWlQPzD3noi9eddzQ==",
+      "path": "currietechnologies.razor.sweetalert2/5.4.0",
+      "hashPath": "currietechnologies.razor.sweetalert2.5.4.0.nupkg.sha512"
     },
     "DocumentFormat.OpenXml/2.16.0": {
       "type": "package",

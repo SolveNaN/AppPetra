@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.97.0" />
+    <PackageReference Include="CurrieTechnologies.Razor.SweetAlert2" Version="5.4.0" />
     <PackageReference Include="EPPlus" Version="6.1.1" />
     <PackageReference Include="EPPlus.Core" Version="1.5.4" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.10" />

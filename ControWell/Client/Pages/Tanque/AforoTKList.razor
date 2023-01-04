@@ -1,7 +1,18 @@
 ﻿@page "/aforotk"
 @page "/aforotk/{id:int}"
-@using ControWell.Client.Services.TanqueService;
 @inject ITanqueService TanqueService
+@inject IAforoService AforoService
+@using ControWell.Shared
+@using System.Net.Http.Json
+@using ControWell.Client.Services.TanqueService;
+@using ControWell.Client.Services.AforoService;
+
+@using System.Data
+@using System.IO
+@using NPOI.XSSF.UserModel
+@using NPOI.SS.UserModel
+
+
 @inject HttpClient Http
 @inject NavigationManager NanigationManager
 
@@ -10,7 +21,7 @@
 <EditForm Model="tanque">
     <div>
         <label for="nombre">Nombre tanque</label>
-        <InputText id="nombre" @bind-Value="tanque.NombreTanque" class="form-control"></InputText>
+        <InputText @bind-Value="tanque.NombreTanque" class="form-control"></InputText>
     </div>
     <div>
         
@@ -22,7 +33,7 @@
                             <th>Editar</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody>                        
                      @foreach(var af in aforos)
                          {
                           if (af.TanqueId == tanque.Id)
@@ -42,14 +53,43 @@
             
         
     </div>
-
+    <h1></h1>
     <br />
-
-    <button type="button" class="btn btn-primary" >Actualizar Aforo</button>
-    <button type="button" class="btn btn-danger" >Eliminar Aforo</button>
+    <InputFile OnChange="@ImportExcelFile" />
+    <button type="button" class="btn btn-primary" @onclick=Procesar>Actualizar Aforo</button>
+    <button type="button" class="btn btn-danger" @onclick=EliminarAforo>Eliminar Aforos</button>
+    <button type="button" class="btn btn-info" @onclick="()=>AgregarNivel(tanque.Id)">Agregar Nivel</button>
     <button class="btn btn-outline-warning" @onclick="VolverAnterior">Volver</button>
 </EditForm>
+<div>
+     <table class="table">
+        <thead> 
+            <tr>
+            @foreach (DataColumn col in dt.Columns)
+            {
+                            <th>@col.ColumnName</th>
+            }                           
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (DataRow row in dt.Rows)
+        {             
 
+                   <tr>
+                @foreach (DataColumn col in dt.Columns)
+                {
+
+                         <td>@row[col.ColumnName]</td>               
+
+                }
+                  </tr>
+
+
+        }
+        </tbody>
+    </table>
+
+</div>
 
 @code {
     [Parameter]
@@ -57,13 +97,10 @@
     public int? Id { get; set; }
 
     Tanque tanque = new Tanque();
+    AforoTK aforo = new AforoTK();
 
 
-    async Task EnviarTanque()
-    {
-        await TanqueService.UpdateTanque(tanque);
 
-    }
 
     void VolverAnterior()
     {
@@ -73,9 +110,9 @@
 
     protected override async Task OnParametersSetAsync()
     {
-
         tanque = await TanqueService.GetSingleTanque((int)Id);
     }
+
 
     //Para traer todos los aforos
     public static List<AforoTK> aforos = new List<AforoTK>();
@@ -94,9 +131,148 @@
         NanigationManager.NavigateTo("/uploadaforo");
     }
 
-    public void EditarNivel(int id)
+    public void EditarNivel(int Id)
     {
-        NanigationManager.NavigateTo($"/editarnivel/{id}");
+        NanigationManager.NavigateTo($"/editarnivel/{Id}");
     }
 
+    public void AgregarNivel(int Id)
+    {
+        NanigationManager.NavigateTo($"/agregaraforo/{Id}");
+    }
+    //FUNCIONES PARA EXCEL
+    //funcion para administrar las celdas y visualizacion de excel
+    DataTable dt = new DataTable();
+
+    async Task ImportExcelFile(InputFileChangeEventArgs e)
+    {
+        var fileStream = e.File.OpenReadStream();
+        var ms = new MemoryStream();
+        await fileStream.CopyToAsync(ms);
+        fileStream.Close();
+        ms.Position = 0;
+
+        ISheet sheet;
+        var xsswb = new XSSFWorkbook(ms);
+
+        sheet = xsswb.GetSheetAt(0);
+        IRow hr = sheet.GetRow(0);
+        var rl = new List<string>();
+
+        int cc = hr.LastCellNum;
+        for (var j = 0; j < cc; j++)
+        {
+            ICell cell = hr.GetCell(j);
+            dt.Columns.Add(cell.ToString());
+        }
+
+        for (var j = (sheet.FirstRowNum + 1); j <= sheet.LastRowNum; j++)
+        {
+            var r = sheet.GetRow(j);
+            for (var i = r.FirstCellNum; i < cc; i++)
+            {
+                rl.Add(r.GetCell(i).ToString());
+            }
+            if (rl.Count > 0)
+            {
+                dt.Rows.Add(rl.ToArray());
+            }
+            rl.Clear();
+        }
+    }
+    //fin de la funcion para administrar datos de excel
+
+
+
+
+
+    //Inicio de la funcion para tomar los datos del excel
+
+    async Task Procesar()
+    {
+        //registros de aforo con linq para el tanque actual
+        var misaforos = from af in aforos
+                        where af.TanqueId == tanque.Id
+                        orderby af.Nivel ascending
+                        select af;
+        foreach (DataRow row in dt.Rows)
+        {
+
+            foreach (DataColumn col in dt.Columns)
+            {
+                var celda = row[col.ColumnName];
+                var columna = col.ColumnName;
+                columna = columna.ToString();
+                var Existe = false;
+                if (columna == "Nivel")
+                {
+                    foreach(var i in misaforos)
+                    {
+                        if (i.Nivel == Convert.ToInt32(celda.ToString()))
+                        {
+                            aforo.Id=i.Id;
+                            aforo.Nivel=i.Nivel;
+                            aforo.TanqueId = tanque.Id;                            
+                            Existe = true;
+                        }
+
+                    }
+                    if (Existe == false)
+                    {
+                        aforo.Nivel = Convert.ToInt32(celda.ToString());
+                        aforo.TanqueId = tanque.Id;
+                        AforoService.CreateAforo(aforo);
+                    }
+
+                }
+                if (columna == "Volumen")
+                {
+                    var losaforos = from af in aforos
+                                    where af.TanqueId == tanque.Id
+                                    select af;
+                    foreach(var j in losaforos)
+                    {
+                        if (aforo.Id==j.Id)
+                        {
+                            aforo.Volunen = Convert.ToInt32(celda.ToString());
+                            AforoService.UpdateAforo(aforo);
+                        }
+                    }
+                    
+                }
+
+
+            }
+
+
+            
+        }
+        NanigationManager.NavigateTo("/tanquelist");
+    }
+
+    //Fin de funcion para tomar datos de excel
+
+    //Funcion para enviar los datos a la base
+
+    //Fin de funcion para enviar los datos a la base
+
+    //Eliominar Aforos con linq
+    public void EliminarAforo()
+    {
+        var misaforos = from af in aforos
+                    where af.TanqueId == tanque.Id
+                    select af;
+        foreach(var i in misaforos)
+        {
+            AforoService.DeleteAforo(i.Id);    
+        }
+        NanigationManager.NavigateTo("/tanquelist");
+    }
+
+ 
+    //fucion para ver el excel
+    public void ver()
+    {
+
+    }
 }

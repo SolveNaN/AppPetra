@@ -25,6 +25,25 @@
           }
         }
       },
+      "CurrieTechnologies.Razor.SweetAlert2/5.4.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Components": "6.0.0",
+          "Microsoft.AspNetCore.Components.Web": "6.0.0"
+        },
+        "compile": {
+          "lib/net6.0/CurrieTechnologies.Razor.SweetAlert2.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/CurrieTechnologies.Razor.SweetAlert2.dll": {}
+        },
+        "build": {
+          "buildTransitive/CurrieTechnologies.Razor.SweetAlert2.props": {}
+        },
+        "buildMultiTargeting": {
+          "buildMultiTargeting/CurrieTechnologies.Razor.SweetAlert2.props": {}
+        }
+      },
       "DocumentFormat.OpenXml/2.16.0": {
         "type": "package",
         "dependencies": {
@@ -2538,6 +2557,25 @@
           }
         }
       },
+      "CurrieTechnologies.Razor.SweetAlert2/5.4.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Components": "6.0.0",
+          "Microsoft.AspNetCore.Components.Web": "6.0.0"
+        },
+        "compile": {
+          "lib/net6.0/CurrieTechnologies.Razor.SweetAlert2.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/CurrieTechnologies.Razor.SweetAlert2.dll": {}
+        },
+        "build": {
+          "buildTransitive/CurrieTechnologies.Razor.SweetAlert2.props": {}
+        },
+        "buildMultiTargeting": {
+          "buildMultiTargeting/CurrieTechnologies.Razor.SweetAlert2.props": {}
+        }
+      },
       "DocumentFormat.OpenXml/2.16.0": {
         "type": "package",
         "dependencies": {
@@ -4967,6 +5005,60 @@
         "lib/netstandard2.0/ClosedXML.dll",
         "lib/netstandard2.0/ClosedXML.xml",
         "nuget-logo.png"
+      ]
+    },
+    "CurrieTechnologies.Razor.SweetAlert2/5.4.0": {
+      "sha512": "gDHNb0xG7+KNJ8DBSQXZb6ZF9YCMUK6EoUc6uQSPAduF8+QvJPxbRL0WjaMv/TtGuuj80QWlQPzD3noi9eddzQ==",
+      "type": "package",
+      "path": "currietechnologies.razor.sweetalert2/5.4.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "build/CurrieTechnologies.Razor.SweetAlert2.props",
+        "build/Microsoft.AspNetCore.StaticWebAssets.props",
+        "buildMultiTargeting/CurrieTechnologies.Razor.SweetAlert2.props",
+        "buildTransitive/CurrieTechnologies.Razor.SweetAlert2.props",
+        "currietechnologies.razor.sweetalert2.5.4.0.nupkg.sha512",
+        "currietechnologies.razor.sweetalert2.nuspec",
+        "lib/net6.0/CurrieTechnologies.Razor.SweetAlert2.dll",
+        "lib/net7.0/CurrieTechnologies.Razor.SweetAlert2.dll",
+        "lib/netstandard2.0/CurrieTechnologies.Razor.SweetAlert2.dll",
+        "logo_v2_128.png",
+        "staticwebassets/bootstrap4Theme.css",
+        "staticwebassets/bootstrap4Theme.js",
+        "staticwebassets/bootstrap4Theme.min.css",
+        "staticwebassets/bootstrap4Theme.min.js",
+        "staticwebassets/borderlessTheme.css",
+        "staticwebassets/borderlessTheme.js",
+        "staticwebassets/borderlessTheme.min.css",
+        "staticwebassets/borderlessTheme.min.js",
+        "staticwebassets/bulmaTheme.css",
+        "staticwebassets/bulmaTheme.js",
+        "staticwebassets/bulmaTheme.min.css",
+        "staticwebassets/bulmaTheme.min.js",
+        "staticwebassets/darkTheme.css",
+        "staticwebassets/darkTheme.js",
+        "staticwebassets/darkTheme.min.css",
+        "staticwebassets/darkTheme.min.js",
+        "staticwebassets/defaultTheme.css",
+        "staticwebassets/defaultTheme.js",
+        "staticwebassets/defaultTheme.min.css",
+        "staticwebassets/defaultTheme.min.js",
+        "staticwebassets/materialUITheme.css",
+        "staticwebassets/materialUITheme.js",
+        "staticwebassets/materialUITheme.min.css",
+        "staticwebassets/materialUITheme.min.js",
+        "staticwebassets/minimalTheme.css",
+        "staticwebassets/minimalTheme.js",
+        "staticwebassets/minimalTheme.min.css",
+        "staticwebassets/minimalTheme.min.js",
+        "staticwebassets/sweetAlert2.js",
+        "staticwebassets/sweetAlert2.min.js",
+        "staticwebassets/wordpressAdminTheme.css",
+        "staticwebassets/wordpressAdminTheme.js",
+        "staticwebassets/wordpressAdminTheme.min.css",
+        "staticwebassets/wordpressAdminTheme.min.js"
       ]
     },
     "DocumentFormat.OpenXml/2.16.0": {
@@ -10754,6 +10846,7 @@
     "net6.0": [
       "ClosedXML >= 0.97.0",
       "ControWell.Shared >= 1.0.0",
+      "CurrieTechnologies.Razor.SweetAlert2 >= 5.4.0",
       "EPPlus >= 6.1.1",
       "EPPlus.Core >= 1.5.4",
       "Microsoft.AspNetCore.Components.WebAssembly >= 6.0.10",
@@ -10768,11 +10861,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Dagoberto\\Downloads\\AppPetra\\ControWell\\Client\\ControWell.Client.csproj",
+      "projectUniqueName": "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Client\\ControWell.Client.csproj",
       "projectName": "ControWell.Client",
-      "projectPath": "C:\\Users\\Dagoberto\\Downloads\\AppPetra\\ControWell\\Client\\ControWell.Client.csproj",
+      "projectPath": "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Client\\ControWell.Client.csproj",
       "packagesPath": "C:\\Users\\Dagoberto\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Dagoberto\\Downloads\\AppPetra\\ControWell\\Client\\obj\\",
+      "outputPath": "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Client\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Dagoberto\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -10789,8 +10882,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\Dagoberto\\Downloads\\AppPetra\\ControWell\\Shared\\ControWell.Shared.csproj": {
-              "projectPath": "C:\\Users\\Dagoberto\\Downloads\\AppPetra\\ControWell\\Shared\\ControWell.Shared.csproj"
+            "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Shared\\ControWell.Shared.csproj": {
+              "projectPath": "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Shared\\ControWell.Shared.csproj"
             }
           }
         }
@@ -10808,6 +10901,10 @@
           "ClosedXML": {
             "target": "Package",
             "version": "[0.97.0, )"
+          },
+          "CurrieTechnologies.Razor.SweetAlert2": {
+            "target": "Package",
+            "version": "[5.4.0, )"
           },
           "EPPlus": {
             "target": "Package",

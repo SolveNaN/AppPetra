@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "Sh99C6Iva15E5MX/Hb+b4yDrM3FWSj9gCBNxc7Jqney+v2uShxIrQnkqprL+p6inKtTi6NnyjEbvPymk+P3i1A==",
+  "dgSpecHash": "HVIQYfJ30nFvNPn4HYsc1dHGCZ4zSgMV+Bneg2y6hd7GZTVkKWZVCKVa7igt8JsCXViCH8SK7KMSPWHzofES0w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Dagoberto\\Downloads\\AppPetra\\ControWell\\Client\\ControWell.Client.csproj",
+  "projectFilePath": "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Client\\ControWell.Client.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Dagoberto\\.nuget\\packages\\closedxml\\0.97.0\\closedxml.0.97.0.nupkg.sha512",
+    "C:\\Users\\Dagoberto\\.nuget\\packages\\currietechnologies.razor.sweetalert2\\5.4.0\\currietechnologies.razor.sweetalert2.5.4.0.nupkg.sha512",
     "C:\\Users\\Dagoberto\\.nuget\\packages\\documentformat.openxml\\2.16.0\\documentformat.openxml.2.16.0.nupkg.sha512",
     "C:\\Users\\Dagoberto\\.nuget\\packages\\epplus\\6.1.1\\epplus.6.1.1.nupkg.sha512",
     "C:\\Users\\Dagoberto\\.nuget\\packages\\epplus.core\\1.5.4\\epplus.core.1.5.4.nupkg.sha512",
