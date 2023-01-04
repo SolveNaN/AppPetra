@@ -3,17 +3,19 @@
 @using ControWell.Shared
 @using System.Net.Http.Json
 @inject HttpClient Http
-@inject NavigationManager NanigationManager
+@inject NavigationManager NavigationManager
 @inject IVariableProcesoService VariableProcesoService
+@inject SweetAlertService Swal
+
 <h3>Variable ProcesoList</h3>
 
+<div class="table-container-scroll">
 <table class="table">
     <thead>
         <tr>
-            <th>Id</th>           
             <th>Nombre</th>
             <th>Unidad</th>
-            <th>Detalle</th>            
+            <th>Acciones</th>   
         </tr>
     </thead>
     <tbody>
@@ -22,11 +24,27 @@
         {
            
             <tr>
-                <td>@VariableProceso.Id</td>               
-                <td>@VariableProceso.Nombre</td>
-                <td>@VariableProceso.Unidad</td>
+               @if (update == true && VariableProceso.Id == id){<td><input @bind-value="@VariableProceso.Nombre" /></td>}else{<td>@VariableProceso.Nombre</td>}
+               @if (update == true && VariableProceso.Id == id){<td><input @bind-value="@VariableProceso.Unidad" /></td>}else{<td>@VariableProceso.Unidad</td>}
+
                 <td>
-                    <button class="btn btn-primary"@onclick="()=>MostrarUnaVariable(VariableProceso.Id)"><i class="oi oi-pencil"></i></button>
+                    @if (update == true && VariableProceso.Id == id)
+                     {
+                      <div class="button-group">
+                       <button class="btn btn-info" data-toggle="tooltip" title="Save" @onclick="()=> UpdateVariableProceso(VariableProceso)">
+                         <i class="fa-solid fa-circle-check"></i>
+                       </button>
+                       <button class="btn btn-danger" @onclick="Cancelar" data-toggle="tooltip" title="Cancel">
+                         <i class="fa-solid fa-ban"></i>
+                       </button>
+                      </div>
+                      } else
+                      {
+                       <div class="button-group">
+                         <button class="btn btn-primary" @onclick="()=>updatedatarow(VariableProceso.Id)"><i class="oi oi-pencil"></i></button>
+                                <button class="btn btn-warning" @onclick="()=>DeleteVariableProceso(VariableProceso.Id)"><i class="oi oi-trash"></i></button>
+                       </div>
+                      }
                 </td>
                 
             </tr>
@@ -34,24 +52,251 @@
         }
     </tbody>
 </table>
-<button class="btn btn-outline-success" @onclick="NevegarVariablesLista">Nueva Variable</button>
-<br />
-<br />
+</div>
+
+@*Loading database*@
+@if (PozosState == false)
+{
+    <div id="db-spinner">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+}
+@*AGREGAR NUEVO VARIABLE*@
+
+@if (state == true)
+{
+    <div class="create-container">
+        <div class="add-card">
+            <EditForm Model="variable" OnSubmit="EviarVariable">
+                <div>
+                    <label for="nombre">Nombre variable</label>
+                    <InputText id="nombre" @bind-Value="variable.Nombre" class="form-control"></InputText>
+                </div>
+                <div>
+                    <label for="lastname">Unidad de medida</label>
+                    <InputText id="lastname" @bind-Value="variable.Unidad" class="form-control"></InputText>
+                </div>
+
+                <br />
+
+                <button type="submit" class="btn btn-primary">Confirmar</button>
+                <button class="btn btn-warning" @onclick="Cancelar">Cancelar</button>
+                <br />
+                <br />
+            </EditForm>
+        </div>
+    </div>
+}
+else
+{
+    <h1></h1>
+}
+<button class="btn btn-success" @onclick="nuevavariable">Nueva Variable</button>
+
+<style>
+    body{
+   font-family: Arial;
+  }
+
+  button {
+      margin: 4px;
+  }
+
+  input {
+    border-radius: 5px;
+    background-color: #f7fafc;
+    width: 90%;
+    height: 40px;
+    border: 0.5px dashed blue;
+
+  }
+/* estilos de la tabla */
+
+  .table-container-scroll{
+          overflow:scroll;
+         height:500px;
+         width:100%;
+
+  }
+
+    table{
+        background-color: white;
+        text-align: left;
+        border-collapse: collapse;
+        width: 100%;
+
+    }
+
+    th, td{
+        padding: 10px;
+        margin-left: 40px;
+    }
+
+    thead{
+        background-color: #388e3c;
+        border-bottom: solid 3px #0F362D;
+        color: #eeeeee;
+        position: sticky;
+        top: 0;
+
+    }
+
+    tr:nth-child(even){
+        background-color: #ddd;
+    }
+
+    tr:hover td{
+       background-color: rgba(100, 176, 161, 0.8);
+       /*background-color: #369681;*/
+       color: #eeeeee;
+    }
+
+/*    crear variable*/    
+.create-container {
+        position: absolute;
+        top: 55px;
+        left: 250px;
+        padding: 12px;
+        width: 1110px;
+        height: 570px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.45);
+    }
+
+    .add-card {
+        width: 280px;
+        height: 300px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(223, 230, 233,1.0);
+        border-radius: 8px;
+        color: rgba(0, 0, 0,1.0);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.45);
+     
+    }      
+    
+    .add-card label {
+       margin-bottom: 5px;
+       margin-top: 6px;
+     }
+
+    .button-group {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #db-spinner {
+        position: absolute;
+        top: 55px;
+        left: 250px;
+        padding: 12px;
+        width: 1110px;
+        height: 570px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+
+</style>
 @code {
+
+    Boolean PozosState = false;
+    Boolean state = false;
+    Boolean update = false;
+    int id;
+
+    VariableProceso variable = new VariableProceso();
+
     public static List<VariableProceso> Variables = new List<VariableProceso>();
     protected override async Task OnInitializedAsync()
     {
         var resultado = await Http.GetFromJsonAsync<List<VariableProceso>>("api/VariableProceso");
         if (resultado != null)
             Variables = resultado;
+            PozosState = true;
     }
 
-    void NevegarVariablesLista()
+    async Task DeleteVariableProceso(int _id)
     {
-        NanigationManager.NavigateTo("/crearvariable");
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Eliminar",
+                Text = "¿ Estas seguro que deseas eliminar ?",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Eliminar",
+                CancelButtonText = "Cancelar"
+            });
+
+        var confirmado = !string.IsNullOrEmpty(resultado.Value);
+
+        if (!confirmado)
+        {
+            //context.PreventNavigation();
+        }
+        else
+        {
+        await VariableProcesoService.DeleteVariableProceso(_id);
+        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/variableprocesolist");
+        }
+    }
+
+    async Task EviarVariable()
+    {
+        await VariableProcesoService.CreateVariableProceso(variable);
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Success",
+                Text = "¿ Guardado correctamente ?",
+                Icon = SweetAlertIcon.Success,
+            });
+        state = false;
+        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/variableprocesolist");
+
+    }
+
+    async Task UpdateVariableProceso(VariableProceso variable)
+    {
+        await VariableProcesoService.UpdateVariableProceso(variable);
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Success",
+                Text = "¿ Actualizado correctamente ?",
+                Icon = SweetAlertIcon.Success,
+            });
+
+        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/variableprocesolist");
+    }
+
+    void updatedatarow(int _id)
+    {
+        update = true;
+        id = _id;
+    }
+
+    void Cancelar()
+    {
+        state = false;
+        update = false;
+
+    }
+    void nuevavariable()
+    {
+        //NanigationManager.NavigateTo("/crearpozo");
+        state = true;
     }
     void MostrarUnaVariable(int id)
     {
-        NanigationManager.NavigateTo($"singlevariableproceso/{id}");
+        NavigationManager.NavigateTo($"singlevariableproceso/{id}");
     }
 }
