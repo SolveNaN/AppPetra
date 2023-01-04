@@ -5,43 +5,73 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 @inject IPozoService PozoService
+@inject SweetAlertService Swal
+
 <h3>Pozos</h3>
+
+@*TABLA POZOLIST*@
 
 <div class="table-container-scroll">
 <table class="table">
     <thead>
         <tr>
-            <th>Id</th>
+           @* <th>Id</th>*@
             <th>Nombre</th>
             <th>Ubicacion</th>
             <th>Operadora</th>
             <th>Comentario</th>
+            <th></th>
+
         </tr>
     </thead>
     <tbody>
         @foreach (var Pozo in Pozos)
         {
-            <tr>
-                <td>@Pozo.Id</td>
-                <td>@Pozo.NombrePozo</td>
-                <td>@Pozo.Ubicacion</td>
-                <td>@Pozo.Operadora</td>
-                <td>@Pozo.Comentario</td>
-                <td>
-                    <button class="btn btn-primary"><i class="oi oi-pencil"></i></button>
-                </td>
+            
+             <tr>
+               @*<td>@Pozo.Id</td>*@
+               @if(update == true && Pozo.Id == id){<td><input @bind-value="@Pozo.NombrePozo" /></td>}else{<td>@Pozo.NombrePozo</td>}
+               @if(update == true && Pozo.Id == id){<td><input @bind-value="@Pozo.Ubicacion" /></td>}else{<td>@Pozo.Ubicacion</td>}
+               @if(update == true && Pozo.Id == id){<td><input @bind-value="@Pozo.Operadora" /></td>}else{<td>@Pozo.Operadora</td>}
+               @if(update == true && Pozo.Id == id){<td><input @bind-value="@Pozo.Comentario" /></td>}else{<td>@Pozo.Comentario</td>}
 
-            </tr>
-       
-        }
+                <td>
+                  @if(update == true && Pozo.Id == id){
+                            <button type="submit" class="btn btn-info" data-toggle="tooltip" title="Save" @onclick="(()=>UpdatePozo(Pozo))">
+                      <i class="fa-solid fa-circle-check"></i>
+                    </button>
+                    <button class="btn btn-danger" @onclick="Cancelar" data-toggle="tooltip" title="Cancel">
+                      <i class="fa-solid fa-ban"></i>
+                    </button>
+                  }else{
+                    <button class="btn btn-primary" data-toggle="tooltip" title="Update" @onclick="(()=> updatedatarow(Pozo.Id))"><i class="oi oi-pencil"></i></button>
+                    <button class="btn btn-warning" data-toggle="tooltip" title="Delete" @onclick="(()=>  DeletePozo(Pozo.Id))"><i class="oi oi-trash"></i></button>
+                  }
+                </td>
+               </tr>
+                }
     </tbody>
 </table>
 </div>
 
+@*Loading database*@
+@if (PozosState == false)
+{
+    <div id="db-spinner">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+}
+
+@*AGREGAR NUEVO POZO BUTTON*@
+
 @if (state == true){
-    <button class="btn btn-success" @onclick="NevegarVariablesLista" hidden >Nuevo Pozo</button>
+  <button class="btn btn-success" @onclick="NevegarVariablesLista" hidden >Nuevo Pozo</button>
 }else
 {<button class="btn btn-success" @onclick="NevegarVariablesLista">Nuevo Pozo</button> }
+
+@*AGREGAR NUEVO POZO*@
 
 @if (state == true)
  {
@@ -86,6 +116,21 @@
    font-family: Arial;
   }
 
+  input {
+    border-radius: 5px;
+    background-color: #f7fafc;
+    width: 90%;
+    height: 40px;
+    border: 0.5px dashed blue;
+        /*border-style: inset;*/
+/*      border-width: 1px;
+*/
+     /* border-top-style: hidden;
+      border-right-style: solid;
+      border-bottom-style: hidden;
+      border-left-style: solid;*/
+
+  }
 /* estilos de la tabla */
 
   .table-container-scroll{
@@ -104,7 +149,7 @@
     }
 
     th, td{
-        padding: 100px;
+        padding: 10px;
         margin-left: 40px;
     }
 
@@ -122,8 +167,9 @@
     }
 
     tr:hover td{
-        background-color: #369681;
-        color: white;
+       background-color: rgba(100, 176, 161, 0.8);
+       /*background-color: #369681;*/
+       color: #eeeeee;
     }
 
  /* estilos formulario agregar pozo*/
@@ -163,10 +209,25 @@
     align-items: center;
  }
 
+ #db-spinner {
+           position: absolute;
+           top: 55px;
+           left: 250px;
+           padding: 12px;
+           width: 1110px;
+           height: 570px;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+ }
+
 </style>
 @code {
 
     Boolean state = false;
+    Boolean update = false;
+    int id;
+    Boolean PozosState = false;
 
     public static List<Pozo> Pozos = new List<Pozo>();
 
@@ -175,6 +236,7 @@
         var resultado = await Http.GetFromJsonAsync<List<Pozo>>("api/Pozo");
         if (resultado != null)
             Pozos = resultado;
+        PozosState = true;
     }
 
     [Parameter]
@@ -186,35 +248,82 @@
 
     async Task EviarPozo()
     {
-        Console.WriteLine("hola dentro de la funcion enviar pozo");
-
-
         try
         {
             await PozoService.CreatePozo(pozo);
-            Console.WriteLine("dentro del try");
-
+            var resultado = await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Success",
+                    Text = "¿ Guardado correctamente ?",
+                    Icon = SweetAlertIcon.Success,
+                });
         }
         catch (InvalidCastException e)
         {
             Console.WriteLine(e);
-            Console.WriteLine("dentro del chatch");
 
             state = false;
+            NavigationManager.NavigateTo("/");
             NavigationManager.NavigateTo("/pozolist");
         }
         finally
         {
-            Console.WriteLine("ejecutando el finally");
-
-          state = false;
-          NavigationManager.NavigateTo("/pozolist");
+            state = false;
+            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/pozolist");
         }
+    }
+
+    async Task DeletePozo(int _id)
+    {
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Eliminar",
+                Text = "¿ Estas seguro que deseas eliminar ?",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Eliminar",
+                CancelButtonText = "Cancelar"
+            });
+
+        var confirmado = !string.IsNullOrEmpty(resultado.Value);
+
+        if(!confirmado)
+        {
+            //context.PreventNavigation();
+        }else
+        {           
+          await PozoService.DeletePozo(_id);
+            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/pozolist");
+        }
+
+    }
+
+    async Task UpdatePozo(Pozo pozo)
+    {
+        await PozoService.UpdatePozo(pozo);
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Success",
+                Text = "¿ Actualizado correctamente ?",
+                Icon = SweetAlertIcon.Success,
+            });
+
+        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/pozolist");
+    }
+
+    void updatedatarow(int _id)
+    {
+        update = true;
+        id = _id;
     }
 
     void Cancelar()
     {
         state = false;
+        update = false;
     }
 
     void NevegarVariablesLista()
