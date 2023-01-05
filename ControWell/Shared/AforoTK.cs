@@ -11,8 +11,8 @@ namespace ControWell.Shared
         public int Id { get; set; }
         public Tanque? Tanque { get; set; }
         public int TanqueId { get; set; }
-        public int Nivel { get; set; }
-        public int Volunen { get; set; }
+        public float Nivel { get; set; }
+        public decimal Volunen { get; set; }
         public int TempBase { get; set; }
         public string Material { get; set; } = string.Empty;
     }

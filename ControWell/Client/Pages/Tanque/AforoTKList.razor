@@ -59,7 +59,7 @@
     <button type="button" class="btn btn-primary" @onclick=Procesar>Actualizar Aforo</button>
     <button type="button" class="btn btn-danger" @onclick=EliminarAforo>Eliminar Aforos</button>
     <button type="button" class="btn btn-info" @onclick="()=>AgregarNivel(tanque.Id)">Agregar Nivel</button>
-    <button class="btn btn-outline-warning" @onclick="VolverAnterior">Volver</button>
+    <button class="btn btn-outline-warning" @onclick="VolverAnterior">Volver</button>   
 </EditForm>
 <div>
      <table class="table">
@@ -97,10 +97,6 @@
     public int? Id { get; set; }
 
     Tanque tanque = new Tanque();
-    AforoTK aforo = new AforoTK();
-
-
-
 
     void VolverAnterior()
     {
@@ -110,19 +106,26 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        tanque = await TanqueService.GetSingleTanque((int)Id);
+        tanque = await TanqueService.GetSingleTanque((int)Id);        
+    
     }
 
 
     //Para traer todos los aforos
-    public static List<AforoTK> aforos = new List<AforoTK>();
-
+    public static List<AforoTK> aforos = new List<AforoTK>();  
+    
     protected override async Task OnInitializedAsync()
     {
         var resultado = await Http.GetFromJsonAsync<List<AforoTK>>("api/Aforo");
         if (resultado != null)
             aforos = resultado;
+
     }
+    //Lista de aforos  lista ordenada
+    IEnumerable<AforoTK> losaforos = from af in aforos
+                                     orderby af.Nivel ascending
+                                     select af;
+
 
     //Funcion para navegar hasta la carga por excel a UploadAforo
 
@@ -195,50 +198,58 @@
                         where af.TanqueId == tanque.Id
                         orderby af.Nivel ascending
                         select af;
+        //trato de ordenar row
         foreach (DataRow row in dt.Rows)
         {
-
+            AforoTK aforo = new AforoTK();
+            AforoTK NuevoAforo = new AforoTK();//se inicializa el objeto nuevo
+            aforo.Id = default;
+            aforo.Nivel = 50000;
+            aforo.Volunen = 50000;
+            aforo.TanqueId = 50000;
+            NuevoAforo.Nivel = default;//define una referencia para saber que si está o no y actualiza el nivel
             foreach (DataColumn col in dt.Columns)
             {
                 var celda = row[col.ColumnName];
                 var columna = col.ColumnName;
                 columna = columna.ToString();
-                var Existe = false;
+                var ExisteNivel = false;//variable bandera
                 if (columna == "Nivel")
                 {
                     foreach(var i in misaforos)
                     {
-                        if (i.Nivel == Convert.ToInt32(celda.ToString()))
+                        if (i.Nivel == Convert.ToInt32(celda.ToString()))//el objeto aforo se llena constantemente
                         {
                             aforo.Id=i.Id;
                             aforo.Nivel=i.Nivel;
                             aforo.TanqueId = tanque.Id;                            
-                            Existe = true;
+                            ExisteNivel = true;
                         }
 
                     }
-                    if (Existe == false)
+                    if (ExisteNivel == false)
                     {
-                        aforo.Nivel = Convert.ToInt32(celda.ToString());
-                        aforo.TanqueId = tanque.Id;
+                        NuevoAforo.Nivel = Convert.ToInt32(celda.ToString());
+                        NuevoAforo.TanqueId = tanque.Id;
                         AforoService.CreateAforo(aforo);
                     }
 
                 }
+
                 if (columna == "Volumen")
                 {
-                    var losaforos = from af in aforos
-                                    where af.TanqueId == tanque.Id
-                                    select af;
-                    foreach(var j in losaforos)
+                    if (aforo.Id != default)
                     {
-                        if (aforo.Id==j.Id)
-                        {
-                            aforo.Volunen = Convert.ToInt32(celda.ToString());
-                            AforoService.UpdateAforo(aforo);
-                        }
+                        aforo.Volunen = Convert.ToDecimal(celda);
+                        AforoService.UpdateAforo(aforo);
                     }
-                    
+                    if (NuevoAforo.Nivel != default||NuevoAforo.Nivel==0)
+                    {
+                        
+                        NuevoAforo.Volunen = Convert.ToDecimal(celda);
+                        AforoService.CreateAforo(NuevoAforo);
+                    }
+
                 }
 
 

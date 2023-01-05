@@ -45,4 +45,8 @@
     </COMReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\CalMedicion\" />
+  </ItemGroup>
+
 </Project>
