@@ -1,29 +1,35 @@
 ﻿@page "/registroList"
 @inject HttpClient Http
-@inject NavigationManager NanigationManager
+@inject NavigationManager NavigationManager
 @using ControWell.Client.Services.AlarmaService;
+@using ControWell.Client.Services.RegistroService;
+@using ControWell.Client.Services.PozoService;
+@using ControWell.Client.Services.VariableProcesoService;
+@inject IRegistroService RegistroService
 @using ControWell.Shared
 @using System.Net.Http.Json
+@inject SweetAlertService Swal
+
 
 <h3>Listado de Registros</h3>
 
+<div class="table-container-scroll">
 <table class="table">
     <thead>
-        <tr style="background-color:antiquewhite">
-            <th>Id</th>
+        <tr>
             <th>Fecha</th>
             <th>Pozo</th>
             <th>Variable</th>
             <th>Medida</th>
             <th>Unidad</th>
-            <th>Editar</th>
+            <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
          @foreach (var Registro in Registros)
         {
             <tr>
-               <td>@Registro.Id</td>
                <td>@Registro.FechaHora</td>
                <td>@Registro.Pozo.NombrePozo</td>
                <td>@Registro.VariableProceso.Nombre</td>
@@ -38,9 +44,9 @@
                         {
                             if ((Registro.Medida >= a.Max || Registro.Medida<=a.Min)&&a.Habilitado==1)
                             {
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input"  value="" type="checkbox" role="checkbox" id="flexSwitchCheckChecked" checked>
-                                </div>
+                                <span data-toggle="tooltip" title="Alarm">
+                                    <i class="fa-solid fa-bell fa-beat   fa-lg " style="--fa-beat-scale: 1.3; --fa-animation-duration: 0.7s;"></i>
+                                </span>
                             }
                            
                         }
@@ -48,26 +54,294 @@
                 </td>
                <td>
                   <button class="btn btn-primary" @onclick="()=>MostrarUnRegistro(Registro.Id)"><i class="oi oi-pencil"></i></button>
+                   <button class="btn btn-warning" data-toggle="tooltip" title="Delete" @onclick="()=>DeleteRegistro(Registro.Id)"><i class="oi oi-trash"></i></button>
                </td>
 
             </tr>
         }                                     
     </tbody>
 </table>
-<button class="btn btn-outline-success" @onclick="NevegarRegistroLista">Nuevo Registro</button>
+</div>
+@*    NUEVO REGISTRO *@
+@if (state == true)
+    {
+        <div class="create-container">
+            <div class="add-card">
+                <EditForm Model="registro" OnSubmit="EnviarRegistro">
+                    <label>Pozo</label>
+                    <InputSelect @bind-Value="registro.PozoId" class="form-select">
+                        @foreach (var pozo in Pozos)
+                        {
+                            <option value="@pozo.Id">@pozo.NombrePozo</option>
+                        }
+
+                    </InputSelect>
+                    <label>Variable</label>
+                    <InputSelect @bind-Value="registro.VariableProcesoId" class="form-select">
+                        @foreach (var variableProceso in Variables)
+                        {
+                            <option value="@variableProceso.Id">@variableProceso.Nombre en @variableProceso.Unidad</option>
+                        }
+
+                    </InputSelect>
+                    <div>
+                        <label for="">Fecha</label>
+                    <InputDate id="fecha" @bind-Value:format="MM/dd/yyyy HH:mm:ss" @bind-Value="registro.FechaHora" class="form-control"></InputDate>
+
+                    </div>
+                    <div>
+                        <label for="">Medida</label>
+                        <InputNumber id="medida" @bind-Value="registro.Medida" class="form-control"></InputNumber>
+                    </div>
+
+                    <br />
+                    <div class="button-group-add">
+                      <button type="submit" class="btn btn-primary">Confirmar</button>
+                      <button class="btn btn-warning" @onclick="Cancelar">Cancelar</button>
+                    </div>
+                    <br />
+                    <br />
+                </EditForm>
+            </div>
+        </div>
+    }
+    @*    EDITAR REGISTRO *@
+    @if (update == true)
+    {
+        <div class="create-container">
+            <div class="add-card">
+                <EditForm Model="registro" OnSubmit="EnviarRegistro">
+                    <label>Pozo</label>
+                    <InputSelect @bind-Value="registro.PozoId" class="form-select">
+                        @foreach (var pozo in Pozos)
+                        {
+                            <option value="@pozo.Id">@pozo.NombrePozo</option>
+                        }
+
+                    </InputSelect>
+                    <label>Variable</label>
+                    <InputSelect @bind-Value="registro.VariableProcesoId" class="form-select">
+                        @foreach (var variableProceso in Variables)
+                        {
+                            <option value="@variableProceso.Id">@variableProceso.Nombre en @variableProceso.Unidad</option>
+                        }
+
+                    </InputSelect>
+                    <div>
+                        <label for="">Fecha</label>
+                        <InputDate id="fecha" @bind-Value="registro.FechaHora" class="form-control"></InputDate>
+                    </div>
+                    <div>
+                        <label for="">Medida</label>
+                        <InputNumber id="medida" @bind-Value="registro.Medida" class="form-control"></InputNumber>
+                    </div>
+
+                    <br />
+                      <div class="button-group-add">
+                        <button type="button" class="btn btn-primary" @onclick="UpdateRegistro">Actualizar</button>
+                        <button class="btn btn-warning" @onclick="Cancelar">Cancelar</button>
+                      </div>
+                    <br />
+                    <br />
+                </EditForm>
+            </div>
+        </div>
+    }
+
+<button class="btn btn-success" @onclick="nuevoRegistro">Nuevo Registro</button>
+
+<style>
+    body {
+        font-family: Arial;
+    }
+
+    InputSelect {
+        border-radius: 5px;
+        margin-top: 5px;
+    }
+
+    input {
+        border-radius: 5px;
+        background-color: #f7fafc;
+        width: 90%;
+        height: 40px;
+        border: 0.5px dashed blue;
+    }
+
+    button {
+        margin-left: 5px;
+    }
+
+    /* estilos de la tabla */
+
+    .table-container-scroll {
+        overflow: scroll;
+        height: 500px;
+        width: 100%;
+    }
+
+    table {
+        background-color: white;
+        text-align: left;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        padding: 10px;
+        margin-left: 40px;
+    }
+
+    thead {
+        background-color: #388e3c;
+        border-bottom: solid 3px #0F362D;
+        color: #eeeeee;
+        position: sticky;
+        top: 0px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #ddd;
+    }
+
+    tr:hover td {
+        background-color: rgba(100, 176, 161, 0.8);
+        /*background-color: #369681;*/
+        color: #eeeeee;
+    }
+
+    #db-spinner {
+        position: absolute;
+        top: 55px;
+        left: 250px;
+        padding: 12px;
+        width: 1110px;
+        height: 570px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .alarma-activa {
+        color: red;
+        font-weight: bold;
+    }
+
+    /*TAMAÑO CELDA*/
+    max {
+        width: 10%;
+    }
+
+    .fa-bell {
+        margin-left: 15px;
+        color: rgb(0, 0, 0);
+        /*      background-color: papayawhip;
+             border-radius: 0.2em;
+             padding: 0.3em;*/
+    }
+
+    .set-alarm {
+        background-color: transparent;
+        margin: 15px;
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-left: 5px;
+    }
+
+    .button-group-add {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 5px;
+    }
+
+    /*    crear alama*/
+    .create-container {
+        position: absolute;
+        top: 55px;
+        left: 250px;
+        padding: 12px;
+        width: 1110px;
+        height: 570px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.45);
+    }
+
+    .add-card {
+        width: 340px;
+        height: 440px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(223, 230, 233,1.0);
+        border-radius: 8px;
+        color: rgba(0, 0, 0,1.0);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.45);
+    }
+
+        .add-card label {
+            margin-bottom: 5px;
+            margin-top: 6px;
+        }
+
+    .button-group {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .button-group-add {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+</style>
 @code {
+
+    [Parameter]
+
+    public int? Id { get; set; }
+
+    Boolean state = false;
+    Boolean update = false;
+    int id;
+    Boolean AlarmaState = false;
+    Boolean setAlarma = false;
+    Boolean AlarmaRegistro = false;
+
+    Registro registro = new Registro();
+    VariableProceso variable = new VariableProceso();
+
+    Pozo pozo = new Pozo();
+
+    public static List<VariableProceso> Variables = new List<VariableProceso>();
+    public static List<Pozo> Pozos = new List<Pozo>();
     public static List<Registro> Registros = new List<Registro>();
-    
+
     /*Esta es la lista para traaer valores de alarmas aqui*/
 
     public static List<Alarma> Alarmas = new List<Alarma>();
 
     protected override async Task OnInitializedAsync()
     {
+        var mivariable = await Http.GetFromJsonAsync<List<VariableProceso>>("api/VariableProceso");
+        if (mivariable != null)
+            Variables = mivariable;
+
         var resultadoRegistro = await Http.GetFromJsonAsync<List<Registro>>("api/Registro");
         if (resultadoRegistro != null)
             Registros = resultadoRegistro;
- 
+        AlarmaRegistro = true;
+
+        var mipozo = await Http.GetFromJsonAsync<List<Pozo>>("api/Pozo");
+        if (mipozo != null)
+            Pozos = mipozo;
+
         /*Traer los valores de alarma aqui*/
         var resultadoAlarma = await Http.GetFromJsonAsync<List<Alarma>>("api/Alarma");
         if (resultadoAlarma != null)
@@ -75,17 +349,86 @@
 
     }
 
+    protected override async Task OnParametersSetAsync()
+    {
+        //registro = await RegistroService.GetSingleRegistro((int)Id);
+    }
+
+    async Task EnviarRegistro()
+    {
+        await RegistroService.CreateRegistro(registro);
+        Console.WriteLine("REGISTRO");
+
+                    Console.WriteLine(registro.FechaHora);
+
+            var resultado = await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Success",
+                    Text = "Guardado correctamente",
+                    Icon = SweetAlertIcon.Success,
+                });
+        state = true;
+        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/registroList");
+
+    }
+
+    async Task DeleteRegistro(int _id)
+    {
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Eliminar",
+                Text = "¿ Estas seguro que deseas eliminar ?",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Eliminar",
+                CancelButtonText = "Cancelar"
+            });
+
+        var confirmado = !string.IsNullOrEmpty(resultado.Value);
+
+        if (confirmado)       
+        {
+            await RegistroService.DeleteRegistro(_id);
+        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/registroList");
+        }
+    }
+
+    async Task UpdateRegistro()
+    {
+        await RegistroService.UpdateRegistro(registro);
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Success",
+                Text = "Actualizado correctamente",
+                Icon = SweetAlertIcon.Success,
+            });
+        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/registroList");
+    }
 
     void NevegarRegistroLista()
     {
-        NanigationManager.NavigateTo("/crearregistro");
+        //NavigationManager.NavigateTo("/crearregistro");
+        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/registroList");
     }
     void MostrarUnRegistro(int id)
     {
-        NanigationManager.NavigateTo($"singleregistro/{id}");
+        //NanigationManager.NavigateTo($"singleregistro/{id}");
+        update = true;
     }
 
-  
-
+    void Cancelar()
+    {
+        state = false;
+        update = false;
     }
+
+    void nuevoRegistro()
+    {
+        state = true;
+    }
+}
 
