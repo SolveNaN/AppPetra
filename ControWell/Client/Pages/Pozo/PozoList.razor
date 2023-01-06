@@ -37,7 +37,7 @@
 
                 <td>
                   @if(update == true && Pozo.Id == id){
-                            <button type="submit" class="btn btn-info" data-toggle="tooltip" title="Save" @onclick="(()=>UpdatePozo(Pozo))">
+                    <button type="submit" class="btn btn-info" data-toggle="tooltip" title="Save" @onclick="(()=>UpdatePozo(Pozo))">
                       <i class="fa-solid fa-circle-check"></i>
                     </button>
                     <button class="btn btn-danger" @onclick="Cancelar" data-toggle="tooltip" title="Cancel">
@@ -254,7 +254,7 @@
             var resultado = await Swal.FireAsync(new SweetAlertOptions
                 {
                     Title = "Success",
-                    Text = "¿ Guardado correctamente ?",
+                    Text = "Guardado correctamente",
                     Icon = SweetAlertIcon.Success,
                 });
         }
@@ -306,7 +306,7 @@
         var resultado = await Swal.FireAsync(new SweetAlertOptions
             {
                 Title = "Success",
-                Text = "¿ Actualizado correctamente ?",
+                Text = "Actualizado correctamente",
                 Icon = SweetAlertIcon.Success,
             });
 
