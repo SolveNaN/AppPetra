@@ -1,75 +1,487 @@
 ﻿@page "/alarmalist"
-@inject IAlarmaService AlarmarSerice
+@inject IAlarmaService AlarmaService
+@inject IPozoService PozoService
+@inject IVariableProcesoService VariableProcesoService
 @inject HttpClient Http
-@inject NavigationManager NanigationManager
+@inject NavigationManager NavigationManager
 @using ControWell.Client.Services.AlarmaService;
+@using ControWell.Client.Services.PozoService;
+@using ControWell.Client.Services.VariableProcesoService;
 @using ControWell.Shared
 @using System.Net.Http.Json
+@inject SweetAlertService Swal
+
 
 <h3>Listado de Alarmas</h3>
 
+<div class="table-container-scroll">
 <table class="table">
     <thead>
         <tr>
-            <th>Id</th>
             <th>Pozos</th>
             <th>Variable</th>
             <th>Max</th>
             <th>Min</th>
             <th>U</th>
-            <th>Habilitada</th>            
-            <th>Edit</th>
+@*            <th>Habilitada</th>            
+*@            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var Alarma in Alarmas)
         {
-                                <tr>
-                                    <td>@Alarma.Id</td>
-                                    <td>@Alarma.Pozo.NombrePozo</td>
-                                    <td>@Alarma.VariableProceso.Nombre</td>
-                                    <td>@Alarma.Max</td>
-                                    <td>@Alarma.Min</td>
-                                    <td>@Alarma.VariableProceso.Unidad</td>                                    
-                                    <td>
-                    <div class="form-check form-switch">
-                        @if(Alarma.Habilitado==1){
-                                <input class="form-check-input" value="@Alarma.Habilitado" type="checkbox" role="checkbox" id="flexSwitchCheckChecked" checked>
-                        }
-                        else{
-                                 <input class="form-check-input" value="@Alarma.Habilitado" type="checkbox" role="checkbox" id="flexSwitchCheckChecked" unchecked>
-                        }
-                        
-                        
-                    </div>
-                                    </td>
-                                    <td>
-                    <button class="btn btn-primary" @onclick="()=>MostrarUnaAlarma(Alarma.Id)"><i class="oi oi-pencil"></i></button>
-                                    </td>
-
-                                </tr>
+          <tr>
+                    @if (update == true && Alarma.Id == id)
+                    {
+                        <td><input @bind-value="@Alarma.Pozo.NombrePozo" /></td>
+                    }
+                    else if (Alarma.Habilitado == 1)
+                    {
+                        <td class="alarma-activa">@Alarma.Pozo.NombrePozo</td>
+                    }
+                    else{
+                     <td>@Alarma.Pozo.NombrePozo</td>
+                    }
+                    @if (update == true && Alarma.Id == id)
+                    {
+                        <td><input @bind-value="@Alarma.VariableProceso.Nombre" /></td>
+                    }
+                    else if (Alarma.Habilitado == 1)
+                    {
+                        <td class="alarma-activa">@Alarma.VariableProceso.Nombre</td>
+                    }
+                    else
+                    {
+                        <td>@Alarma.VariableProceso.Nombre</td>
+                    }
+                    @if (update == true && Alarma.Id == id)
+                    {
+                        <td><input @bind-value="@Alarma.Max" class="max" /></td>
+                    }
+                    else if (Alarma.Habilitado == 1)
+                    {
+                        <td class="alarma-activa">@Alarma.Max</td>
+                    }
+                    else
+                    {
+                        <td>@Alarma.Max</td>
+                    }
+                    @if (update == true && Alarma.Id == id)
+                    {
+                        <td><input @bind-value="@Alarma.Min" /></td>
+                    }
+                    else if (Alarma.Habilitado == 1)
+                    {
+                        <td class="alarma-activa">@Alarma.Min</td>
+                    }
+                    else
+                    {
+                        <td>@Alarma.Min</td>
+                    }
+                    @if (update == true && Alarma.Id == id)
+                    {
+                        <td><input @bind-value="@Alarma.VariableProceso.Unidad" /></td>
+                    }
+                    else if (Alarma.Habilitado == 1)
+                    {
+                        <td class="alarma-activa">@Alarma.VariableProceso.Unidad</td>
+                    }
+                    else
+                    {
+                        <td>@Alarma.VariableProceso.Unidad</td>
+                    }
+             
+       @*      <td>
+              <div class="form-check form-switch"> 
+                @if(Alarma.Habilitado==1){
+                   <input class="form-check-input" value="@Alarma.Habilitado" type="checkbox" role="checkbox" id="flexSwitchCheckChecked" checked>
+                 }else{
+                      <input class="form-check-input" value="@Alarma.Habilitado" type="checkbox" role="checkbox" id="flexSwitchCheckChecked" unchecked>
+                 }
+              </div>
+             </td>*@
+             <td>
+               @if (update == true && Alarma.Id == id)
+                 {
+                <div class="button-group">
+                   <button type="submit" class="btn btn-info" data-toggle="tooltip" title="Save" @onclick="()=>UpdateAlarma(Alarma)">
+                     <i class="fa-solid fa-circle-check"></i>
+                   </button>
+                   <button class="btn btn-danger" @onclick="Cancelar" data-toggle="tooltip" title="Cancel">
+                     <i class="fa-solid fa-ban"></i>
+                   </button>
+                     @if (setAlarma == false)
+                       {                    
+                         <span class="set-alarm" @onclick="estadoprueba" data-toggle="tooltip" title="Activar">
+                           <i class="fa-solid fa-bell-slash fa-lg"></i>
+                         </span>
+                       }else{
+                         <span class="set-alarm-desactivar" @onclick="estadoprueba" data-toggle="tooltip" title="Desactivar">
+                            <i class="fa-solid fa-bell  fa-lg"></i>
+                         </span>
+                       }
+                </div>
+                  } else
+                    {
+                     <div class="button-group-1">
+                      <button class="btn btn-primary" data-toggle="tooltip" title="Update" @onclick="(()=> updatedatarow(Alarma.Id))"><i class="oi oi-pencil"></i></button>
+                      <button class="btn btn-warning" data-toggle="tooltip" title="Delete" @onclick="()=>DeleteAlarma(Alarma.Id)"><i class="oi oi-trash"></i></button>
+                                @if (Alarma.Habilitado == 1)
+                                {
+                                 <span data-toggle="tooltip" title="Alarm">
+                                    <i class="fa-solid fa-bell fa-beat   fa-lg " style="--fa-beat-scale: 1.3; --fa-animation-duration: 0.7s;"></i>
+                                 </span>
+                                    @* fa - beat fa - fade  fa-bounce *@                             
+                                }else{
+                                    <span data-toggle="tooltip" title="" >
+                                        <p>⠀⠀⠀</p> @* texto invisible*@
+                                    </span>
+                                }
+                     </div>
+                    }
+                      
+              </td>
+           </tr>
         }
     </tbody>
+
 </table>
-<button class="btn btn-outline-success" @onclick="NevegarVariablesLista">Ajustar Nueva Alarma</button>
+</div>
+
+@*Crear alarma*@
+@if (state == true)
+{
+    <div class="create-container">
+        <div class="add-card">
+            <EditForm Model="alarma" OnSubmit="EviarAlarma">
+                <label>Pozo</label>
+                <InputSelect @bind-Value="alarma.PozoId" class="form-select">
+                    @foreach (var pozo in Pozos)
+                    {
+                        <option value="@pozo.Id">@pozo.NombrePozo</option>
+                    }
+
+                </InputSelect>
+                <label>Variable</label>
+                <InputSelect @bind-Value="alarma.VariableProcesoId" class="form-select">
+                    @foreach (var variableProceso in Variables)
+                    {
+                        <option value="@variableProceso.Id">@variableProceso.Nombre en @variableProceso.Unidad</option>
+                    }
+
+                </InputSelect>
+                <div>
+                    <label for="">Valor maximo</label>
+                    <InputNumber id="max" @bind-Value="alarma.Max" class="form-control"></InputNumber>
+                </div>
+                <div>
+                    <label for="">Valor minimo</label>
+                    <InputNumber id="max" @bind-Value="alarma.Min" class="form-control"></InputNumber>
+                </div>
+
+                <br />
+
+                <div>
+                    <InputSelect @bind-Value=alarma.Habilitado>
+
+                        <option value="1">Activar</option>
+                        <option value="0">Desactivar</option>
+
+                    </InputSelect>
+                </div>
+                <br />
+                <div class="button-group-add ">
+                  <button type="submit" class="btn btn-primary">Confirmar</button>
+                  <button class="btn btn-warning" @onclick="Cancelar">Cancelar</button>
+                </div>
+ 
+            </EditForm>
+        </div>
+    </div>
+}
+
+
+@*Loading database*@
+@if (AlarmaState == false)
+{
+    <div id="db-spinner">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+}
+
+<button class="btn btn-success" @onclick="nuevaAlarma">Ajustar Nueva Alarma</button>
+
+<style>
+
+    body {
+        font-family: Arial;
+    }
+
+    InputSelect {
+        border-radius: 5px;
+        margin-top: 5px;
+    }
+    input {
+        border-radius: 5px;
+        background-color: #f7fafc;
+        width: 90%;
+        height: 40px;
+        border: 0.5px dashed blue;
+    }
+
+    button{
+        margin-left: 5px;
+    }
+  
+    /* estilos de la tabla */
+
+    .table-container-scroll {
+        overflow: scroll;
+        height: 500px;
+        width: 100%;
+    }
+
+    table {
+        background-color: white;
+        text-align: left;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        padding: 10px;
+        margin-left: 40px;
+    }
+
+    thead {
+        background-color: #388e3c;
+        border-bottom: solid 3px #0F362D;
+        color: #eeeeee;
+        position: sticky;
+        top: 0px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #ddd;
+    }
+
+    tr:hover td {
+        background-color: rgba(100, 176, 161, 0.8);
+        /*background-color: #369681;*/
+        color: #eeeeee;
+    }
+
+    #db-spinner {
+        position: absolute;
+        top: 55px;
+        left: 250px;
+        padding: 12px;
+        width: 1110px;
+        height: 570px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .alarma-activa {
+        color: red;
+        font-weight: bold;
+    }
+
+    /*TAMAÑO CELDA*/
+    max {
+        width: 10%;
+    }
+
+    .fa-bell {
+      margin-left: 15px;
+      color: rgb(0, 0, 0);
+ /*      background-color: papayawhip;
+         border-radius: 0.2em;
+         padding: 0.3em;*/
+     }
+
+    .set-alarm{
+        background-color: transparent;
+        margin: 15px;
+    }
+
+    .button-group {
+       display: flex;
+       justify-content: space-between;
+       align-items: center;
+       margin-left: 5px;
+    }
+
+    .button-group-1 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 5px;
+    }
+
+    /*    crear alama*/
+    .create-container {
+        position: absolute;
+        top: 55px;
+        left: 250px;
+        padding: 12px;
+        width: 1110px;
+        height: 570px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.45);
+    }
+
+    .add-card {
+        width: 340px;
+        height: 440px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(223, 230, 233,1.0);
+        border-radius: 8px;
+        color: rgba(0, 0, 0,1.0);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.45);
+    }
+
+    .add-card label {
+        margin-bottom: 5px;
+        margin-top: 6px;
+     }
+
+    .button-group {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .button-group-add {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .set-alarm-desactivar{
+        background-color: transparent;
+        margin-right: 22px;
+        margin-top:15px;
+        margin-bottom: 15px;
+    }
+</style>
 @code {
+
+    [Parameter]
+
+    public int? Id { get; set; }
+
+    Boolean state = false;
+    Boolean update = false;
+    int id;
+    Boolean AlarmaState = false;
+    Boolean setAlarma = false;
+
     public static List<Alarma> Alarmas = new List<Alarma>();
+
+    Alarma alarma = new Alarma();
+    VariableProceso variable = new VariableProceso();
+    Pozo pozo = new Pozo();
+
+    public static List<VariableProceso> Variables = new List<VariableProceso>();
+    public static List<Pozo> Pozos = new List<Pozo>();
 
     protected override async Task OnInitializedAsync()
     {
         var resultado = await Http.GetFromJsonAsync<List<Alarma>>("api/Alarma");
         if (resultado != null)
             Alarmas = resultado;
+        AlarmaState = true;
+
+        var resultadoVP = await Http.GetFromJsonAsync<List<VariableProceso>>("api/VariableProceso");
+        if (resultado != null)
+            Variables = resultadoVP;
+
+
+        var resultadP = await Http.GetFromJsonAsync<List<Pozo>>("api/Pozo");
+        if (resultadP != null)
+            Pozos = resultadP;
 
     }
 
-
-    void NevegarVariablesLista()
+    async Task EviarAlarma()
     {
-        NanigationManager.NavigateTo("/crearalarma");
+        await AlarmaService.CreateAlarma(alarma);
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Success",
+                Text = "Guardado correctamente",
+                Icon = SweetAlertIcon.Success,
+            });
+        state = true;
+        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/alarmalist");
+
+    }
+
+    async Task UpdateAlarma(Alarma alarma)
+    {
+        await AlarmaService.UpdateAlarma(alarma);
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Success",
+                Text = "Actualizado correctamente",
+                Icon = SweetAlertIcon.Success,
+            });
+
+        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/alarmalist");
+    }
+
+    async Task DeleteAlarma(int _id)
+    {
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Eliminar",
+                Text = "¿ Estas seguro que deseas eliminar ?",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Eliminar",
+                CancelButtonText = "Cancelar"
+            });
+
+        var confirmado = !string.IsNullOrEmpty(resultado.Value);
+
+        if (confirmado)
+        {
+            await AlarmaService.DeleteAlarma(_id);
+            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/alarmalist");
+        }
+    }
+
+    void updatedatarow(int _id)
+    {
+        update = true;
+        id = _id;
+    }
+
+    void estadoprueba()
+    {
+        setAlarma = !setAlarma;
+    }
+    void Cancelar()
+    {
+        state = false;
+        update = false;
+    }
+    void nuevaAlarma()
+    {
+        state = true;
     }
     void MostrarUnaAlarma(int id)
     {
-        NanigationManager.NavigateTo($"singlealarma/{id}");
+        //NanigationManager.NavigateTo($"singlealarma/{id}");
     }
 }
