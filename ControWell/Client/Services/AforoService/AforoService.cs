@@ -23,14 +23,15 @@ namespace ControWell.Client.Services.AforoService
         public async Task CreateAforo(AforoTK aforo)
         {
             var result = await _http.PostAsJsonAsync("api/Aforo", aforo);
+            await Task.Delay(1000);
             await SetAforo(result);
+            
         }
 
         private async Task SetAforo(HttpResponseMessage result)
         {
             var response = await result.Content.ReadFromJsonAsync<List<AforoTK>>();
-            Aforos = response;
-            
+            Aforos = response;            
         }
 
         public async Task<AforoTK> GetSingleAforo(int id)
@@ -40,6 +41,7 @@ namespace ControWell.Client.Services.AforoService
                 return result;
             throw new Exception("El aforo no se encuentra");
         }
+        //implementacion de consulta por nivel
 
 
         public async Task DeleteAforo(int id)
@@ -55,5 +57,9 @@ namespace ControWell.Client.Services.AforoService
             await SetAforo(result);
         }
 
+        Task IAforoService.ConsultaNivel(float nivel)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

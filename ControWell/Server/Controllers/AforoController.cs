@@ -16,11 +16,13 @@ namespace ControWell.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<AforoTK>>> GetAforos()
+        public async Task<ActionResult<List<AforoTK>>> GetAforos()//Aqui se obtiene la lista ordenada siempre
         {
-            var aforos = await _context.AforoTKs.Include(t => t.Tanque)
+            var aforos = from af in _context.AforoTKs                      
+                         orderby af.Nivel ascending
+                         select af;
 
-                .ToListAsync();
+                
             return Ok(aforos);
         }
 
@@ -44,6 +46,22 @@ namespace ControWell.Server.Controllers
 
             return Ok(aforo);
         }
+        //Consulta por nivel
+        [HttpGet]
+        [Route("{Nivel}")]
+        public async Task<ActionResult<List<AforoTK>>> ConsultaNivel(float nivel)
+        {
+            var aforo = from af in _context.AforoTKs
+                        where af.Nivel == nivel
+                        orderby af.Nivel ascending
+                        select af;
+            if (aforo == null)
+            {
+                return NotFound("El aforo no fue encontrado :/");
+            }
+
+            return Ok(aforo);
+        }
 
         [HttpDelete]
         [Route("{id}")]
@@ -60,6 +78,7 @@ namespace ControWell.Server.Controllers
 
             return Ok(await GetDbAforo());
         }
+
 
         [HttpPost]
 
