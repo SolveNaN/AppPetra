@@ -11,5 +11,6 @@
         Task CreateAforo(AforoTK aforo);
         Task DeleteAforo(int id);
         Task UpdateAforo(AforoTK aforo);
+        Task ConsultaNivel(float nivel);
     }
 }

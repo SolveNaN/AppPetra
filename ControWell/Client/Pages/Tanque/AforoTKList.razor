@@ -6,7 +6,6 @@
 @using System.Net.Http.Json
 @using ControWell.Client.Services.TanqueService;
 @using ControWell.Client.Services.AforoService;
-
 @using System.Data
 @using System.IO
 @using NPOI.XSSF.UserModel
@@ -23,6 +22,12 @@
         <label for="nombre">Nombre tanque</label>
         <InputText @bind-Value="tanque.NombreTanque" class="form-control"></InputText>
     </div>
+        <InputFile OnChange="@ImportExcelFile" />
+    <button type="button" class="btn btn-primary" @onclick=Procesar>Actualizar Aforo</button>
+    <button type="button" class="btn btn-danger" @onclick=EliminarAforo>Eliminar Aforos</button>
+    <button type="button" class="btn btn-info" @onclick="()=>AgregarNivel(tanque.Id)">Agregar Nivel</button>
+    <button class="btn btn-outline-warning" @onclick="ver">Ver XLXS</button>
+    <button class="btn btn-outline-warning" @onclick="VolverAnterior">Volver</button> 
     <div>
         
                 <table class="table">
@@ -33,7 +38,7 @@
                             <th>Editar</th>
                         </tr>
                     </thead>
-                    <tbody>                        
+                    <tbody>
                      @foreach(var af in aforos)
                          {
                           if (af.TanqueId == tanque.Id)
@@ -55,16 +60,12 @@
     </div>
     <h1></h1>
     <br />
-    <InputFile OnChange="@ImportExcelFile" />
-    <button type="button" class="btn btn-primary" @onclick=Procesar>Actualizar Aforo</button>
-    <button type="button" class="btn btn-danger" @onclick=EliminarAforo>Eliminar Aforos</button>
-    <button type="button" class="btn btn-info" @onclick="()=>AgregarNivel(tanque.Id)">Agregar Nivel</button>
-    <button class="btn btn-outline-warning" @onclick="VolverAnterior">Volver</button>   
+ 
 </EditForm>
 <div>
      <table class="table">
         <thead> 
-            <tr>
+            <tr>                
             @foreach (DataColumn col in dt.Columns)
             {
                             <th>@col.ColumnName</th>
@@ -106,25 +107,22 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        tanque = await TanqueService.GetSingleTanque((int)Id);        
-    
+        tanque = await TanqueService.GetSingleTanque((int)Id);
+
+
     }
 
 
     //Para traer todos los aforos
     public static List<AforoTK> aforos = new List<AforoTK>();  
-    
+
     protected override async Task OnInitializedAsync()
     {
         var resultado = await Http.GetFromJsonAsync<List<AforoTK>>("api/Aforo");
         if (resultado != null)
-            aforos = resultado;
-
+            aforos = resultado;        
     }
-    //Lista de aforos  lista ordenada
-    IEnumerable<AforoTK> losaforos = from af in aforos
-                                     orderby af.Nivel ascending
-                                     select af;
+
 
 
     //Funcion para navegar hasta la carga por excel a UploadAforo
@@ -134,9 +132,9 @@
         NanigationManager.NavigateTo("/uploadaforo");
     }
 
-    public void EditarNivel(int Id)
+    public async void EditarNivel(int Id)
     {
-        NanigationManager.NavigateTo($"/editarnivel/{Id}");
+        NanigationManager.NavigateTo($"/editarnivel/{Id}");        
     }
 
     public void AgregarNivel(int Id)
@@ -192,7 +190,7 @@
     //Inicio de la funcion para tomar los datos del excel
 
     async Task Procesar()
-    {
+    {    
         //registros de aforo con linq para el tanque actual
         var misaforos = from af in aforos
                         where af.TanqueId == tanque.Id
@@ -232,6 +230,7 @@
                         NuevoAforo.Nivel = Convert.ToInt32(celda.ToString());
                         NuevoAforo.TanqueId = tanque.Id;
                         AforoService.CreateAforo(aforo);
+                        await Task.Delay(150);
                     }
 
                 }
@@ -244,10 +243,10 @@
                         AforoService.UpdateAforo(aforo);
                     }
                     if (NuevoAforo.Nivel != default||NuevoAforo.Nivel==0)
-                    {
-                        
+                    {                        
                         NuevoAforo.Volunen = Convert.ToDecimal(celda);
                         AforoService.CreateAforo(NuevoAforo);
+                        await Task.Delay(150);
                     }
 
                 }
@@ -256,11 +255,10 @@
             }
 
 
-            
-        }
+        }       
         NanigationManager.NavigateTo("/tanquelist");
-    }
 
+    }                      
     //Fin de funcion para tomar datos de excel
 
     //Funcion para enviar los datos a la base
@@ -271,19 +269,28 @@
     public void EliminarAforo()
     {
         var misaforos = from af in aforos
-                    where af.TanqueId == tanque.Id
-                    select af;
+                        where af.TanqueId == tanque.Id
+                        select af;
         foreach(var i in misaforos)
         {
             AforoService.DeleteAforo(i.Id);    
-        }
+        }        
         NanigationManager.NavigateTo("/tanquelist");
     }
 
- 
+
     //fucion para ver el excel
     public void ver()
     {
 
     }
+
+    //Consulta por nivel
+    AforoTK miconsulta = new AforoTK();
+    async Task ConsultaNivel(float nivel)
+    {
+        await AforoService.ConsultaNivel(nivel);
+    
+    }
+
 }
