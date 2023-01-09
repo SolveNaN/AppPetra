@@ -19,7 +19,7 @@
     <p>Ingresar pozos.</p>
 
 
-    <button class="btn btn-primary" @onclick=procesar>Confirmar</button>
+    <button class="btn btn-primary" @onclick=Procesar>Confirmar</button>
 <button class="btn btn-info" @onclick=ver>Ver</button>
 <button class="btn btn-warning" @onclick=volver>Descartar</button>
      <table class="table">
@@ -101,28 +101,28 @@
 
     public int? Id { get; set; }
     /*Objeto reistro*/
-    Registro registro = new Registro();
 
 
-    async Task EviarRegistro()
-    {
-        await RegistroService.CreateRegistro(registro);
 
-    }
+
     //Fin de funcion para tomar datos de excel
 
     //Funcion para enviar los datos a la base
-    async Task procesar()
+    async Task Procesar()
     {
+        Registro registro = new Registro();//creo el objeto registro
+                                           //lo que hago es llenar por primera vez el registro con datos iniciales ficticios
+
         foreach (DataRow row in dt.Rows)
         {
 
             foreach (DataColumn col in dt.Columns)
             {
+
                 var celda = row[col.ColumnName];
                 var columna = col.ColumnName;
-                columna = columna.ToString();
-
+                columna = columna.ToString()
+    ;
                 if (columna == "Fecha")
                 {
                     registro.FechaHora = Convert.ToDateTime(celda.ToString());
@@ -140,15 +140,32 @@
                 }
                 foreach (var variable in Variables)
                 {
-
+                    var RegistroExiste = false;//varible bandera
+                    registro.Id = default;
                     if (variable.Nombre == columna)
                     {
                         registro.VariableProcesoId = variable.Id;
                         registro.Medida = Convert.ToSingle(celda.ToString());
-                        RegistroService.CreateRegistro(registro);
-
+                        foreach(var i in Registros)
+                        {
+                            if (i.PozoId == registro.PozoId && i.VariableProcesoId == registro.VariableProcesoId && i.FechaHora == registro.FechaHora)
+                            {
+                                RegistroExiste = true;
+                                registro.Id = i.Id;
+                            }
+                        }
+                        if (RegistroExiste == true)
+                        {
+                            RegistroService.UpdateRegistro(registro);
+                            
+                        }
+                        if (RegistroExiste == false)
+                        {
+                            RegistroService.CreateRegistro(registro);
+                        }
                     }
                 }
+
             }
 
         }

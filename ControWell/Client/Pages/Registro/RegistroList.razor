@@ -74,7 +74,7 @@
                         {
                             <option value="@pozo.Id">@pozo.NombrePozo</option>
                         }
-
+                        
                     </InputSelect>
                     <label>Variable</label>
                     <InputSelect @bind-Value="registro.VariableProcesoId" class="form-select">
@@ -149,6 +149,7 @@
     }
 
 <button class="btn btn-success" @onclick="nuevoRegistro">Nuevo Registro</button>
+<button class="btn btn-info" @onclick="CargarXSXL">Carga XLXS</button>
 
 <style>
     body {
@@ -359,9 +360,9 @@
         await RegistroService.CreateRegistro(registro);
         Console.WriteLine("REGISTRO");
 
-                    Console.WriteLine(registro.FechaHora);
+        Console.WriteLine(registro.FechaHora);
 
-            var resultado = await Swal.FireAsync(new SweetAlertOptions
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
                 {
                     Title = "Success",
                     Text = "Guardado correctamente",
@@ -390,8 +391,8 @@
         if (confirmado)       
         {
             await RegistroService.DeleteRegistro(_id);
-        NavigationManager.NavigateTo("/");
-        NavigationManager.NavigateTo("/registroList");
+            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/registroList");
         }
     }
 
@@ -430,5 +431,15 @@
     {
         state = true;
     }
+
+    //Navegacion hacia la carga por excel
+
+    public void CargarXSXL()
+    {
+        NavigationManager.NavigateTo("/uploaddata");
+    }
+
+    //Consulta para que por pozo solo me traiga las variables disponibles para ese pozo
+
 }
 

@@ -9,6 +9,7 @@
 @using ControWell.Client.Services.VariableProcesoService;
 @using ControWell.Shared
 @using System.Net.Http.Json
+@using System.Linq
 @inject SweetAlertService Swal
 
 
@@ -164,10 +165,36 @@
                 </InputSelect>
                 <label>Variable</label>
                 <InputSelect @bind-Value="alarma.VariableProcesoId" class="form-select">
-                    @foreach (var variableProceso in Variables)
+                   @if(1==1)
                     {
-                        <option value="@variableProceso.Id">@variableProceso.Nombre en @variableProceso.Unidad</option>
+                        
+                        var mialarma = from al in Alarmas//alarmas para ese pozo en especifico
+                        where al.PozoId==alarma.PozoId
+                        select al.VariableProceso;
+
+                        
+                        foreach (var i in Variables)
+                        {
+                            var igual = false;
+                            foreach(var j in mialarma)
+                            {
+                                if (i.Id == j.Id)
+                                {
+                                    
+                                    igual = true;
+
+                                }
+                            }
+                            if (igual == false)
+                            {
+                                <option value="@i.Id">@i.Nombre en @i.Unidad</option>
+                            }
+                        }
+                        
+                       
+                        
                     }
+
 
                 </InputSelect>
                 <div>
@@ -408,6 +435,7 @@
         if (resultadP != null)
             Pozos = resultadP;
 
+
     }
 
     async Task EviarAlarma()
@@ -484,4 +512,14 @@
     {
         //NanigationManager.NavigateTo($"singlealarma/{id}");
     }
+    //diferencia entre dos listas
+
+    // lista 1---las alarmas por pozo---de esa lista alarma.variable
+    //lista 2---variable proceso
+
+    //lista 1
+
+
+
+                   
 }

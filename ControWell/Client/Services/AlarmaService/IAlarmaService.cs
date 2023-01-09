@@ -11,5 +11,7 @@
         Task CreateAlarma(Alarma alarma);
         Task DeleteAlarma(int id);
         Task UpdateAlarma(Alarma alarma);
+
+        
     }
 }
