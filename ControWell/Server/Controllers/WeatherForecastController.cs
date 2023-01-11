@@ -1,34 +1,53 @@
-using ControWell.Shared;
+using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
+using ControWell.Shared;
+using System.Diagnostics;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
+using NPOI.HSSF.UserModel;
+using ControWell.Shared;
+using EFCore.BulkExtensions;
+using ControWell.Shared;
+using System.Diagnostics.Contracts;
+using ClosedXML.Excel;
+using System.Data;
 
 namespace ControWell.Server.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class WeatherForecastController1 : Controller
     {
-        private static readonly string[] Summaries = new[]
+        public FileResult Index()
         {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Nombre");
+            dt.Columns.Add("Telefono");
+            dt.Columns.Add("Edad");
 
-        private readonly ILogger<WeatherForecastController> _logger;
+            DataRow dr = dt.NewRow();
+            dr["Nombre"] = "Omar";
+            dr["Telefono"] = "3142970790";
+            dr["Edad"] = "29";
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
-        {
-            _logger = logger;
-        }
+            DataRow dr2 = dt.NewRow();
+            dr2["Nombre"] = "Andres";
+            dr2["Telefono"] = "3142970790";
+            dr2["Edad"] = "26";
+            dt.Rows.Add(dr);
+            dt.Rows.Add(dr2);
 
-        [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
-        {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            using (var libro = new XLWorkbook())
             {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+                dt.TableName = "Clientes";
+                var hoja = libro.Worksheets.Add(dt);
+                hoja.ColumnsUsed().AdjustToContents();
+                using (var memoria = new MemoryStream())
+                {
+                    libro.SaveAs(memoria);
+                    var nombreExcel = string.Concat("Reporte", "xlsx");
+                    return File(memoria.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", nombreExcel);
+                }
+            };
         }
     }
 }

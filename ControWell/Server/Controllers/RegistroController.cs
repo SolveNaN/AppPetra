@@ -1,6 +1,9 @@
-﻿using ControWell.Shared;
+﻿using ClosedXML.Excel;
+using ControWell.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Win32;
+using System.Data;
 
 namespace ControWell.Server.Controllers
 {
@@ -21,7 +24,10 @@ namespace ControWell.Server.Controllers
             var registros = await _context.Registros.Include(p => p.Pozo).Include(v => v.VariableProceso)
 
                 .ToListAsync();
-            return Ok(registros);
+            IEnumerable<Registro> RegistrosOrdenados = from reg in _context.Registros//Creo una lista ordenada por fecha
+                                                       orderby reg.FechaHora descending
+                                                       select reg;
+            return Ok(RegistrosOrdenados);
         }
 
         [HttpGet("Pozos")]
@@ -104,9 +110,7 @@ namespace ControWell.Server.Controllers
 
         }
 
-
-
-
+  
 
     }
 }

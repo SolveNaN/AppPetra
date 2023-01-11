@@ -11,48 +11,20 @@
 @using SpreadsheetLight;
 @using System.Data;
 @using ClosedXML.Excel;
+@using System.Data.SqlClient;
+@using System.IO
+
+
+@using NPOI.HSSF.UserModel;
+@using NPOI.SS.UserModel;
+@using NPOI.SS.Util;
+@using NPOI.HSSF.Util;
+@using NPOI.POIFS.FileSystem;
+@using NPOI.HPSF;
+@using System.IO;
 <h3>Consutas</h3>
 <h3>Pozos registrados por variable</h3>
-<EditForm Model="registro" OnSubmit="EnviarRegistro">
-    <label>Pozo</label>
-    <InputSelect @bind-Value="registro.PozoId" class="form-select">
-        @foreach (var pozo in Pozos)
-        {
-            <option value="@pozo.Id">@pozo.NombrePozo</option>
-        }
 
-    </InputSelect>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Fecha y hora</th>                
-                <th>Variable</th>
-                <th>Medida</th>
-                <th>Unidad</th>
-            </tr>
-        </thead>
-        <tbody>
-                @foreach (var r in Registros)
-                    {
-                @if (registro.PozoId == r.PozoId)
-                {
-                    <tr>
-                        <td>@r.FechaHora</td>                        
-                        <td>@r.VariableProceso.Nombre</td>
-                        <td>@r.Medida</td>
-                        <td>@r.VariableProceso.Unidad</td>
-                        
-                    </tr>
-                }
-                
-                    }
-           
-        </tbody>
-    </table>
-
-
-</EditForm>
 <EditForm Model="registroFiltro" class="row mt-4">
     <div class="col-12">
         <div class="card shadow-sm">
@@ -75,13 +47,37 @@
                         </div>
                         <div class="col-sm-3">
                             <label class="form-text">Variables de proceso</label>
-                            <InputSelect class="form-select" @bind-Value=registroFiltro.VariableProcesoId>
-                                @foreach (var v in Variables)
+                            <div class="" style="height:'300px'">
+                                @if (1 == 1)//este 1=1 es solo para que entre a realizar la accion
                                 {
-                                    <option value="@v.Id">@v.Nombre</option>
+                                    var VarRegPorPozo = from re in Registros//alarmas para ese pozo en especifico
+                                                     where re.PozoId == registroFiltro.PozoId
+                                                     select re.VariableProceso;
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <td>Nombre Variable</td>
+                                                <td>Selec</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var i in VarRegPorPozo)
+                                            {
+                                                <tr>
+                                                    <td>@i.Nombre</td>
+                                                    <td>
+                                                        <input class="form-check-input" type="checkbox" value="1" id="defaultCheck1">
+                                                    </td>
+                                                </tr>
+                                            
+                                            }
+                                        </tbody>
+                                    </table>
+
+                                    //<option value="@v.Id">@v.Nombre</option>
                                 }
 
-                            </InputSelect>
+                            </div>
                         </div>
                         <div class="col-sm-3">
                             <label class="form-text">Fecha inicio</label>
@@ -95,7 +91,7 @@
 
                         <div class="col-sm-3">
                             <button class="btn btn-success">Ver</button>
-                            <button class="btn btn-success" @onclick=consulta>Export as XLXS</button>
+                            <button class="btn btn-success" @onclick=Generar>Export as XLXS</button>
                             <button class="btn btn-warning">Export as PDF</button>
                         </div>
 
@@ -121,7 +117,7 @@
                                         <tbody>
                                          @foreach(var r in Registros)
                                             {
-                                                if (registroFiltro.PozoId == r.PozoId)
+                                                if (registroFiltro.PozoId == r.PozoId && registroFiltro.VariableProcesoId==r.VariableProcesoId)
                                                 {
                                                 <tr>
                                                     <td>@r.FechaHora</td>
@@ -144,10 +140,12 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div>    
 </EditForm>
-
-@code {
+<form action="/Registro/GenerarExcel" method="get">
+<button type="submit"></button>    
+</form>
+@code{
     [Parameter]
 
     public int? Id { get; set; }
@@ -179,6 +177,8 @@
         var miregistro = await Http.GetFromJsonAsync<List<Registro>>("api/Registro");
         if (miregistro != null)
             Registros = miregistro;
+
+
     }
 
 
@@ -212,29 +212,36 @@
         oSLDocument.SaveAs(pathFile);
     }
 
-    public void Export()
+    static void Generar()
     {
-        DataTable dt = new DataTable();
-        dt.Columns.Add("Nombre");
-        dt.Columns.Add("Telefono");
-        dt.Columns.Add("Edad");
 
-        DataRow dr = dt.NewRow();
-        dr["Nombre"] = "Omar";
-        dr["Telefono"] = "3142970790";
-        dr["Edad"] = "29";
-
-        DataRow dr2 = dt.NewRow();
-        dr2["Nombre"] = "Andres";
-        dr2["Telefono"] = "3142970790";
-        dr2["Edad"] = "26";
-        dt.Rows.Add(dr);
-        dt.Rows.Add(dr2);
-
-        using (XLWorkbook libro=new XLWorkbook())
+        // Create a new workbook and a sheet named "User Accounts"
+        var workbook = new HSSFWorkbook();
+        var sheet = workbook.CreateSheet("User Accounts");
+        // Add header labels
+        var rowIndex = 0;
+        var row = sheet.CreateRow(rowIndex);
+        row.CreateCell(0).SetCellValue("Username");
+        row.CreateCell(1).SetCellValue("Email");
+        row.CreateCell(2).SetCellValue("Joined");
+        row.CreateCell(3).SetCellValue("Last Login");
+        row.CreateCell(4).SetCellValue("Approved?");
+        row.CreateCell(5).SetCellValue("Comments");
+        rowIndex++;
+        // Add data rows
+        // Save the Excel spreadsheet to a file on the web server's file system
+        using (var fileData = new FileStream("reporte.xlsx", FileMode.Create))
         {
-            var hoja = libro.Worksheets.Add(dt);
-            hoja.ColumnsUsed().AdjustToContents();           
+            workbook.Write(fileData);
+        }
+        // Save the Excel spreadsheet to a MemoryStream and return it to the client
+        using (FileStream stream = new FileStream("outfile.xlsx", FileMode.Create, FileAccess.Write))
+        {
+            workbook.Write(stream);
+            return File(stream);
         }
     }
+
+
+
 }
