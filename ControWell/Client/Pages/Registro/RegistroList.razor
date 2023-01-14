@@ -148,6 +148,16 @@
         </div>
     }
 
+@*Loading database*@
+
+@if (registroState == false)
+{
+    <div id="db-spinner">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+}
 <button class="btn btn-success" @onclick="nuevoRegistro">Nuevo Registro</button>
 
 <style>
@@ -285,21 +295,35 @@
         box-shadow: 0 4px 8px rgba(0,0,0,0.45);
     }
 
-        .add-card label {
-            margin-bottom: 5px;
-            margin-top: 6px;
-        }
+    .add-card label {
+        margin-bottom: 5px;
+        margin-top: 6px;
+    }
 
     .button-group {
         display: flex;
         justify-content: center;
         align-items: center;
     }
+
     .button-group-add {
         display: flex;
         justify-content: space-between;
         align-items: center;
     }
+
+    
+    #db-spinner {
+        position: absolute;
+        top: 55px;
+        left: 250px;
+        padding: 12px;
+        width: 1110px;
+        height: 570px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+ }
 </style>
 @code {
 
@@ -310,7 +334,7 @@
     Boolean state = false;
     Boolean update = false;
     int id;
-    Boolean AlarmaState = false;
+    Boolean registroState = false;
     Boolean setAlarma = false;
     Boolean AlarmaRegistro = false;
 
@@ -332,10 +356,11 @@
         var mivariable = await Http.GetFromJsonAsync<List<VariableProceso>>("api/VariableProceso");
         if (mivariable != null)
             Variables = mivariable;
+            registroState = true;
 
         var resultadoRegistro = await Http.GetFromJsonAsync<List<Registro>>("api/Registro");
         if (resultadoRegistro != null)
-            Registros = resultadoRegistro;
+        Registros = resultadoRegistro;
         AlarmaRegistro = true;
 
         var mipozo = await Http.GetFromJsonAsync<List<Pozo>>("api/Pozo");
