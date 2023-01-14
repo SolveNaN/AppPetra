@@ -66,8 +66,8 @@
 
 @*AGREGAR NUEVO POZO BUTTON*@
 
-@if (state == true){
-  <button class="btn btn-success" @onclick="NevegarVariablesLista" hidden >Nuevo Pozo</button>
+@if (state == true || PozosState == false){
+  <button class="btn btn-success" @onclick="NevegarVariablesLista" disabled >Nuevo Pozo</button>
 }else
 {<button class="btn btn-success" @onclick="NevegarVariablesLista">Nuevo Pozo</button> }
 
@@ -110,7 +110,7 @@
   <h1></h1>    
   }
 
-<style scoped lang="scss">
+<style>
 
  body{
    font-family: Arial;
