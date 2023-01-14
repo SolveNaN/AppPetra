@@ -10,61 +10,112 @@
 @using System.IO
 @using NPOI.XSSF.UserModel
 @using NPOI.SS.UserModel
+@inject SweetAlertService Swal
 
 
 @inject HttpClient Http
-@inject NavigationManager NanigationManager
+@inject NavigationManager NavigationManager
 
-<h3>CrearTanque</h3>
+<br />
+<br />
 
 <EditForm Model="tanque">
     <div>
         <label for="nombre">Nombre tanque</label>
-        <InputText @bind-Value="tanque.NombreTanque" class="form-control"></InputText>
+        <InputText @bind-Value="tanque.NombreTanque" class="form-control" disabled ></InputText>
     </div>
-        <InputFile OnChange="@ImportExcelFile" />
-    <button type="button" class="btn btn-primary" @onclick=Procesar>Actualizar Aforo</button>
-    <button type="button" class="btn btn-danger" @onclick=EliminarAforo>Eliminar Aforos</button>
-    <button type="button" class="btn btn-info" @onclick="()=>AgregarNivel(tanque.Id)">Agregar Nivel</button>
-    <button class="btn btn-outline-warning" @onclick="ver">Ver XLXS</button>
-    <button class="btn btn-outline-warning" @onclick="VolverAnterior">Volver</button> 
-    <div>
-        
-                <table class="table">
+     <div class="button-group">
+       @if(excelUpload==false){<button type="button" class="btn btn-primary" @onclick=Procesar disabled >Actualizar Aforo</button>}
+       else{<button type="button" class="btn btn-primary" @onclick=Procesar>Actualizar Aforo</button>}
+       <button type="button" class="btn btn-danger" @onclick=EliminarAforo>Eliminar Aforos</button>
+       <button type="button" class="btn btn-info" @onclick="()=>AgregarNivel(tanque.Id)">Agregar Nivel</button>
+       @if(ViewXLXS == false){<button class="btn btn-warning" @onclick="ver">Ver XLXS</button>} else {<button class="btn btn-warning" @onclick="ver">Ver Tabla</button>}
+       <button class="btn btn-warning" @onclick="VolverAnterior">Volver</button> 
+     </div>
+     <div class="input-file">
+         <div class="input-file-container">
+           <InputFile OnChange="@ImportExcelFile" />
+         </div>
+     </div>
+
+
+    <div class="table-container-scroll">
+        @if(ViewXLXS == false)
+        {
+         <table class="table">
                     <thead>
                         <tr>
+                            <th></th>
                             <th>Nivel</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
                             <th>Volumen bls</th>
-                            <th>Editar</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                      @foreach(var af in aforos)
                          {
                           if (af.TanqueId == tanque.Id)
-                    {
-                        <tr>
-                            <td>@af.Nivel</td>
-                            <td>@af.Volunen</td>
-                            <td>
-                                <button class="btn btn-primary" @onclick="()=>EditarNivel(af.Id)"><i class=" oi oi-pencil"></i></button>
-                            </td>
+                        {
+                            <tr>
+                            <td></td>
+                            @if (update == true && af.Id == id) {<td><input @bind-value="@af.Nivel"/></td> }else{<td>@af.Nivel</td>}
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            @if (update == true && af.Id == id) {<td><input @bind-value="@af.Volunen"/></td> }else{<td>@af.Volunen</td>}
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                                    @if (update == true && af.Id == id)
+                                    {
+                                    <td>
+                                        <button class="btn btn-info" @onclick="()=>EditarNivel(af)">
+                                            <i class="fa-solid fa-circle-check"></i>
+                                        </button>
+                                        <button class="btn btn-danger" @onclick="Cancelar"><i class="fa-solid fa-ban"></i></button>
+                                    </td>
+                                    <td></td>
+                                    }
+                                    else
+                                    {
+                                    <td>
+                                        <button class="btn btn-primary" @onclick="()=>updatedatarow(af.Id)"><i class="oi oi-pencil"></i></button>
+                                        <button class="btn btn-warning" @onclick="()=>EliminarAforoDataTable(af.Id)"><i class="oi oi-trash"></i></button>
+                                    </td>
+                                    }
                         </tr>
                             
-                    }
+                        }
                         }
                     </tbody>
-                </table>
-            
-        
-    </div>
-    <h1></h1>
-    <br />
- 
-</EditForm>
-<div>
-     <table class="table">
-        <thead> 
+            </table>
+        }
+        else if (excelUpload == true && ViewXLXS == true)
+        {
+          <table class="table">
+        <thead>
             <tr>                
             @foreach (DataColumn col in dt.Columns)
             {
@@ -88,20 +139,200 @@
 
         }
         </tbody>
-    </table>
+            </table>
+        }else
+        {
+            <h1>No se ha cargado ningun archivo </h1>
+            <p><i class="fa-light fa-triangle-exclamation"></i></p>
+        }
+    </div>
 
-</div>
+</EditForm>
 
+@*Agregar aforo*@
+
+@if (stateAddAforo == true)
+{
+    <div class="create-container">
+        <div class="add-card">
+            <EditForm Model="aforo" OnSubmit="()=>EnviarAforo(tanque.Id)">
+                <div>
+                    <label for="nombre">Tanque</label>
+                    <InputText id="nombre" @bind-Value="tanque.NombreTanque" class="form-control"></InputText>
+                </div>
+                <div>
+                    <label for="nombre">Nivel</label>
+                    <InputNumber id="nombre" @bind-Value="aforo.Nivel" class="form-control"></InputNumber>
+                </div>
+                <div>
+                    <label for="lastname">Volumen Bls</label>
+                    <InputNumber id="lastname" @bind-Value="aforo.Volunen" class="form-control"></InputNumber>
+                </div>
+
+
+                <br />
+
+                <button type="submit" class="btn btn-primary">Confirmar</button>
+                <button class="btn btn-warning" @onclick="Cancelar">Cancelar</button>
+
+            </EditForm>
+        </div>
+    </div>
+}
+
+@*Loading database*@
+@if (TankState == false)
+{
+    <div id="db-spinner">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+}
+
+    <style>
+        body {
+            font-family: Arial;
+        }
+
+        button {
+            margin: 4px;
+        }
+
+        input {
+            border-radius: 5px;
+            background-color: #f7fafc;
+            width: 90%;
+            height: 40px;
+            border: 0.5px dashed blue;
+        }
+        /* estilos de la tabla */
+
+        .table-container-scroll {
+            overflow: scroll;
+            height: 350px;
+            width: 100%;
+        }
+
+        table {
+            background-color: white;
+            text-align: left;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 10px;
+            margin-left: 40px;
+        }
+
+        thead {
+            background-color: #388e3c;
+            border-bottom: solid 3px #0F362D;
+            color: #eeeeee;
+            position: sticky;
+            top: 0;
+        }
+
+        tr:nth-child(even) {
+            background-color: #ddd;
+        }
+
+        tr:hover td {
+            background-color: rgba(100, 176, 161, 0.8);
+            /*background-color: #369681;*/
+            color: #eeeeee;
+        }
+
+       .button-group {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom:10px;
+        margin-top: 10px;
+    }
+
+    .input-file {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+            margin-top: 10px;
+            width: 100%;
+    }
+
+     .input-file-container {
+         width: 70%;
+     }
+
+    InputFile{
+        height: 40px;
+    }
+
+    #db-spinner {
+        position: absolute;
+        top: 55px;
+        left: 250px;
+        padding: 12px;
+        width: 1110px;
+        height: 570px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .create-container {
+        position: absolute;
+        top: 55px;
+        left: 250px;
+        padding: 12px;
+        width: 1110px;
+        height: 570px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.45);
+    }
+
+    .add-card {
+        width: 280px;
+        height: 300px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(223, 230, 233,1.0);
+        border-radius: 8px;
+        color: rgba(0, 0, 0,1.0);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.45);
+    }
+
+        .add-card label {
+            margin-bottom: 5px;
+            margin-top: 6px;
+        }
+    </style>
 @code {
     [Parameter]
 
     public int? Id { get; set; }
 
+    Boolean ViewXLXS = false;
+    Boolean TankState = false;
+    Boolean state = false;
+    Boolean update = false;
+    Boolean excelUpload = false;
+    Boolean stateAddAforo = false;
+
+    int id;
+
     Tanque tanque = new Tanque();
+
+    AforoTK aforo = new AforoTK();
+
 
     void VolverAnterior()
     {
-        NanigationManager.NavigateTo("/tanquelist");
+        NavigationManager.NavigateTo("/tanquelist");
     }
 
 
@@ -120,26 +351,43 @@
     {
         var resultado = await Http.GetFromJsonAsync<List<AforoTK>>("api/Aforo");
         if (resultado != null)
-            aforos = resultado;        
+        {
+            aforos = resultado;
+            TankState = true;   
+        }else
+        {
+            TankState = false;
+        }
     }
-
-
 
     //Funcion para navegar hasta la carga por excel a UploadAforo
 
     public void CargarAforos()
     {
-        NanigationManager.NavigateTo("/uploadaforo");
+        NavigationManager.NavigateTo("/uploadaforo");
     }
 
-    public async void EditarNivel(int Id)
+    public async void EditarNivel(AforoTK Aforo)
     {
-        NanigationManager.NavigateTo($"/editarnivel/{Id}");        
+        await AforoService.UpdateAforo(Aforo);
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Success",
+                Text = "Guardado correctamente",
+                Icon = SweetAlertIcon.Success,
+            });
+        state = false;
+        update = false;
+        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo($"/aforotk/{tanque.Id}");
+
+        //NavigationManager.NavigateTo($"/editarnivel/{Id}");        
     }
 
     public void AgregarNivel(int Id)
     {
-        NanigationManager.NavigateTo($"/agregaraforo/{Id}");
+        stateAddAforo = true;
+        //NavigationManager.NavigateTo($"/aforotk/{Id}");
     }
     //FUNCIONES PARA EXCEL
     //funcion para administrar las celdas y visualizacion de excel
@@ -147,6 +395,9 @@
 
     async Task ImportExcelFile(InputFileChangeEventArgs e)
     {
+        excelUpload = true;
+        ViewXLXS = true;
+
         var fileStream = e.File.OpenReadStream();
         var ms = new MemoryStream();
         await fileStream.CopyToAsync(ms);
@@ -183,7 +434,32 @@
     }
     //fin de la funcion para administrar datos de excel
 
+    async Task EliminarAforoDataTable(int _id)
+    {
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Eliminar",
+                Text = "¿ Estas seguro que deseas eliminar ?",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Eliminar",
+                CancelButtonText = "Cancelar"
+            });
 
+        var confirmado = !string.IsNullOrEmpty(resultado.Value);
+
+        if (!confirmado)
+        {
+            //context.PreventNavigation();
+        }
+        else
+        {
+            await AforoService.DeleteAforo(_id);
+            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo($"/aforotk/{tanque.Id}");
+        }
+        //NanigationManager.NavigateTo($"/aforotk/{id}");
+    }
 
 
 
@@ -191,98 +467,147 @@
 
     async Task Procesar()
     {    
-        //registros de aforo con linq para el tanque actual
-        var misaforos = from af in aforos
-                        where af.TanqueId == tanque.Id
-                        orderby af.Nivel ascending
-                        select af;
-        //trato de ordenar row
-        foreach (DataRow row in dt.Rows)
-        {
-            AforoTK aforo = new AforoTK();
-            AforoTK NuevoAforo = new AforoTK();//se inicializa el objeto nuevo
-            aforo.Id = default;
-            aforo.Nivel = 50000;
-            aforo.Volunen = 50000;
-            aforo.TanqueId = 50000;
-            NuevoAforo.Nivel = default;//define una referencia para saber que si está o no y actualiza el nivel
-            foreach (DataColumn col in dt.Columns)
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
             {
-                var celda = row[col.ColumnName];
-                var columna = col.ColumnName;
-                columna = columna.ToString();
-                var ExisteNivel = false;//variable bandera
-                if (columna == "Nivel")
+                Title = "Procesar",
+                Text = "¿ Deseas guardar esta información ?",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Confirmar",
+                CancelButtonText = "Cancelar"
+            });
+
+        var confirmado = !string.IsNullOrEmpty(resultado.Value);
+
+        if (!confirmado)
+        {
+            //context.PreventNavigation();
+        }
+        else
+        {
+            //registros de aforo con linq para el tanque actual
+            var misaforos = from af in aforos
+                            where af.TanqueId == tanque.Id
+                            orderby af.Nivel ascending
+                            select af;
+            //trato de ordenar row
+            foreach (DataRow row in dt.Rows)
+            {
+                AforoTK aforo = new AforoTK();
+                AforoTK NuevoAforo = new AforoTK();//se inicializa el objeto nuevo
+                aforo.Id = default;
+                aforo.Nivel = 50000;
+                aforo.Volunen = 50000;
+                aforo.TanqueId = 50000;
+                NuevoAforo.Nivel = default;//define una referencia para saber que si está o no y actualiza el nivel
+                foreach (DataColumn col in dt.Columns)
                 {
-                    foreach(var i in misaforos)
+                    var celda = row[col.ColumnName];
+                    var columna = col.ColumnName;
+                    columna = columna.ToString();
+                    var ExisteNivel = false;//variable bandera
+                    if (columna == "Nivel")
                     {
-                        if (i.Nivel == Convert.ToInt32(celda.ToString()))//el objeto aforo se llena constantemente
+                        foreach(var i in misaforos)
                         {
-                            aforo.Id=i.Id;
-                            aforo.Nivel=i.Nivel;
-                            aforo.TanqueId = tanque.Id;                            
-                            ExisteNivel = true;
+                            if (i.Nivel == Convert.ToInt32(celda.ToString()))//el objeto aforo se llena constantemente
+                            {
+                                aforo.Id=i.Id;
+                                aforo.Nivel=i.Nivel;
+                                aforo.TanqueId = tanque.Id;                            
+                                ExisteNivel = true;
+                            }
+
+                        }
+                        if (ExisteNivel == false)
+                        {
+                            NuevoAforo.Nivel = Convert.ToInt32(celda.ToString());
+                            NuevoAforo.TanqueId = tanque.Id;
+                            AforoService.CreateAforo(aforo);
+                            //await Task.Delay(150);
                         }
 
                     }
-                    if (ExisteNivel == false)
+
+                    if (columna == "Volumen")
                     {
-                        NuevoAforo.Nivel = Convert.ToInt32(celda.ToString());
-                        NuevoAforo.TanqueId = tanque.Id;
-                        AforoService.CreateAforo(aforo);
-                        await Task.Delay(150);
+                        if (aforo.Id != default)
+                        {
+                            aforo.Volunen = Convert.ToDecimal(celda);
+                            AforoService.UpdateAforo(aforo);
+                        }
+                        if (NuevoAforo.Nivel != default||NuevoAforo.Nivel==0)
+                        {                        
+                            NuevoAforo.Volunen = Convert.ToDecimal(celda);
+                            AforoService.CreateAforo(NuevoAforo);
+                            //await Task.Delay(150);
+                        }
+
                     }
 
-                }
-
-                if (columna == "Volumen")
-                {
-                    if (aforo.Id != default)
-                    {
-                        aforo.Volunen = Convert.ToDecimal(celda);
-                        AforoService.UpdateAforo(aforo);
-                    }
-                    if (NuevoAforo.Nivel != default||NuevoAforo.Nivel==0)
-                    {                        
-                        NuevoAforo.Volunen = Convert.ToDecimal(celda);
-                        AforoService.CreateAforo(NuevoAforo);
-                        await Task.Delay(150);
-                    }
 
                 }
 
 
-            }
+            }       
 
-
-        }       
-        NanigationManager.NavigateTo("/tanquelist");
-
-    }                      
+            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/tanquelist");
+        }                      
+    }
     //Fin de funcion para tomar datos de excel
 
     //Funcion para enviar los datos a la base
 
     //Fin de funcion para enviar los datos a la base
 
-    //Eliominar Aforos con linq
-    public void EliminarAforo()
+    async Task EnviarAforo(int id)
     {
-        var misaforos = from af in aforos
-                        where af.TanqueId == tanque.Id
-                        select af;
-        foreach(var i in misaforos)
+        aforo.TanqueId = tanque.Id;
+        await AforoService.CreateAforo(aforo);
+        NavigationManager.NavigateTo($"/");
+        NavigationManager.NavigateTo($"/aforotk/{tanque.Id}");
+        stateAddAforo = false;
+
+    }
+
+    //Eliominar Aforos con linq
+    public async void EliminarAforo()
+    {
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "¿ Deseas eliminar esta información ?",
+                Text = "Los datos se borrarán permanentemente",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Sí, Eliminar",
+                CancelButtonText = "Conservar"
+            });
+
+        var confirmado = !string.IsNullOrEmpty(resultado.Value);
+
+        if (!confirmado)
         {
-            AforoService.DeleteAforo(i.Id);    
-        }        
-        NanigationManager.NavigateTo("/tanquelist");
+            //context.PreventNavigation();
+        }
+        else
+        {
+            var misaforos = from af in aforos
+                            where af.TanqueId == tanque.Id
+                            select af;
+            foreach (var i in misaforos)
+            {
+                await AforoService.DeleteAforo(i.Id);
+            }
+            NavigationManager.NavigateTo("/tanquelist");
+        }
     }
 
 
     //fucion para ver el excel
     public void ver()
     {
-
+        ViewXLXS = !ViewXLXS;
     }
 
     //Consulta por nivel
@@ -290,7 +615,26 @@
     async Task ConsultaNivel(float nivel)
     {
         await AforoService.ConsultaNivel(nivel);
-    
+
+    }
+
+    void updatedatarow(int _id)
+    {
+        update = true;
+        id = _id;
+    }
+
+    void Cancelar()
+    {
+        state = false;
+        update = false;
+        stateAddAforo = false;
+    }
+
+    void AgregarNivel()
+    {
+        state = true;
+        update = false;
     }
 
 }
