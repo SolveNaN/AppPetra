@@ -1,18 +1,22 @@
 ﻿@page "/tanquelist"
 @using ControWell.Shared
 @using System.Net.Http.Json
-@inject NavigationManager NanigationManager
+@inject NavigationManager NavigationManager
+@using ControWell.Client.Services.TanqueService;
+@inject ITanqueService TanqueService;
 @inject HttpClient Http
+@inject SweetAlertService Swal
+
 <h3>Administrar Tanques</h3>
 
+<div class="table-container-scroll">
 <table class="table">
     <thead>
         <tr>
-            <th>Id</th>
             <th>Nombre del Tanque</th>
             <th>Capacidad</th>
             <th>Tipo de Fluido</th>
-            <th>Editar</th>
+            <th>Acciones</th>
             <th>Aforo</th>
 
         </tr>
@@ -20,27 +24,103 @@
     <tbody>
         @foreach (var Tanque in Tanques)
         {
-            <tr>
-                <td>@Tanque.Id</td>
-                <td>@Tanque.NombreTanque</td>
-                <td>@Tanque.Capacidad</td>
-                <td>@Tanque.TipoFluido</td>
-                <td>
-                    <button class="btn btn-primary" @onclick="()=>Editar(Tanque.Id)"><i class="oi oi-pencil"></i></button>
-                </td>
-                <td>
-                    <button class="btn btn-info" @onclick="()=>Aforo(Tanque.Id)"><i class="oi oi-basket"></i></button>
-                </td>
+                <tr> 
+                  @if( update == true && Tanque.Id == id){<td><input @bind-value="@Tanque.NombreTanque" /></td>}else{ <td>@Tanque.NombreTanque</td>}
+                  @if( update == true && Tanque.Id == id){<td><input @bind-value="@Tanque.Capacidad" /></td>}else{ <td>@Tanque.Capacidad</td>}
+                  @if( update == true && Tanque.Id == id){<td><input @bind-value="@Tanque.TipoFluido" /></td>}else{ <td>@Tanque.TipoFluido</td>}
+                
+                  @if (update == true && Tanque.Id == id)
+                    {
+                      <td>
+                         <button class="btn btn-primary" @onclick="()=>UpdateTanque(Tanque)">                        
+                            <i class="fa-solid fa-circle-check"></i>
+                         </button>
+                         <button class="btn btn-danger" @onclick="Cancelar" ><i class="fa-solid fa-ban"></i></button>
+                      </td>
+                      <td></td>
+                    }
+                    else
+                    {                        
+                     <td>
+                            <button class="btn btn-primary" @onclick="()=>updatedatarow(Tanque.Id)"><i class="oi oi-pencil"></i></button>
+                        <button class="btn btn-warning" @onclick="(()=>DeleteTanque(Tanque.Id))" ><i class="oi oi-trash"></i></button>
+                     </td>
+                     <td>
+                         <button class="btn btn-info" @onclick="()=>Aforo(Tanque.Id)"><i class="oi oi-basket"></i></button>
+                     </td>
+                    }
             </tr>
         }
     </tbody>
 </table>
-<button class="btn btn-success" @onclick=Nuevo>Nuevo</button>
+</div>
+
+@*AGREGAR NUEVO POZO*@
+
+@if (state == true)
+{
+    <div class="create-container">
+        <div class="add-card">
+            <EditForm Model="tanque" OnSubmit="EnviarTanque">
+        <div>
+        <label for="nombre">Nombre Tanque</label>
+        <InputText id="nombre" @bind-Value="tanque.NombreTanque" class="form-control"></InputText>
+        </div>
+        <div>
+        <label for="lastname">Capacidad</label>
+        <InputText id="lastname" @bind-Value="tanque.Capacidad" class="form-control"></InputText>
+    </div>
+    <div>
+        <label for="lastname">Tipo de fluido</label>
+        <InputText id="lastname" @bind-Value="tanque.TipoFluido" class="form-control"></InputText>
+    </div>
+
+    <br />
+       <div class="button-group">
+        <button type="submit" class="btn btn-primary">Confirmar</button>
+        <button class="btn btn-warning" @onclick="Cancelar">Cancelar</button>
+      </div>
+    <br />
+    <br />
+</EditForm>
+
+        </div>
+    </div>
+}
+else
+{
+    <h1></h1>
+}
+
+@*Loading database*@
+@if (tankState == false)
+{
+    <div id="db-spinner">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+}
+@if(state == true || tankState == false)
+{
+    <button class="btn btn-success" @onclick=Nuevo disabled>Nuevo</button>
+}else
+{
+    <button class="btn btn-success" @onclick=Nuevo>Nuevo</button>
+}
 <style>
     body {
         font-family: Arial;
     }
 
+    input {
+        border-radius: 5px;
+        background-color: #f7fafc;
+        width: 90%;
+        height: 40px;
+        border: 0.5px dashed blue;
+ 
+    }
     /* estilos de la tabla */
 
     .table-container-scroll {
@@ -57,7 +137,7 @@
     }
 
     th, td {
-        padding: 100px;
+        padding: 10px;
         margin-left: 40px;
     }
 
@@ -74,37 +154,184 @@
     }
 
     tr:hover td {
-        background-color: #369681;
-        color: white;
+        background-color: rgba(100, 176, 161, 0.8);
+        /*background-color: #369681;*/
+        color: #eeeeee;
     }
 
-    .table-wrapper table tbody td {
-        border: 1px solid #000;
-        background-color: #FFF;
+    InputSelect {
+        border-radius: 5px;
+        margin-top: 5px;
+    }
+
+    input {
+        border-radius: 5px;
+        background-color: #f7fafc;
+        width: 90%;
+        height: 40px;
+        border: 0.5px dashed blue;
+    }
+    /* estilos formulario agregar pozo*/
+    .create-container {
+        position: absolute;
+        top: 55px;
+        left: 250px;
+        padding: 12px;
+        width: 1110px;
+        height: 570px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.45);
+    }
+
+    .add-card {
+        width: 280px;
+        height: 350px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(223, 230, 233,1.0);
+        border-radius: 8px;
+        color: rgba(0, 0, 0,1.0);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.45);
+    }
+
+    .add-card label {
+        margin-bottom: 5px;
+        margin-top: 6px;
+     }
+
+    .button-group {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #db-spinner {
+        position: absolute;
+        top: 55px;
+        left: 250px;
+        padding: 12px;
+        width: 1110px;
+        height: 570px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .button-group-actions {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 5px;
     }
 
 </style>
 
 @code {
+
+    //[Parameter]
+
+    Boolean state = false;
+    Boolean update = false;
+    int id;
+    Boolean tankState = false;
+
+    public int? Id { get; set; }
+
+    Tanque tanque = new Tanque();
+ 
     public static List<Tanque> Tanques = new List<Tanque>();
     protected override async Task OnInitializedAsync()
     {
         var resultado = await Http.GetFromJsonAsync<List<Tanque>>("api/Tanque");
         if(resultado!=null)
             Tanques = resultado;
+            tankState = true;
+    }
+
+    async Task EnviarTanque()
+    {
+        await TanqueService.CreateTanque(tanque);
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Success",
+                Text = "Guardado correctamente",
+                Icon = SweetAlertIcon.Success,
+            });
+        state = false;
+        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/tanquelist");
+
+    }
+
+    async Task UpdateTanque(Tanque tanque)
+    {
+        await TanqueService.UpdateTanque(tanque);
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Success",
+                Text = "Actualizado correctamente",
+                Icon = SweetAlertIcon.Success,
+            });
+
+        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/tanquelist");
+    }
+
+    async Task DeleteTanque(int _id)
+    {
+
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Eliminar",
+                Text = "¿ Estas seguro que deseas eliminar ?",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Eliminar",
+                CancelButtonText = "Cancelar"
+            });
+
+        var confirmado = !string.IsNullOrEmpty(resultado.Value);
+
+        if (!confirmado)
+        {
+            //context.PreventNavigation();
+        }
+        else
+        {
+            await TanqueService.DeleteTanque(_id);
+            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/tanquelist");
+        }
     }
 
     public void Nuevo()
     {
-        NanigationManager.NavigateTo("/creartanque");
+        //NanigationManager.NavigateTo("/creartanque");
+        state = true;
+
+    }
+
+    void updatedatarow(int _id)
+    {
+        update = true;
+        id = _id;
+    }
+
+    void Cancelar()
+    {
+        state = false;
+        update = false;
     }
 
     public void Editar(int id)
     {
-        NanigationManager.NavigateTo($"/singletanque/{id}");
+        NavigationManager.NavigateTo($"/singletanque/{id}");
     }
     public void Aforo(int id)
     {
-        NanigationManager.NavigateTo($"/aforotk/{id}");
+        NavigationManager.NavigateTo($"/aforotk/{id}");
     }
 }
