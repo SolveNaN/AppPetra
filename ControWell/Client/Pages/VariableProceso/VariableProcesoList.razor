@@ -55,7 +55,7 @@
 </div>
 
 @*Loading database*@
-@if (PozosState == false)
+@if (VariableState == false)
 {
     <div id="db-spinner">
         <div class="spinner-border" role="status">
@@ -207,7 +207,7 @@ else
 </style>
 @code {
 
-    Boolean PozosState = false;
+    Boolean VariableState = false;
     Boolean state = false;
     Boolean update = false;
     int id;
@@ -220,7 +220,7 @@ else
         var resultado = await Http.GetFromJsonAsync<List<VariableProceso>>("api/VariableProceso");
         if (resultado != null)
             Variables = resultado;
-            PozosState = true;
+            VariableState = true;
     }
 
     async Task DeleteVariableProceso(int _id)
@@ -255,7 +255,7 @@ else
         var resultado = await Swal.FireAsync(new SweetAlertOptions
             {
                 Title = "Success",
-                Text = "¿ Guardado correctamente ?",
+                Text = "Guardado correctamente",
                 Icon = SweetAlertIcon.Success,
             });
         state = false;
