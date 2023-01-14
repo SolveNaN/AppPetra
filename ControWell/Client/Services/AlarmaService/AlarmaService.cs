@@ -1,4 +1,5 @@
 ﻿using ControWell.Shared;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Components;
 
 namespace ControWell.Client.Services.AlarmaService
@@ -56,6 +57,7 @@ namespace ControWell.Client.Services.AlarmaService
             await SetAlarma(result);
         }
 
-        
+
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ControWell.Shared;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography.X509Certificates;
 
@@ -23,6 +24,8 @@ namespace ControWell.Server.Controllers
                 .ToListAsync();
             return Ok(alarmas);
         }
+
+       
 
         [HttpGet("Pozos")]
         public async Task<ActionResult<List<Pozo>>> GetPozos()

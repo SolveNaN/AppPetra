@@ -12,5 +12,6 @@
         Task DeleteRegistro(int id);
         Task UpdateRegistro(Registro registro);
         Task CreateOrUpdateRegistro(Registro registro);
+        
     }
 }

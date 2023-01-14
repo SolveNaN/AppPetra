@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ControWell.Shared;
 using System.Diagnostics;
-
-
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using NPOI.HSSF.UserModel;
@@ -10,62 +8,48 @@ using ControWell.Shared;
 using EFCore.BulkExtensions;
 using ControWell.Shared;
 using System.Diagnostics.Contracts;
+using ClosedXML.Excel;
+using System.Data;
 
 namespace ProyectoExcel.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly DataContext _context;
+       public HomeController() 
+        { 
 
-        public HomeController(DataContext context)
-        {
-
-            _context = context;
         }
         public IActionResult Index()
         {
-            return View();
-        }
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Nombre");
+            dt.Columns.Add("Telefono");
+            dt.Columns.Add("Edad");
 
-        [HttpPost]
-        public IActionResult MostrarDatos([FromForm] IFormFile ArchivoExcel)
-        {
-            Stream stream = ArchivoExcel.OpenReadStream();
+            DataRow dr = dt.NewRow();
+            dr["Nombre"] = "Omar";
+            dr["Telefono"] = "3142970790";
+            dr["Edad"] = "29";
 
-            IWorkbook MiExcel = null;
+            DataRow dr2 = dt.NewRow();
+            dr2["Nombre"] = "Andres";
+            dr2["Telefono"] = "3142970790";
+            dr2["Edad"] = "26";
+            dt.Rows.Add(dr);
+            dt.Rows.Add(dr2);
 
-            if (Path.GetExtension(ArchivoExcel.FileName) == ".xlsx")
+            using (var libro = new XLWorkbook())
             {
-                MiExcel = new XSSFWorkbook(stream);
-            }
-            else
-            {
-                MiExcel = new HSSFWorkbook(stream);
-            }
-
-            ISheet HojaExcel = MiExcel.GetSheetAt(0);
-            int cantidadFilas = HojaExcel.LastRowNum;
-            List < Pozo> lista = new List<Pozo>();
-
-            for (int i = 1; i <= cantidadFilas; i++)
-            {
-
-                IRow fila = HojaExcel.GetRow(i);
-
-                lista.Add(new Pozo
+                dt.TableName = "Clientes";
+                var hoja = libro.Worksheets.Add(dt);
+                hoja.ColumnsUsed().AdjustToContents();
+                using (var memoria = new MemoryStream())
                 {
-                    NombrePozo = fila.GetCell(0).ToString(),
-                    Ubicacion = fila.GetCell(1).ToString(),
-                    Operadora = fila.GetCell(2).ToString(),
-                    Comentario = fila.GetCell(3).ToString(),
-
-                });
+                    libro.SaveAs(memoria);
+                    var nombreExcel = string.Concat("Reporte", "xlsx");
+                    return File(memoria.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", nombreExcel);
+                }
             }
-
-            return StatusCode(StatusCodes.Status200OK, lista);
         }
-
-
-
     }
 }
