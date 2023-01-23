@@ -13,52 +13,239 @@
 
 <h3>CrearPozo</h3>
 
-
-    <InputFile OnChange="@ImportExcelFile" />
-
-
-    <p>Ingresar pozos.</p>
+    <div class="container">
+    <InputFile OnChange="@ImportExcelFile" class="InputFile" accept=".xlsx" />
 
 
-    <button class="btn btn-primary" @onclick=Procesar>Confirmar</button>
-<button class="btn btn-info" @onclick=ver>Ver</button>
-<button class="btn btn-warning" @onclick=volver>Descartar</button>
+    <p>Ingresar pozos / Seleccione o arrastre un archivo</p>
+
+
+    @if (loadFileExcel == false){   
+      <button disabled class="btn btn-primary" @onclick=Procesar>Confirmar</button>
+    }else {<button class="btn btn-primary" @onclick=Procesar>Confirmar</button>}
+
+    @if (loadFileExcel == false){
+        <button disabled class="btn btn-info" @onclick=ver>Ver</button>
+    }else {    <button class="btn btn-info" @onclick=ver>Ver</button>}
+
+    <button class="btn btn-warning" @onclick=volver>Descartar</button>
+
+</div>
+
+<div class="table-container-scroll">
+
      <table class="table">
         <thead> 
             <tr>
-            @foreach (DataColumn col in dt.Columns)
-            {
-                            <th>@col.ColumnName</th>
-            }                           
+              @foreach (DataColumn col in dt.Columns)
+               {
+                 <th>@col.ColumnName</th>
+               }                           
             </tr>
         </thead>
         <tbody>
         @foreach (DataRow row in dt.Rows)
         {             
-
-                   <tr>
+            <tr>
                 @foreach (DataColumn col in dt.Columns)
                 {
-
-                         <td>@row[col.ColumnName]</td>               
-
+                  <td>@row[col.ColumnName]</td>               
                 }
-                  </tr>
-
-
+            </tr>
         }
         </tbody>
     </table>
+</div>
+   
+    <style>
 
 
+    .container {
+        max-width: 1160px;
+        margin: 0 auto;
+    }
 
+    body {
+        font-family: Arial;
+    }
+
+    InputSelect {
+        border-radius: 5px;
+        margin-top: 5px;
+    }
+
+    .InputFile{
+        height: 50%;
+        background-color: cadetblue;
+        color: white;
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    input {
+        border-radius: 5px;
+        background-color: #f7fafc;
+        width: 90%;
+        height: 40px;
+        border: 0.5px dashed blue;
+    }
+
+    button {
+        margin-left: 5px;
+    }
+
+    /* estilos de la tabla */
+
+    .table-container-scroll {
+        overflow: scroll;
+        height: 400px;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    table {
+        background-color: white;
+        text-align: center;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        padding: 10px;
+        margin-left: 40px;
+    }
+
+    thead {
+        background-color: #388e3c;
+        border-bottom: solid 3px #0F362D;
+        color: #eeeeee;
+        position: sticky;
+        top: 0px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #ddd;
+    }
+
+    tr:hover td {
+        background-color: rgba(100, 176, 161, 0.8);
+        /*background-color: #369681;*/
+        color: #eeeeee;
+    }
+
+    #db-spinner {
+        position: absolute;
+        top: 55px;
+        left: 250px;
+        padding: 12px;
+        width: 1110px;
+        height: 570px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .upload_hide {
+        position: absolute;
+        max-width: 840px;
+        max-height: 540px;
+        width: 100%;
+        height: 100%;
+        background-color: red;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 5;
+        opacity: 0;
+    }
+
+    .upload_label {
+        position: absolute;
+        max-width: 800px;
+        max-height: 500px;
+        width: 100%;
+        height: 100%;
+        margin: 20px !important;
+        border: 2px dashed #139CFF;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        border-radius: 8px;
+        flex-direction: column;
+    }
+
+    .choose_file {
+        width: 200px;
+        height: 50px;
+        border: none;
+        background-color: #139CFF;
+        color: #fff;
+        border-radius: 3px;
+        margin: 30px auto;
+        pointer-events: none;
+    }
+
+    .delete_file {
+        width: 200px;
+        height: 50px;
+        border: none;
+        background-color: #139CFF;
+        color: #fff;
+        border-radius: 3px;
+        margin: 30px auto;
+        cursor: pointer;
+        z-index: 6;
+        position: absolute;
+        top: 62%;
+        left: 51%;
+        transform: translate(-50%, -50%);
+        outline: none;
+    }
+
+
+    .upload_label > i {
+        color: #FF1384;
+        font-size: 110px;
+        margin: 30px 0;
+    }
+
+    .drag_text {
+        color: #139CFF;
+        font-size: 22px;
+        margin: 30px 0 0 0;
+    }
+
+
+    .image > img {
+        padding: 40px;
+        width: 80%;
+        height: auto;
+        position: absolute;
+        left: 10%;
+        top: 0;
+    }
+
+    .container-upload{
+        background-color: lightgreen;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    </style>
 
 @code {
     //Funcion para administrar excel
     DataTable dt = new DataTable();
 
+    Boolean loadFileExcel = false;
+
     async Task ImportExcelFile(InputFileChangeEventArgs e)
     {
+        loadFileExcel = true ;
+
         var fileStream = e.File.OpenReadStream();
         var ms = new MemoryStream();
         await fileStream.CopyToAsync(ms);
