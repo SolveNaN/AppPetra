@@ -34,7 +34,7 @@
      </div>
      <div class="input-file">
          <div class="input-file-container">
-           <InputFile OnChange="@ImportExcelFile" />
+            <InputFile OnChange="@ImportExcelFile" class="InputFile" accept=".xlsx" />
          </div>
      </div>
 
@@ -265,8 +265,12 @@
          width: 70%;
      }
 
-    InputFile{
-        height: 40px;
+    .InputFile {
+        height: 50%;
+        background-color: cadetblue;
+        color: white;
+        width: 100%;
+        margin-bottom: 5px;
     }
 
     #db-spinner {
