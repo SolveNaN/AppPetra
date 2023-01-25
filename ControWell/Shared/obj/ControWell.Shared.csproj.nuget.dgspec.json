@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Shared\\ControWell.Shared.csproj": {}
+    "D:\\DESARROLLADOR BAKEND-FRONTEND\\nuevorepocontrowell\\ControWell\\Shared\\ControWell.Shared.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Shared\\ControWell.Shared.csproj": {
+    "D:\\DESARROLLADOR BAKEND-FRONTEND\\nuevorepocontrowell\\ControWell\\Shared\\ControWell.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Shared\\ControWell.Shared.csproj",
+        "projectUniqueName": "D:\\DESARROLLADOR BAKEND-FRONTEND\\nuevorepocontrowell\\ControWell\\Shared\\ControWell.Shared.csproj",
         "projectName": "ControWell.Shared",
-        "projectPath": "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Shared\\ControWell.Shared.csproj",
-        "packagesPath": "C:\\Users\\Dagoberto\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Shared\\obj\\",
+        "projectPath": "D:\\DESARROLLADOR BAKEND-FRONTEND\\nuevorepocontrowell\\ControWell\\Shared\\ControWell.Shared.csproj",
+        "packagesPath": "C:\\Users\\Marlon\\.nuget\\packages\\",
+        "outputPath": "D:\\DESARROLLADOR BAKEND-FRONTEND\\nuevorepocontrowell\\ControWell\\Shared\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Dagoberto\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Marlon\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

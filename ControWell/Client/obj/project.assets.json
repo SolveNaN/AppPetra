@@ -10856,19 +10856,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Dagoberto\\.nuget\\packages\\": {}
+    "C:\\Users\\Marlon\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Client\\ControWell.Client.csproj",
+      "projectUniqueName": "D:\\DESARROLLADOR BAKEND-FRONTEND\\nuevorepocontrowell\\ControWell\\Client\\ControWell.Client.csproj",
       "projectName": "ControWell.Client",
-      "projectPath": "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Client\\ControWell.Client.csproj",
-      "packagesPath": "C:\\Users\\Dagoberto\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Client\\obj\\",
+      "projectPath": "D:\\DESARROLLADOR BAKEND-FRONTEND\\nuevorepocontrowell\\ControWell\\Client\\ControWell.Client.csproj",
+      "packagesPath": "C:\\Users\\Marlon\\.nuget\\packages\\",
+      "outputPath": "D:\\DESARROLLADOR BAKEND-FRONTEND\\nuevorepocontrowell\\ControWell\\Client\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Dagoberto\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Marlon\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -10882,8 +10882,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Shared\\ControWell.Shared.csproj": {
-              "projectPath": "C:\\Users\\Dagoberto\\Documents\\AppPetra\\ControWell\\Shared\\ControWell.Shared.csproj"
+            "D:\\DESARROLLADOR BAKEND-FRONTEND\\nuevorepocontrowell\\ControWell\\Shared\\ControWell.Shared.csproj": {
+              "projectPath": "D:\\DESARROLLADOR BAKEND-FRONTEND\\nuevorepocontrowell\\ControWell\\Shared\\ControWell.Shared.csproj"
             }
           }
         }

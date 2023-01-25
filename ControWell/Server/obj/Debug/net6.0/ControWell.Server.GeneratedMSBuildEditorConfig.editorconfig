@@ -9,13 +9,13 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = ControWell.Server
 build_property.RootNamespace = ControWell.Server
-build_property.ProjectDir = C:\Users\Dagoberto\Documents\AppPetra\ControWell\Server\
+build_property.ProjectDir = D:\DESARROLLADOR BAKEND-FRONTEND\nuevorepocontrowell\ControWell\Server\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\Dagoberto\Documents\AppPetra\ControWell\Server
+build_property.MSBuildProjectDirectory = D:\DESARROLLADOR BAKEND-FRONTEND\nuevorepocontrowell\ControWell\Server
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/Dagoberto/Documents/AppPetra/ControWell/Server/Pages/Error.cshtml]
+[D:/DESARROLLADOR BAKEND-FRONTEND/nuevorepocontrowell/ControWell/Server/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
