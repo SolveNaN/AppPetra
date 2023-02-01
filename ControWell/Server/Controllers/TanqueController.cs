@@ -58,6 +58,8 @@ namespace ControWell.Server.Controllers
             DbTanque.NombreTanque = tanque.NombreTanque;
             DbTanque.Capacidad = tanque.Capacidad;
             DbTanque.TipoFluido = tanque.TipoFluido;
+            DbTanque.Material=tanque.Material;
+            DbTanque.TBase = tanque.TBase;
 
             await _context.SaveChangesAsync();
 

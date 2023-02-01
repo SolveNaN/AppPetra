@@ -16,8 +16,10 @@
             <th>Nombre del Tanque</th>
             <th>Capacidad</th>
             <th>Tipo de Fluido</th>
+            <th>Material</th>
+            <th>T Base °F</th>
             <th>Acciones</th>
-            <th>Aforo</th>
+            <th>Aforo</th>           
 
         </tr>
     </thead>
@@ -27,8 +29,20 @@
                 <tr> 
                   @if( update == true && Tanque.Id == id){<td><input @bind-value="@Tanque.NombreTanque" /></td>}else{ <td>@Tanque.NombreTanque</td>}
                   @if( update == true && Tanque.Id == id){<td><input @bind-value="@Tanque.Capacidad" /></td>}else{ <td>@Tanque.Capacidad</td>}
-                  @if( update == true && Tanque.Id == id){<td><input @bind-value="@Tanque.TipoFluido" /></td>}else{ <td>@Tanque.TipoFluido</td>}
-                
+                    @if (update == true && Tanque.Id == id)
+                    {
+                        <td>
+                            <InputSelect @bind-Value="@Tanque.TipoFluido">                                
+                                @foreach(var j in Fluidos){<option value="@j.Name"></option> @j.Name }                                
+                            </InputSelect>
+                       </td>
+                    }
+                    else
+                    {
+                        <td>@Tanque.TipoFluido</td>
+                    }
+                  @if( update == true && Tanque.Id == id){<td><input @bind-value="@Tanque.Material" /></td>}else{ <td>@Tanque.Material</td>}
+                  @if( update == true && Tanque.Id == id){<td><input @bind-value="@Tanque.TBase" /></td>}else{ <td>@Tanque.TBase</td>}
                   @if (update == true && Tanque.Id == id)
                     {
                       <td>
@@ -67,13 +81,31 @@
         <InputText id="nombre" @bind-Value="tanque.NombreTanque" class="form-control"></InputText>
         </div>
         <div>
-        <label for="lastname">Capacidad</label>
+        <label for="lastname">Capacidad bls</label>
         <InputText id="lastname" @bind-Value="tanque.Capacidad" class="form-control"></InputText>
     </div>
     <div>
         <label for="lastname">Tipo de fluido</label>
-        <InputText id="lastname" @bind-Value="tanque.TipoFluido" class="form-control"></InputText>
+       <InputSelect @bind-Value="tanque.TipoFluido" class="form-control">
+                  @foreach(var i in Fluidos)
+                    {
+                      <option value="@i.Name">@i.Name</option>
+                    }
+        </InputSelect>
     </div>
+    <div>
+        <label for="lastname">Material</label>
+        <InputSelect @bind-Value="tanque.Material" class="form-control">
+             @foreach(var i in Materiales)
+                 {
+                   <option value="@i.TipoMaterial">@i.TipoMaterial</option>
+                 }
+        </InputSelect>
+         <div>
+             <label for="lastname">Temperatura base °F</label>
+             <InputNumber id="lastname" @bind-Value="tanque.TBase" class="form-control"></InputNumber>
+        </div>
+   </div>
 
     <br />
        <div class="button-group">
@@ -187,7 +219,7 @@ else
 
     .add-card {
         width: 280px;
-        height: 350px;
+        height: 550px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -241,8 +273,60 @@ else
     public int? Id { get; set; }
 
     Tanque tanque = new Tanque();
- 
+
     public static List<Tanque> Tanques = new List<Tanque>();
+    //Lista temporal de materiales
+    public static List<Material> Materiales = new List<Material>
+    {
+        new Material
+        {
+            Id=1,
+            TipoMaterial="Acero",
+            CoefLineal=0.125
+        },
+        new Material
+        {
+            Id=2,
+            TipoMaterial="MidCarbon",
+            CoefLineal=0.55
+        },
+        new Material
+        {
+            Id=3,
+            TipoMaterial="Stanless",
+            CoefLineal=0.124
+        }
+    };
+    //Lita de Tipo de fluido
+    public static List<Fluido> Fluidos = new List<Fluido>
+    {
+        new Fluido
+        {
+            Id=1,
+            Name="Crudo"
+        },
+        new Fluido
+        {
+            Id=2,
+            Name="Refinado"
+        },
+        new Fluido
+        {
+            Id=3,
+            Name="Lbricante"
+        },
+        new Fluido
+        {
+           Id=4,
+           Name="Agua"
+        },
+        new Fluido
+        {
+            Id=5,
+            Name="Nafta"
+        }
+    };
+
     protected override async Task OnInitializedAsync()
     {
         var resultado = await Http.GetFromJsonAsync<List<Tanque>>("api/Tanque");

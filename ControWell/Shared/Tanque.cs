@@ -12,5 +12,7 @@ namespace ControWell.Shared
         public string NombreTanque { get; set; } = string.Empty;
         public string Capacidad { get; set; } = string.Empty;
         public string TipoFluido { get; set; } = string.Empty;
+        public string Material { get; set; } = string.Empty;
+        public decimal TBase { get; set; }
     }
 }
