@@ -6,6 +6,8 @@ global using ControWell.Client.Services.SuperHeroService;
 global using ControWell.Client.Services.AlarmaService;
 global using ControWell.Client.Services.TanqueService;
 global using ControWell.Client.Services.AforoService;
+global using ControWell.Client.Services.TipoMovimientoService;
+global using ControWell.Client.Services.BalanceService;
 using ControWell.Client;
 
 using Microsoft.AspNetCore.Components.Web;
@@ -28,6 +30,8 @@ builder.Services.AddScoped<IAlarmaService, AlarmaService>();
 builder.Services.AddScoped<IRegistroService, RegistroService>();
 builder.Services.AddScoped<ITanqueService, TanqueService>();
 builder.Services.AddScoped<IAforoService, AforoService>();
+builder.Services.AddScoped<ITipoMovimientoService, TipoMovimientoService>();
+builder.Services.AddScoped<IBalanceService, BalanceService>();
 builder.Services.AddSweetAlert2();
 
 //Agregado para ver excel

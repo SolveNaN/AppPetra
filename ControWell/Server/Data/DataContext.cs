@@ -194,6 +194,8 @@
         public DbSet<Prueba> Pruebas { get; set; }
         public DbSet<Alarma> Alarmas { get; set; }
         public DbSet<Registro> Registros { get; set; }
+        public DbSet<TipoMovimiento> Movimientos { get; set; }
+        public DbSet<Balance> Balances { get; set; }
     }
 
     
