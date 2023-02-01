@@ -1,0 +1,315 @@
+﻿@using ControWell.Client.Services.TipoMovimientoService;
+@using ControWell.Shared
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject ITipoMovimientoService TipoMovimientoService
+@inject SweetAlertService Swal
+
+
+@*Contenedor general*@
+<div class="col-sm-12">
+    @*Inicio tabla que muestra los movimientos*@
+    <h4>Movimientos posibles</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                @* <th>Id</th>*@
+                <th>Nombre</th>
+                <th></th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var MisMovimientos in TipoMovimientos)
+            {
+
+                <tr>
+                    @*<td>@Pozo.Id</td>*@
+                    @if (update == true && MisMovimientos.Id == id)
+                    {
+                        <td><input @bind-value="@MisMovimientos.NombreMovimiento" /></td>
+                    }
+                    else
+                    {
+                        <td>@MisMovimientos.NombreMovimiento</td>
+                    }
+                    
+
+                    <td>
+                        @if (update == true && MisMovimientos.Id == id)
+                        {
+                            <button type="submit" class="btn btn-info" data-toggle="tooltip" title="Save" @onclick="(()=>UpdateTipoMovimiento(MisMovimientos))">
+                                <i class="fa-solid fa-circle-check"></i>
+                            </button>
+                            <button class="btn btn-danger" @onclick="Cancelar" data-toggle="tooltip" title="Cancel">
+                                <i class="fa-solid fa-ban"></i>
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-primary" data-toggle="tooltip" title="Update" @onclick="(()=> updatedatarow(MisMovimientos.Id))"><i class="oi oi-pencil"></i></button>
+                            <button class="btn btn-warning" data-toggle="tooltip" title="Delete" @onclick="(()=>  DeleteTipoMovimiento(MisMovimientos.Id))"><i class="oi oi-trash"></i></button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @*AGREGAR NUEVO POZO BUTTON*@
+
+@if (state == true || MovimientoState == false)
+{
+    <button class="btn btn-success" @onclick="NevegarVariablesLista" disabled>Nuevo tipo</button>
+}
+else
+{
+    <button class="btn btn-success" @onclick="NevegarVariablesLista">Nuevo tipo</button>
+}
+
+@*AGREGAR NUEVO POZO*@
+@if (state == true)
+ {
+  <div class="create-pozo-container">
+    <div class="add-pozo-card">
+       <EditForm Model="movimiento" OnSubmit="EviarMovimiento">
+        <br />
+        <div>
+            <label for="nombre">Nombre del movimiento</label>
+            <InputText id="nombre" @bind-Value="movimiento.NombreMovimiento" class="form-control"></InputText>
+        </div>
+
+
+        <br />
+        <div class="button-group">
+          <button type="submit" class="btn btn-success">Guardar</button>
+          <button class="btn btn-danger" @onclick="Cancelar">Cancelar</button>
+        </div>
+        <br />
+        <br />
+    </EditForm>
+    </div>
+  </div>
+ }else{
+  <h1></h1>    
+  }
+</div>
+@*Fin contenedor principal*@
+
+<style>
+
+    body {
+        font-family: Arial;
+    }
+
+    input {
+        border-radius: 5px;
+        background-color: #f7fafc;
+        width: 90%;
+        height: 40px;
+        border: 0.5px dashed blue;
+        /*border-style: inset;*/
+        /*      border-width: 1px;
+    */
+        /* border-top-style: hidden;
+          border-right-style: solid;
+          border-bottom-style: hidden;
+          border-left-style: solid;*/
+    }
+    /* estilos de la tabla */
+
+    .table-container-scroll {
+        overflow: scroll;
+        height: 500px;
+        width: 100%;
+    }
+
+    table {
+        background-color: white;
+        text-align: left;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        padding: 10px;
+        margin-left: 40px;
+    }
+
+    thead {
+        background-color: #388e3c;
+        border-bottom: solid 3px #0F362D;
+        color: #eeeeee;
+        position: sticky;
+        top: 0px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #ddd;
+    }
+
+    tr:hover td {
+        background-color: rgba(100, 176, 161, 0.8);
+        /*background-color: #369681;*/
+        color: #eeeeee;
+    }
+
+    /* estilos formulario agregar pozo*/
+    .create-pozo-container {
+        position: absolute;
+        top: 55px;
+        left: 250px;
+        padding: 12px;
+        width: 1110px;
+        height: 570px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.45);
+    }
+
+    .add-pozo-card {
+        width: 280px;
+        height: 400px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(223, 230, 233,1.0);
+        border-radius: 8px;
+        color: rgba(0, 0, 0,1.0);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.45);
+    }
+
+        .add-pozo-card label {
+            margin-bottom: 5px;
+            margin-top: 6px;
+        }
+
+    .button-group {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #db-spinner {
+        position: absolute;
+        top: 55px;
+        left: 250px;
+        padding: 12px;
+        width: 1110px;
+        height: 570px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+</style>
+@code {
+
+    Boolean state = false;
+    Boolean update = false;
+    int id;
+    Boolean MovimientoState = false;
+    public static List<TipoMovimiento> TipoMovimientos = new List<TipoMovimiento>();
+
+    [Parameter]
+
+    public int? Id { get; set; }
+
+    TipoMovimiento movimiento = new TipoMovimiento();
+    protected override async Task OnInitializedAsync()
+    {
+        var resultado = await Http.GetFromJsonAsync<List<TipoMovimiento>>("api/TipoMovimiento");
+        if (resultado != null)
+            TipoMovimientos = resultado;
+        MovimientoState = true;
+    }
+
+
+    async Task UpdateTipoMovimiento(TipoMovimiento pozo)
+    {
+        await TipoMovimientoService.UpdateTipoMovimiento(pozo);
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Success",
+                Text = "Actualizado correctamente",
+                Icon = SweetAlertIcon.Success,
+            });
+
+        NavigationManager.NavigateTo("/movimientos");
+        NavigationManager.NavigateTo("/movimientos");
+    }
+
+    void Cancelar()
+    {
+        state = false;
+        update = false;
+    }
+    void updatedatarow(int _id)
+    {
+        update = true;
+        id = _id;
+    }
+
+    async Task DeleteTipoMovimiento(int _id)
+    {
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Eliminar",
+                Text = "¿ Estas seguro que deseas eliminar ?",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Eliminar",
+                CancelButtonText = "Cancelar"
+            });
+
+        var confirmado = !string.IsNullOrEmpty(resultado.Value);
+
+        if (!confirmado)
+        {
+            //context.PreventNavigation();
+        }
+        else
+        {
+            await TipoMovimientoService.DeleteTipoMovimiento(_id);
+            NavigationManager.NavigateTo("/movimientos");
+            NavigationManager.NavigateTo("/movimientos");
+        }
+
+    }
+    void NevegarVariablesLista()
+    {
+        //NanigationManager.NavigateTo("/crearpozo");
+        state = true;
+    }
+
+    async Task EviarMovimiento()
+    {
+        try
+        {
+            await TipoMovimientoService.CreateTipoMovimiento(movimiento);
+            var resultado = await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Success",
+                    Text = "Guardado correctamente",
+                    Icon = SweetAlertIcon.Success,
+                });
+        }
+        catch (InvalidCastException e)
+        {
+            Console.WriteLine(e);
+
+            state = false;
+            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/movimientos");
+        }
+        finally
+        {
+            state = false;
+            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/movimientos");
+        }
+    }
+}

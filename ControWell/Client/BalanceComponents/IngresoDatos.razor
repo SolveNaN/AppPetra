@@ -1,0 +1,242 @@
+﻿@using ControWell.Client.Services.BalanceService;
+@using ControWell.Shared
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject IBalanceService BalanceService
+@inject SweetAlertService Swal
+<div>
+    <div class="add-pozo-card-1">
+        <EditForm Model="miBalance" OnSubmit="EviarBalance">
+            <br />
+            <div>
+                <div>
+                    <label for="nombre">Tanque</label>
+                    <InputSelect @bind-Value=miBalance.TanqueId>
+                        @foreach (var i in Tanques)
+                        {
+                            <option value="@i.Id">@i.NombreTanque</option>
+                        }
+                    </InputSelect>
+                </div>
+                <div>
+                    <label for="nombre">Pozo</label>
+                    <InputSelect @bind-Value=miBalance.PozoId>
+                        @foreach (var j in Pozos)
+                        {
+                            <option value="@j.Id">@j.NombrePozo</option>
+                        }
+                    </InputSelect>
+                </div>
+                <div>
+                    <label for="nombre">Tipo de movimiento</label>
+                    <InputSelect @bind-Value=miBalance.MovimientoId>
+                        @foreach (var k in Movimientos)
+                        {
+                            <option value="@k.Id">@k.NombreMovimiento</option>
+                        }
+                    </InputSelect>
+                </div>
+                <div>
+                    <label for="nombre">Nivel</label>
+                    <InputNumber @bind-Value=miBalance.Nivel></InputNumber>
+                </div>
+                <div>
+                    <label for="nombre">Interfase</label>
+                    <InputNumber @bind-Value=miBalance.Interfase></InputNumber>
+                </div>
+                <div>
+                    <label for="nombre">°API</label>
+                    <InputNumber @bind-Value=miBalance.Api></InputNumber>
+                </div>
+                <div>
+                    <label for="nombre">SYW %</label>
+                    <InputNumber @bind-Value=miBalance.Syw></InputNumber>
+                </div>
+                <div>
+                    <label for="nombre">Tem ambiente °F</label>
+                    <InputNumber @bind-Value=miBalance.TemAmbiente></InputNumber>
+                </div>
+                <div>
+                    <label for="nombre">Tem fluido °F</label>
+                    <InputNumber @bind-Value=miBalance.TemFluido></InputNumber>
+                </div>
+            </div>
+            <br/>
+             <div class="button-group-add">
+            <button type="submit" class="btn btn-info">Guardar</button>
+            </div>
+        </EditForm>
+
+        
+    </div>
+</div>
+
+<style>
+
+ body{
+   font-family: Arial;
+  }
+
+  input {
+    border-radius: 5px;
+    background-color: #f7fafc;
+    width: 90%;
+    height: 40px;
+    border: 0.5px dashed blue;
+        /*border-style: inset;*/
+/*      border-width: 1px;
+*/
+     /* border-top-style: hidden;
+      border-right-style: solid;
+      border-bottom-style: hidden;
+      border-left-style: solid;*/
+
+  }
+/* estilos de la tabla */
+
+  .table-container-scroll{
+          overflow:scroll;
+         height:500px;
+         width:100%;
+
+  }
+
+    table{
+        background-color: white;
+        text-align: left;
+        border-collapse: collapse;
+        width: 100%;
+
+    }
+
+    th, td{
+        padding: 10px;
+        margin-left: 40px;
+    }
+
+    thead{
+        background-color: #388e3c;
+        border-bottom: solid 3px #0F362D;
+        color: #eeeeee;
+        position: sticky;
+        top: 0px;
+
+    }
+
+    tr:nth-child(even){
+        background-color: #ddd;
+    }
+
+    tr:hover td{
+       background-color: rgba(100, 176, 161, 0.8);
+       /*background-color: #369681;*/
+       color: #eeeeee;
+    }
+
+ /* estilos formulario agregar pozo*/
+ .create-pozo-container{
+       position: absolute;
+       top: 55px;
+       left: 250px;
+       padding: 12px;
+       width: 1110px;
+       height: 570px;
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       background: rgba(0, 0, 0, 0.45);
+ }
+
+ .add-pozo-card-1{
+      width: 350px;
+      height: 700px;
+      display: block;
+      justify-content: center;
+      align-items: center;
+      background: rgba(223, 230, 233,1.0);
+      border-radius: 8px;
+      color: rgba(0, 0, 0,1.0);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.45);
+
+   }
+
+ .add-pozo-card-1 label {
+     margin-bottom: 5px;
+     margin-top: 6px;
+ }
+ .button-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+ }
+
+ #db-spinner {
+           position: absolute;
+           top: 55px;
+           left: 250px;
+           padding: 12px;
+           width: 1110px;
+           height: 570px;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+ }
+
+</style>
+@code {
+    Boolean state = false;
+    Boolean update = false;
+    int id;
+    Boolean PozosState = false;
+    [Parameter]
+
+    public int? Id { get; set; }
+
+    Balance miBalance = new Balance();
+    public static List<Tanque> Tanques = new List<Tanque>();
+    public static List<Pozo> Pozos = new List<Pozo>();
+    public static List<TipoMovimiento> Movimientos = new List<TipoMovimiento>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var mitanque = await Http.GetFromJsonAsync<List<Tanque>>("api/Tanque");
+        if (mitanque != null)
+            Tanques = mitanque;
+        var mipozo = await Http.GetFromJsonAsync<List<Pozo>>("api/Pozo");
+        if (mipozo != null)
+            Pozos = mipozo;
+        var mimovimiento = await Http.GetFromJsonAsync<List<TipoMovimiento>>("api/TipoMovimiento");
+        if (mimovimiento != null)
+            Movimientos = mimovimiento;
+        PozosState = true;
+    }
+
+    async Task EviarBalance()
+    {
+        try
+        {
+            await BalanceService.CreateBalance(miBalance);
+            var resultado = await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Success",
+                    Text = "Guardado correctamente",
+                    Icon = SweetAlertIcon.Success,
+                });
+        }
+        catch (InvalidCastException e)
+        {
+            Console.WriteLine(e);
+
+            state = false;
+            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/movimientos");
+        }
+        finally
+        {
+            state = false;
+            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/movimientos");
+        }
+    }
+}
