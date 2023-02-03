@@ -9,9 +9,13 @@
     <div class="add-pozo-card-1">
         <EditForm Model="miBalance" OnSubmit="EviarBalance">
             <br />
+            <div class="row-align-title">
+              <h5>Registro de Datos</h5>
+            </div>
+            <br />
             <div>
                 <div>
-                    <label for="nombre">Tanque</label>
+                    <label for="nombre">Tanque⠀ ⠀⠀⠀⠀⠀⠀⠀⠀</label> @* no borrar el texto invisible*@
                     <InputSelect @bind-Value=miBalance.TanqueId>
                         @foreach (var i in Tanques)
                         {
@@ -20,7 +24,7 @@
                     </InputSelect>
                 </div>
                 <div>
-                    <label for="nombre">Pozo</label>
+                    <label for="nombre">Pozo⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</label> @* no borrar el texto invisible*@
                     <InputSelect @bind-Value=miBalance.PozoId>
                         @foreach (var j in Pozos)
                         {
@@ -29,7 +33,7 @@
                     </InputSelect>
                 </div>
                 <div>
-                    <label for="nombre">Tipo de movimiento</label>
+                    <label for="nombre">Tipo de movimiento  ⠀</label> @* no borrar el texto invisible*@
                     <InputSelect @bind-Value=miBalance.MovimientoId>
                         @foreach (var k in Movimientos)
                         {
@@ -38,34 +42,42 @@
                     </InputSelect>
                 </div>
                 <div>
-                    <label for="nombre">Nivel</label>
+                    <label for="nombre">Nivel⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</label> @* no borrar el texto invisible*@
                     <InputNumber @bind-Value=miBalance.Nivel></InputNumber>
                 </div>
                 <div>
-                    <label for="nombre">Interfase</label>
+                    <label for="nombre">Interfase⠀⠀⠀ ⠀⠀⠀⠀⠀</label> @* no borrar el texto invisible*@
                     <InputNumber @bind-Value=miBalance.Interfase></InputNumber>
                 </div>
-                <div>
-                    <label for="nombre">°API</label>
-                    <InputNumber @bind-Value=miBalance.Api></InputNumber>
+                <div class="row-align-components">
+                    <label for="nombre">°API@60⠀⠀⠀⠀⠀ ⠀⠀⠀</label> @* no borrar el texto invisible*@
+                    <InputNumber @bind-Value=miBalance.Api placeholder="Hour"></InputNumber>
+                    <Input value="API obs"/>
+
                 </div>
-                <div>
-                    <label for="nombre">SYW %</label>
+                <div class="row-align-components">
+                    <label for="nombre">S&W ⠀⠀⠀⠀⠀ ⠀⠀ ⠀⠀⠀</label> @* no borrar el texto invisible*@
                     <InputNumber @bind-Value=miBalance.Syw></InputNumber>
+                    <p>%</p>
                 </div>
                 <div>
-                    <label for="nombre">Tem ambiente °F</label>
+                    <label for="nombre">T ambiente °F⠀ ⠀ ⠀⠀</label> @* no borrar el texto invisible*@
                     <InputNumber @bind-Value=miBalance.TemAmbiente></InputNumber>
                 </div>
                 <div>
-                    <label for="nombre">Tem fluido °F</label>
+                    <label for="nombre">T fluido °F ⠀⠀⠀⠀⠀⠀⠀</label @* no borrar el texto invisible*@
                     <InputNumber @bind-Value=miBalance.TemFluido></InputNumber>
                 </div>
             </div>
             <br/>
-             <div class="button-group-add">
-            <button type="submit" class="btn btn-info">Guardar</button>
+             <div class="button-group">
+                <p>⠀⠀⠀</p> @* no borrar el texto invisible*@
+               <button type="submit" class="btn btn-info">Calcular</button>
+                <p>⠀⠀⠀</p> @* no borrar el texto invisible*@
+               <button type="submit" class="btn btn-warning">Borrar último</button>
+                <p>⠀⠀⠀</p> @* no borrar el texto invisible*@
             </div>
+            <br />
         </EditForm>
 
         
@@ -81,9 +93,10 @@
   input {
     border-radius: 5px;
     background-color: #f7fafc;
-    width: 90%;
-    height: 40px;
-    border: 0.5px dashed blue;
+    width: 20%;
+    height: 20px;
+    border: 0.5px solid blue;
+    margin-right:8px;
         /*border-style: inset;*/
 /*      border-width: 1px;
 */
@@ -95,62 +108,12 @@
   }
 /* estilos de la tabla */
 
-  .table-container-scroll{
-          overflow:scroll;
-         height:500px;
-         width:100%;
-
-  }
-
-    table{
-        background-color: white;
-        text-align: left;
-        border-collapse: collapse;
-        width: 100%;
-
-    }
-
-    th, td{
-        padding: 10px;
-        margin-left: 40px;
-    }
-
-    thead{
-        background-color: #388e3c;
-        border-bottom: solid 3px #0F362D;
-        color: #eeeeee;
-        position: sticky;
-        top: 0px;
-
-    }
-
-    tr:nth-child(even){
-        background-color: #ddd;
-    }
-
-    tr:hover td{
-       background-color: rgba(100, 176, 161, 0.8);
-       /*background-color: #369681;*/
-       color: #eeeeee;
-    }
-
+ 
  /* estilos formulario agregar pozo*/
- .create-pozo-container{
-       position: absolute;
-       top: 55px;
-       left: 250px;
-       padding: 12px;
-       width: 1110px;
-       height: 570px;
-       display: flex;
-       justify-content: center;
-       align-items: center;
-       background: rgba(0, 0, 0, 0.45);
- }
 
  .add-pozo-card-1{
-      width: 350px;
-      height: 700px;
+      width: 315px;
+      height: auto;
       display: block;
       justify-content: center;
       align-items: center;
@@ -161,27 +124,36 @@
 
    }
 
+    .row-align {
+        display: flex;
+    }
+
+    .row-align-components {
+        display: flex;
+        align-items: center;
+    }
+
+        .row-align-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width:100%;
+    }
+
  .add-pozo-card-1 label {
      margin-bottom: 5px;
      margin-top: 6px;
+     margin-left:15px;
+     margin-right:20px;
  }
  .button-group {
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+/*    background-color: lawngreen;*/ 
  }
 
- #db-spinner {
-           position: absolute;
-           top: 55px;
-           left: 250px;
-           padding: 12px;
-           width: 1110px;
-           height: 570px;
-           display: flex;
-           justify-content: center;
-           align-items: center;
- }
 
 </style>
 @code {
