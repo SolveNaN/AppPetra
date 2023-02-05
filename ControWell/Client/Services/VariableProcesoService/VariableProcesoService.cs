@@ -1,5 +1,4 @@
-﻿using ControWell.Client.Pages.SuperHero;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using static System.Net.WebRequestMethods;
 
 namespace ControWell.Client.Services.VariableProcesoService

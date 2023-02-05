@@ -6,23 +6,206 @@
 @inject IRegistroService RegistroService
 @using ControWell.Shared
 @using System.Net.Http.Json
-<EditForm Model="registro" OnSubmit="EnviarRegistro">
-    <label>Fluido</label>
-    <InputSelect @bind-Value="registro.PozoId" class="form-select">
-        @foreach (var i in TipoMovimientos)
-        {
-            <option value="@i.Id">@i.NombreMovimiento</option>
-        }
+<div>
+    <EditForm Model="registro" OnSubmit="EnviarRegistro">
+        <label>Fluido</label>
+        <InputSelect @bind-Value="registro.PozoId" class="form-select">
+            @foreach (var i in Fluidos)
+            {
+                <option value="@i.Id">@i.Name</option>
+            }
 
-    </InputSelect>
-    
+        </InputSelect>
 
-    <button type="button" class="btn btn-primary" @onclick="UpdateRegistro">Actualizar</button>
-    <button type="button" class="btn btn-danger" @onclick="DeleteRegistro">Eliminar</button>
-    <button class="btn btn-outline-warning" @onclick="VolverAnterior">Volver</button>
-    <br />
-    <br />
-</EditForm>
+
+
+        <br />
+        <br />
+    </EditForm>
+
+</div>
+<div class="row">
+    <div class="container col-6">
+        <label>Inicial</label>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Tanque</th>
+                    <th>NSV</th>
+                    <th>Agua</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>TK Nafta</td>
+                    <td>Diluyente</td>
+                    <td>CH-100</td>
+                </tr>
+                <tr>
+                    <td>TK OIL</td>
+                    <td>456.2</td>
+                    <td>30.87</td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <label>TOTAL</label><br />
+        <label><input style="width:150px" />NSV</label><br /><br />
+        <label><input style="width:150px" />AGUA</label>
+    </div>
+    <div class="container col-6">
+        <label>Final</label>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Tanque</th>
+                    <th>NSV</th>
+                    <th>Agua</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>TK Nafta</td>
+                    <td>Diluyente</td>
+                    <td>CH-100</td>
+                </tr>
+                <tr>
+                    <td>TK OIL</td>
+                    <td>456.2</td>
+                    <td>30.87</td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <label>TOTAL</label><br />
+        <label><input style="width:150px" />NSV</label><br /><br />
+        <label><input style="width:150px" />AGUA</label>
+    </div>
+</div>
+<style>
+    body {
+        font-family: Arial;
+    }
+
+    input {
+        border-radius: 5px;
+        background-color: #f7fafc;
+        width: 90%;
+        height: 40px;
+        border: 0.5px dashed blue;
+ 
+    }
+    /* estilos de la tabla */
+
+    .table-container-scroll {
+        overflow: scroll;
+        height: 500px;
+        width: 100%;
+    }
+
+    table {
+        background-color: white;
+        text-align: left;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        padding: 10px;
+        margin-left: 40px;
+    }
+
+    thead {
+        background-color: #388e3c;
+        border-bottom: solid 3px #0F362D;
+        color: #eeeeee;
+        position: sticky;
+        top: 0px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #ddd;
+    }
+
+    tr:hover td {
+        background-color: rgba(100, 176, 161, 0.8);
+        /*background-color: #369681;*/
+        color: #eeeeee;
+    }
+
+    InputSelect {
+        border-radius: 5px;
+        margin-top: 5px;
+    }
+
+    input {
+        border-radius: 5px;
+        background-color: #f7fafc;
+        width: 90%;
+        height: 40px;
+        border: 0.5px dashed blue;
+    }
+    /* estilos formulario agregar pozo*/
+    .create-container {
+        position: absolute;
+        top: 55px;
+        left: 250px;
+        padding: 12px;
+        width: 1110px;
+        height: 570px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.45);
+    }
+
+    .add-card {
+        width: 280px;
+        height: 550px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(223, 230, 233,1.0);
+        border-radius: 8px;
+        color: rgba(0, 0, 0,1.0);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.45);
+    }
+
+    .add-card label {
+        margin-bottom: 5px;
+        margin-top: 6px;
+     }
+
+    .button-group {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #db-spinner {
+        position: absolute;
+        top: 55px;
+        left: 250px;
+        padding: 12px;
+        width: 1110px;
+        height: 570px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .button-group-actions {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 5px;
+    }
+
+</style>
 @code {
     [Parameter]
 
@@ -39,7 +222,34 @@
 
     public static List<Pozo> Pozos = new List<Pozo>();
     public static List<TipoMovimiento> TipoMovimientos = new List<TipoMovimiento>();
-
+    public static List<Fluido> Fluidos = new List<Fluido>
+    {
+        new Fluido
+        {
+            Id=1,
+            Name="Crudo"
+        },
+        new Fluido
+        {
+            Id=2,
+            Name="Refinado"
+        },
+        new Fluido
+        {
+            Id=3,
+            Name="Lbricante"
+        },
+        new Fluido
+        {
+           Id=4,
+           Name="Agua"
+        },
+        new Fluido
+        {
+            Id=5,
+            Name="Nafta"
+        }
+    };
 
     protected override async Task OnInitializedAsync()
     {
