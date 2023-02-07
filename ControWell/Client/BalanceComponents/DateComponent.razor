@@ -1,0 +1,156 @@
+﻿@using ControWell.Client.Services.BalanceService;
+@using ControWell.Shared
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject IBalanceService BalanceService
+@inject SweetAlertService Swal
+<div>
+    <div class="card-variables-date">
+        <EditForm Model="miBalance" OnSubmit="EviarBalance">
+            <br />
+
+                <div class="colum-row-variable">
+                    <div class="row-align">
+                        <div>
+                          <Input type="checkbox" id="fecha" />
+                        </div>
+                        <p>Fecha Actual</p>
+                    </div>
+                     <div class="row-align">
+                         <div>
+                           <Input type="checkbox" id="fecha" />
+                         </div>
+                        <p >Fecha Ultimo Movimiento</p>
+                    </div>
+                </div>
+                <div class="colum-row-variable">
+                    <div class="row-align">
+                        <label for="fecha">Fecha⠀</label>
+                        <Input type="date" id="fecha" />
+                    </div>
+                    <div class="row-align">
+                       <label for="fecha" >Hora⠀</label>
+                       <Input type="select" id="fecha"  placeholder="00:00:00 am"/>
+                    </div>
+                </div>
+               <br />
+        </EditForm>
+
+        
+    </div>
+</div>
+
+<style>
+
+ body{
+   font-family: Arial;
+   font-size: 12px;
+  }
+  .colum-row-variable{
+      display: flex;
+      justify-content:center;
+      align-items: center;
+      width: 100%;
+  }
+  .row-align {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+  }
+
+    .row-align-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .card-variables-date {
+      width: 400px;
+      height: auto;
+      display: block;
+      justify-content: center;
+      align-items: center;
+      background: rgba(223, 230, 233,1.0);
+      border-radius: 8px;
+      color: rgba(0, 0, 0,1.0);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.45);
+
+   }
+a
+ .card-variables-date label {
+     margin-bottom: 5px;
+     margin-top: 6px;
+     width: 100px;
+ }
+
+ .card-variables-date input {
+    border-radius: 2px;
+    background-color: #f7fafc;
+    width: 50%;
+    height: 20px;
+    border: 0.5px solid black;
+    border-width: 2px;
+ }
+
+ #button{
+     margin-left:50px;
+ }
+</style>
+@code {
+    Boolean state = false;
+    Boolean update = false;
+    int id;
+    Boolean PozosState = false;
+    [Parameter]
+
+    public int? Id { get; set; }
+
+    Balance miBalance = new Balance();
+    public static List<Tanque> Tanques = new List<Tanque>();
+    public static List<Pozo> Pozos = new List<Pozo>();
+    public static List<TipoMovimiento> Movimientos = new List<TipoMovimiento>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var mitanque = await Http.GetFromJsonAsync<List<Tanque>>("api/Tanque");
+        if (mitanque != null)
+            Tanques = mitanque;
+        var mipozo = await Http.GetFromJsonAsync<List<Pozo>>("api/Pozo");
+        if (mipozo != null)
+            Pozos = mipozo;
+        var mimovimiento = await Http.GetFromJsonAsync<List<TipoMovimiento>>("api/TipoMovimiento");
+        if (mimovimiento != null)
+            Movimientos = mimovimiento;
+        PozosState = true;
+    }
+
+    async Task EviarBalance()
+    {
+        try
+        {
+            await BalanceService.CreateBalance(miBalance);
+            var resultado = await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Success",
+                    Text = "Guardado correctamente",
+                    Icon = SweetAlertIcon.Success,
+                });
+        }
+        catch (InvalidCastException e)
+        {
+            Console.WriteLine(e);
+
+            state = false;
+            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/movimientos");
+        }
+        finally
+        {
+            state = false;
+            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/movimientos");
+        }
+    }
+}

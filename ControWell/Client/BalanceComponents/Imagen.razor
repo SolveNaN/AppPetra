@@ -1,0 +1,160 @@
+﻿@using ControWell.Client.Services.BalanceService;
+@using ControWell.Shared
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject IBalanceService BalanceService
+@inject SweetAlertService Swal
+
+    <div class="add-pozo-card-1">
+        <div class="tank-image">
+               <img class="image" src="https://freesvg.org/img/tanque_horizontal.png" alt="">
+        </div>
+        
+    </div>
+
+
+<style>
+
+ body{
+   font-family: Arial;
+  }
+
+  input {
+    border-radius: 5px;
+    background-color: #f7fafc;
+    width: 20%;
+    height: 20px;
+    border: 0.5px solid blue;
+    margin-right:8px;
+        /*border-style: inset;*/
+/*      border-width: 1px;
+*/
+     /* border-top-style: hidden;
+      border-right-style: solid;
+      border-bottom-style: hidden;
+      border-left-style: solid;*/
+
+  }
+/* estilos de la tabla */
+
+ 
+ /* estilos formulario agregar pozo*/
+
+ .tank-image {
+     width:100%;
+     height: 50%;
+     display: flex;
+     justify-content: center;
+      align-items: center;
+     background-image: url(https://freesvg.org/img/tanque_horizontal.png) no-repeat;
+     background-size: cover;
+     
+ }
+
+ .image {
+     width: 250px;
+     height: 150px;
+ }
+
+ .add-pozo-card-1{
+      width: 315px;
+      height: auto;
+      display: block;
+      justify-content: center;
+      align-items: center;
+      background: rgba(223, 230, 233,1.0);
+      border-radius: 8px;
+      color: rgba(0, 0, 0,1.0);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.45);
+
+   }
+
+    .row-align {
+        display: flex;
+    }
+
+    .row-align-components {
+        display: flex;
+        align-items: initial
+    }
+
+        .row-align-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width:100%;
+    }
+
+ .add-pozo-card-1 label {
+     margin-bottom: 5px;
+     margin-top: 6px;
+     margin-left:15px;
+     margin-right:20px;
+ }
+ .button-group {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+/*    background-color: lawngreen;*/ 
+ }
+
+
+</style>
+@code {
+    Boolean state = false;
+    Boolean update = false;
+    int id;
+    Boolean PozosState = false;
+    [Parameter]
+
+    public int? Id { get; set; }
+
+    Balance miBalance = new Balance();
+    public static List<Tanque> Tanques = new List<Tanque>();
+    public static List<Pozo> Pozos = new List<Pozo>();
+    public static List<TipoMovimiento> Movimientos = new List<TipoMovimiento>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var mitanque = await Http.GetFromJsonAsync<List<Tanque>>("api/Tanque");
+        if (mitanque != null)
+            Tanques = mitanque;
+        var mipozo = await Http.GetFromJsonAsync<List<Pozo>>("api/Pozo");
+        if (mipozo != null)
+            Pozos = mipozo;
+        var mimovimiento = await Http.GetFromJsonAsync<List<TipoMovimiento>>("api/TipoMovimiento");
+        if (mimovimiento != null)
+            Movimientos = mimovimiento;
+        PozosState = true;
+    }
+
+    async Task EviarBalance()
+    {
+        try
+        {
+            await BalanceService.CreateBalance(miBalance);
+            var resultado = await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Success",
+                    Text = "Guardado correctamente",
+                    Icon = SweetAlertIcon.Success,
+                });
+        }
+        catch (InvalidCastException e)
+        {
+            Console.WriteLine(e);
+
+            state = false;
+            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/movimientos");
+        }
+        finally
+        {
+            state = false;
+            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/movimientos");
+        }
+    }
+}
