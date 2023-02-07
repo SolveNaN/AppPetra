@@ -2,7 +2,6 @@ global using ControWell.Shared;
 global using Microsoft.EntityFrameworkCore;
 global using ControWell.Server.Data;
 using Microsoft.AspNetCore.ResponseCompression;
-using ControWell.Client.Services.SuperHeroService;
 using ControWell.Client.Services.PozoService;
 
 var builder = WebApplication.CreateBuilder(args);
