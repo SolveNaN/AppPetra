@@ -18,7 +18,7 @@ namespace ControWell.Client.Services.BalanceService
         public List<Balance> Balances { get; set; } = new List<Balance>();
         public List<Tanque> Tanques { get; set; } = new List<Tanque>();
         public List<Pozo> Pozos { get; set; } = new List<Pozo>();
-        public List<TipoMovimiento> Movimientos { get; set; } = new List<TipoMovimiento>();
+        public List<TipoMovimiento> TipoMovimientos { get; set; } = new List<TipoMovimiento>();
 
 
         public async Task CreateBalance(Balance miBalance)

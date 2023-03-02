@@ -127,6 +127,9 @@
                     Medida= 45
                 }
                 );
+
+
+
         }
         public DbSet<Pozo> Pozos { get; set; }
         public DbSet<Tanque> Tanques { get; set; }
@@ -135,7 +138,7 @@
         public DbSet<Prueba> Pruebas { get; set; }
         public DbSet<Alarma> Alarmas { get; set; }
         public DbSet<Registro> Registros { get; set; }
-        public DbSet<TipoMovimiento> Movimientos { get; set; }
+        public DbSet<TipoMovimiento> TipoMovimientos { get; set; }
         public DbSet<Balance> Balances { get; set; }
     }
 

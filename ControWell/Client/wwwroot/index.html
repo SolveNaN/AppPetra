@@ -64,6 +64,23 @@
     <!-- Page Specific JS -->
     <script src="_content/CurrieTechnologies.Razor.SweetAlert2/sweetAlert2.min.js"></script>
 
+
+    <!--Inicio funcion para crear excel con closexml-->
+    <script>
+        window.downloadFileFromStream = async (contentStreamReference) => {
+            const arrayBuffer = await contentStreamReference.arrayBuffer();
+            const blob = new Blob([arrayBuffer]);
+            const url = URL.createObjectURL(blob);
+            const anchorElement = document.createElement('a');
+            anchorElement.href = url;
+            anchorElement.download = "Reporte.xlsx";
+            anchorElement.click();
+            anchorElement.remove;
+            URL.revokeObjectURL(url);
+        }
+    </script>
+
+    <!--Inicio funcion para crear excel con closexml-->
 </body>
 
 <style>

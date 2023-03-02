@@ -1,5 +1,5 @@
 ﻿@page "/movimientos"
-@using ControWell.Client.BalanceComponents
+@using ControWell.Client.Pages.Balance.Components
 
 <h3>Titulo de relleno</h3>
 
@@ -9,18 +9,18 @@
 <div class="component-container">
 
     <div class="registro-datos-container">
-     <IngresoDatos />
+     <IngresoDatos/>
     </div>
     <div class="registro-datos-container">
         <div class="varaibles-operacion-container">
             <div class="variables">
-                <DateComponent />
+                <MisMovimientos/>
             </div>
             <div class="variables">
-              <Variables/>
+              
             </div>
             <div class="variables">
-               <EnOperacion />
+               
             </div>
         </div>
     </div>
@@ -32,7 +32,7 @@
 <div class="bottom-container">
  <EstadoActual/>
 </div>
-
+<TransferenciaEntreTanques/>
 <style>
 
  .bottom-container{

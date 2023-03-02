@@ -9,6 +9,7 @@
 @using ControWell.Shared
 @using System.Net.Http.Json
 @inject SweetAlertService Swal
+@inject IJSRuntime JS
 
 
 <h3>Listado de Registros</h3>
@@ -85,9 +86,8 @@
 
                     </InputSelect>
                     <div>
-                        <label for="">Fecha</label>
-                    <InputDate id="fecha" @bind-Value:format="MM/dd/yyyy HH:mm:ss" @bind-Value="registro.FechaHora" class="form-control"></InputDate>
-
+                        <label for="">Fecha</label>                    
+                    <InputDate @bind-Value="registro.FechaHora"></InputDate>
                     </div>
                     <div>
                         <label for="">Medida</label>
@@ -160,7 +160,7 @@
 }
 <button class="btn btn-success" @onclick="nuevoRegistro">Nuevo Registro</button>
 <button class="btn btn-info" @onclick="CargarXSXL">Carga XLXS</button>
-
+<button class="btn btn-success" data-toggle="tooltip" title="Exportar" @onclick="(()=> export())">Exportar Registros</button>
 <style>
     body {
         font-family: Arial;
@@ -328,6 +328,7 @@
 </style>
 
 @code {
+    private DateTime? Mifecha = null;
 
     [Parameter]
 
@@ -466,6 +467,17 @@
     }
 
     //Consulta para que por pozo solo me traiga las variables disponibles para ese pozo
+
+    //Funcion para Exportar excel
+    private async Task export()
+    {
+        var response = await Http.GetAsync("api/Registro/ExportExcel");
+        var fileStream = response.Content.ReadAsStream();
+        using var streamRef = new DotNetStreamReference(stream: fileStream);
+        await JS.InvokeVoidAsync("downloadFileFromStream", streamRef);
+
+    }
+
 
 }
 
