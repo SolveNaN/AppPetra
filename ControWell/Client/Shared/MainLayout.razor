@@ -3,10 +3,10 @@
 <div class="page">
    @if(token == false){
         
-      <div class="sidebar">
+      <article class="sidebar">
           <Menu />
-      </div>
-      <article class="content px-4" id="content-article">
+      </article>
+      <article class="content" id="content-article">
         @Body
         <br />
       </article>
@@ -21,8 +21,12 @@
 <style>
     #content-article{
         width: 100%;
-        margin-left: 40px;
-        margin-top: 8px;
+        height: auto;
+        margin-left: 0px;
+        margin-top: 35px;
+    }
+    .sidebar{
+        margin-right:10px;
     }
 </style>
 

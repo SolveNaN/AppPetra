@@ -7,8 +7,6 @@
 @inject IPozoService PozoService
 @inject SweetAlertService Swal
 
-<h3>Pozos</h3>
-
 @*TABLA POZOLIST*@
 
 <div class="table-container-scroll">
@@ -38,14 +36,14 @@
                 <td>
                   @if(update == true && Pozo.Id == id){
                     <button type="submit" class="btn btn-info" data-toggle="tooltip" title="Save" @onclick="(()=>UpdatePozo(Pozo))">
-                      <i class="fa-solid fa-circle-check"></i>
+                                <i style="position:initial" class="fa-solid fa-circle-check"></i>
                     </button>
                     <button class="btn btn-danger" @onclick="Cancelar" data-toggle="tooltip" title="Cancel">
-                      <i class="fa-solid fa-ban"></i>
+                                <i style="position:initial" class="fa-solid fa-ban"></i>
                     </button>
                   }else{
-                    <button class="btn btn-primary" data-toggle="tooltip" title="Update" @onclick="(()=> updatedatarow(Pozo.Id))"><i class="oi oi-pencil"></i></button>
-                    <button class="btn btn-warning" data-toggle="tooltip" title="Delete" @onclick="(()=>  DeletePozo(Pozo.Id))"><i class="oi oi-trash"></i></button>
+                    <button class="btn btn-primary" data-toggle="tooltip" title="Update" @onclick="(()=> updatedatarow(Pozo.Id))"><i style="position:initial" class="oi oi-pencil"></i></button>
+                            <button class="btn btn-warning" data-toggle="tooltip" title="Delete" @onclick="(()=>  DeletePozo(Pozo.Id))"><i style="position:initial" class="oi oi-trash"></i></button>
                   }
                 </td>
                </tr>
@@ -67,9 +65,11 @@
 @*AGREGAR NUEVO POZO BUTTON*@
 
 @if (state == true || PozosState == false){
-  <button class="btn btn-success" @onclick="NevegarVariablesLista" disabled >Nuevo Pozo</button>
+  <button class="btn btn-success" id="btn-nuevo-pozo" @onclick="NevegarVariablesLista" disabled >Nuevo Pozo</button>
 }else
-{<button class="btn btn-success" @onclick="NevegarVariablesLista">Nuevo Pozo</button> }
+{
+    <button class="btn btn-success" id="btn-nuevo-pozo" @onclick="NevegarVariablesLista">Nuevo Pozo</button>
+}
 
 @*AGREGAR NUEVO POZO*@
 
@@ -134,9 +134,14 @@
 /* estilos de la tabla */
 
   .table-container-scroll{
-          overflow:scroll;
+         overflow:scroll;
          height:500px;
          width:100%;
+         position: relative;
+         margin-top:10px;
+         margin-left: 10px;
+         margin-bottom:10px;
+         border-radius: 5px;
 
   }
 
@@ -146,6 +151,10 @@
         border-collapse: collapse;
         width: 100%;
 
+    }
+
+    th {
+        position: relative;
     }
 
     th, td{
@@ -170,6 +179,11 @@
        background-color: rgba(100, 176, 161, 0.8);
        /*background-color: #369681;*/
        color: #eeeeee;
+    }
+
+    #btn-nuevo-pozo{
+        margin-top:10px;
+        margin-left:10px;
     }
 
  /* estilos formulario agregar pozo*/
