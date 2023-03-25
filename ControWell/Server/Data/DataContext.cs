@@ -137,6 +137,14 @@
         public DbSet<Registro> Registros { get; set; }
         public DbSet<TipoMovimiento> Movimientos { get; set; }
         public DbSet<Balance> Balances { get; set; }
+        public DbSet<Guia> Guias { get; set; }
+        public DbSet<Sello> Sellos { get; set; }
+        public DbSet<FormatoCarga> FormatoCarroTanquesCargados { get; set; }
+        public DbSet<OfertaDiaria> OfertaDiariaProgramacionCarrotanques { get; set; }
+        public DbSet<CarroTanque> CarroTanques { get; set; }
+        public DbSet<Operario> Operarios { get; set; }
+        public DbSet<Destino> Destinos { get; set; }
+
     }
 
     
