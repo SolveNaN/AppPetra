@@ -1,0 +1,304 @@
+﻿@page "/carrotanquelist"
+@using ControWell.Client.Services.CarroTanqueService;
+@using ControWell.Shared
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject ICarroTanqueService CarroTanqueService
+@inject SweetAlertService Swal
+
+<div class="table-container-scroll">
+<table class="table">
+    <thead>
+        <tr>
+           @* <th>Id</th>*@
+            <th>Identificador</th>
+            <th>Tipo Vehiculo</th>
+            <th>Operadora</th>
+            <th>Comentario</th>
+            <th></th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var CarroTanque in CarroTanques)
+        {
+            
+             <tr>
+               <td>@CarroTanque.Id</td>
+               @if(update == true && CarroTanque.Id == id){<td><input @bind-value="@CarroTanque.TipoVehiculo" /></td>}else{<td>@CarroTanque.TipoVehiculo</td>}
+               @if(update == true && CarroTanque.Id == id){<td><input @bind-value="@CarroTanque.Capacidad" /></td>}else{<td>@CarroTanque.Capacidad</td>}
+               @if(update == true && CarroTanque.Id == id){<td><input @bind-value="@CarroTanque.Estado" /></td>}else{<td>@CarroTanque.Estado</td>}
+
+                <td>
+                  @if(update == true && CarroTanque.Id == id){
+                    <button type="submit" class="btn btn-info" data-toggle="tooltip" title="Save" @onclick="(()=>UpdateCarroTanque(CarroTanque))">
+                                <i style="position:initial" class="fa-solid fa-circle-check"></i>
+                    </button>
+                    <button class="btn btn-danger" @onclick="Cancelar" data-toggle="tooltip" title="Cancel">
+                                <i style="position:initial" class="fa-solid fa-ban"></i>
+                    </button>
+                  }else{
+                    <button class="btn btn-primary" data-toggle="tooltip" title="Update" @onclick="(()=> updatedatarow(CarroTanque.Id))"><i style="position:initial" class="oi oi-pencil"></i></button>
+                            <button class="btn btn-warning" data-toggle="tooltip" title="Delete" @onclick="(()=>  DeleteCarroTanque(CarroTanque.Id))"><i style="position:initial" class="oi oi-trash"></i></button>
+                  }
+                </td>
+               </tr>
+                }
+    </tbody>
+</table>
+</div>
+
+@*Loading database*@
+@if (CarroTanquesState == false)
+{
+    <div id="db-spinner">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+}
+
+@*AGREGAR NUEVO POZO BUTTON*@
+
+@if (state == true || CarroTanquesState == false){
+  <button class="btn btn-success" id="btn-nuevo-carroTanque" @onclick="NevegarVariablesLista" disabled >Nuevo CarroTanque</button>
+}else
+{
+    <button class="btn btn-success" id="btn-nuevo-carroTanque" @onclick="NevegarVariablesLista">Nuevo CarroTanque</button>
+}
+
+<style>
+
+ body{
+   font-family: Arial;
+  }
+
+  input {
+    border-radius: 5px;
+    background-color: #f7fafc;
+    width: 90%;
+    height: 40px;
+    border: 0.5px dashed blue;
+
+  }
+/* estilos de la tabla */
+
+  .table-container-scroll{
+         overflow:scroll;
+         height:500px;
+         width:100%;
+         position: relative;
+         margin-top:10px;
+         margin-left: 10px;
+         margin-bottom:10px;
+         border-radius: 5px;
+
+  }
+
+    table{
+        background-color: white;
+        text-align: left;
+        border-collapse: collapse;
+        width: 100%;
+
+    }
+
+    th {
+        position: relative;
+    }
+
+    th, td{
+        padding: 10px;
+        margin-left: 40px;
+    }
+
+    thead{
+        background-color: #388e3c;
+        border-bottom: solid 3px #0F362D;
+        color: #eeeeee;
+        position: sticky;
+        top: 0px;
+
+    }
+
+    tr:nth-child(even){
+        background-color: #ddd;
+    }
+
+    tr:hover td{
+       background-color: rgba(100, 176, 161, 0.8);
+       /*background-color: #369681;*/
+       color: #eeeeee;
+    }
+
+    #btn-nuevo-carroTanque{
+        margin-top:10px;
+        margin-left:10px;
+    }
+
+ /* estilos formulario agregar carroTanque*/
+ .create-carroTanque-container{
+       position: absolute;
+       top: 55px;
+       left: 250px;
+       padding: 12px;
+       width: 1110px;
+       height: 570px;
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       background: rgba(0, 0, 0, 0.45);
+ }
+
+ .add-carroTanque-card{
+      width: 280px;
+      height: 400px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(223, 230, 233,1.0);
+      border-radius: 8px;
+      color: rgba(0, 0, 0,1.0);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.45);
+
+   }
+
+ .add-carroTanque-card label {
+     margin-bottom: 5px;
+     margin-top: 6px;
+ }
+ .button-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+ }
+
+ #db-spinner {
+           position: absolute;
+           top: 55px;
+           left: 250px;
+           padding: 12px;
+           width: 1110px;
+           height: 570px;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+ }
+
+</style>
+@code {
+
+    Boolean state = false;
+    Boolean update = false;
+    int id;
+    Boolean CarroTanquesState = false;
+
+    public static List<CarroTanque> CarroTanques = new List<CarroTanque>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var resultado = await Http.GetFromJsonAsync<List<CarroTanque>>("api/carrotanque");
+        if (resultado != null)
+            CarroTanques = resultado;
+        CarroTanquesState = true;
+    }
+
+    [Parameter]
+
+    public int? Id { get; set; }
+
+    CarroTanque carroTanque = new CarroTanque();
+
+
+    async Task EviarCarroTanque()
+    {
+        try
+        {
+            await CarroTanqueService.CreateCarroTanque(carroTanque);
+            var resultado = await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Success",
+                    Text = "Guardado correctamente",
+                    Icon = SweetAlertIcon.Success,
+                });
+        }
+        catch (InvalidCastException e)
+        {
+            Console.WriteLine(e);
+
+            state = false;
+            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/carrotanquelist");
+        }
+        finally
+        {
+            state = false;
+            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/carrotanquelist");
+        }
+    }
+
+    async Task DeleteCarroTanque(int _id)
+    {
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Eliminar",
+                Text = "¿ Estas seguro que deseas eliminar ?",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Eliminar",
+                CancelButtonText = "Cancelar"
+            });
+
+        var confirmado = !string.IsNullOrEmpty(resultado.Value);
+
+        if(!confirmado)
+        {
+            //context.PreventNavigation();
+        }else
+        {           
+          await CarroTanqueService.DeleteCarroTanque(_id);
+            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/carrotanquelist");
+        }
+
+    }
+
+    async Task UpdateCarroTanque(CarroTanque carroTanque)
+    {
+        await CarroTanqueService.UpdateCarroTanque(carroTanque);
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Success",
+                Text = "Actualizado correctamente",
+                Icon = SweetAlertIcon.Success,
+            });
+
+        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/carrotanquelist");
+    }
+
+    void updatedatarow(int _id)
+    {
+        update = true;
+        id = _id;
+    }
+
+    void Cancelar()
+    {
+        state = false;
+        update = false;
+    }
+
+    void NevegarVariablesLista()
+    {
+        //NanigationManager.NavigateTo("/crearcarroTanque");
+        state = true;
+    }
+    void MostrarUnCarroTanque(int id)
+    {
+        NavigationManager.NavigateTo($"singlecarrotanque/{id}");
+    }
+}
+

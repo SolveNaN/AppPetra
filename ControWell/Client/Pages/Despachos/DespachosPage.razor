@@ -1,0 +1,251 @@
+﻿@page "/despacho"
+
+@using System;
+@using System.Text.RegularExpressions;
+
+@using ControWell.Client.BalanceComponents
+@using ControWell.Client.Services.CarroTanqueService;
+@using ControWell.Client.Services.GuiaService;
+@using ControWell.Client.Services.SelloService;
+@using ControWell.Client.Services.OfertaDiariaService
+
+
+@using System.Data
+@using ControWell.Shared
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject ICarroTanqueService CarroTanqueService
+@inject IGuiaService GuiaService
+@inject ISelloService SelloService
+@inject IOfertaDiariaService OfertaDiariaService
+
+@inject SweetAlertService Swal
+
+@using MatBlazor
+
+@if (previsualizarGuiaState == true)
+{
+    <GuiaDespachos />
+}
+
+<div style="width:100%; height:100%;display:flex; justify-content:center; align-items:center; background-color:lightgray">
+
+  <div style="width:50%; height:100%; background-color:lightgreen">
+        <h1>hola mundo</h1>
+        <div>
+           <MatSelect Label="Selecciona Tanque" @bind-Value="valueSello">
+              <MatOptionString Disabled Style="color:blue" Value=""></MatOptionString>
+           </MatSelect>
+
+            <span>@valueSello</span>
+        </div>
+        <MatButton OnClick="previsualizarGuia" Outlined>previsualizar Guia </MatButton>
+  </div>
+
+  <div style="width:50%; height:100%; background-color:antiquewhite">
+     <div style="margin-top:30px; margin-bottom:30px">
+      <MatSelect Label="Selecciona un Camión" @bind-Value="value1" Outlined Style="background-color:whitesmoke; border-radius:8px">
+        <MatOptionString></MatOptionString>
+         @foreach(var CarroTanque in CarroTanques)
+         {
+           <MatOptionString Value="@CarroTanque.Capacidad">@CarroTanque.TipoVehiculo</MatOptionString>
+         }
+       </MatSelect>
+       <span>@value1</span>
+       <MatProgressCircle Closed="LoadingCarroTanque" Size="MatProgressCircleSize.Small" />
+
+      </div>   
+      <div  style="margin-bottom: 30px">
+            <MatSelect Label="Selecciona una Guia" @bind-Value="valueGuia" Outlined Style="background-color:whitesmoke; border-radius:8px">
+            <MatOptionString></MatOptionString>
+            @foreach (var Guia in Guias)
+            {
+                @if(Guia.Estado == 1)
+                {   
+                 <MatOptionString Value="@Guia.NumeroGuia">@Guia.NumeroGuia</MatOptionString>
+                }else if(Guia.Estado == 2) {
+                    <MatOptionString Disabled Style="color:blue" Value="@Guia.NumeroGuia">@Guia.NumeroGuia</MatOptionString>
+                }else
+                {
+                    <MatOptionString Disabled Style="color:darkred" Value="@Guia.NumeroGuia">@Guia.NumeroGuia</MatOptionString>
+                }
+            }
+        </MatSelect>
+
+        <span>@valueGuia</span>
+            <MatProgressCircle Closed="LoadingGuias" Size="MatProgressCircleSize.Small" />
+    </div>   
+     <div style="margin-bottom: 30px">
+            <MatSelect Label="Selecciona maximo 6 sellos" @bind-Value="valueSello" Outlined Style="background-color:whitesmoke; border-radius:8px">
+            <MatOptionString></MatOptionString>
+            @foreach (var Sello in Sellos)
+            {
+                @if(Sello.Estado == 1)
+                {   
+@*                 <MatOptionString Value="@Sello.IndiceSello">@Sello.IndiceSello-@Sello.NumeroSello</MatOptionStrin*@
+
+                    <MatOptionString Value="@Sello.IndiceSello">
+                        <MatCheckbox @bind-Value="@checked1" Label="">@Sello.IndiceSello-@Sello.NumeroSello</MatCheckbox>
+                    </MatOptionString>
+
+                }else if(Sello.Estado == 2) {
+                    <MatOptionString Disabled Style="color:blue">@Sello.IndiceSello-@Sello.NumeroSello</MatOptionString>
+                }else
+                {
+                    <MatOptionString Disabled Style="color:darkred">@Sello.IndiceSello-@Sello.NumeroSello</MatOptionString>
+                };
+            }
+        </MatSelect>
+
+        <span>@valueSello</span>
+        <MatProgressCircle Closed="LoadingSellos" Size="MatProgressCircleSize.Small" />
+
+     </div>
+        <div style="margin-bottom: 30px">
+            <MatSelect Label="Selecciona placa" @bind-Value="valueOfertaDiaria" Outlined Style="background-color:whitesmoke; border-radius:8px">
+                <MatOptionString></MatOptionString>
+                @foreach (var OfertaDiaria in OfertaDiarias)
+                {
+                 @if(OfertaDiaria.disponible=="1")
+                  {
+                    <MatOptionString Value="@OfertaDiaria.Id.ToString()">@OfertaDiaria.Placa</MatOptionString>
+                  }else{
+                    <MatOptionString Disabled Style="color:darkred">@OfertaDiaria.Placa</MatOptionString>
+                  }
+                }
+            </MatSelect>
+            <MatProgressCircle Closed="LoadingOfertaDiaria" Size="MatProgressCircleSize.Small" />
+
+            <span>@valueOfertaDiaria</span>
+            <span>@ofertaDiaria.NombreConductor</span>
+            <MatButton @onclick="BuscarPorPlaca" Outlined>Buscar</MatButton>
+        </div>      
+        <div style="margin-bottom: 30px">
+            <MatSelect Label="Operario " @bind-Value="valueOperario" Outlined Style="background-color:whitesmoke; border-radius:8px">
+                <MatOptionString></MatOptionString>
+                   
+                @foreach (var Operario in Operarios)
+                {
+                    <MatOptionString Value="@Operario.Nombre">@Operario.Nombre</MatOptionString> 
+                }
+            </MatSelect>
+            <span>@valueOperario</span>
+            <MatProgressCircle Closed="LoadingOperarios" Size="MatProgressCircleSize.Small" />
+
+        </div>
+
+        <div style="margin-bottom: 30px">
+            <MatSelect Label="Destino" @bind-Value="valueDestino" Outlined Style="background-color:whitesmoke; border-radius:8px">
+                <MatOptionString></MatOptionString>
+                   
+                @foreach (var Destino in Destinos)
+                {
+                    <MatOptionString Value="@Destino.Nombre">@Destino.Nombre</MatOptionString> 
+                }
+            </MatSelect>
+            <span>@valueDestino</span>
+            <MatProgressCircle Closed="LoadingDestino" Size="MatProgressCircleSize.Small" />
+        </div>
+   </div>
+</div>
+
+
+@code
+{
+    int i = 0 ;
+
+    string value1 = "";
+    string myStringValue = "";
+    string placa = "";
+
+    string valueGuia = "";
+    string valueSello = "";
+    string valueOfertaDiaria = "";
+    string valueOperario = "";
+    string valueDestino = "";
+
+    bool checked1 = true;
+    bool previsualizarGuiaState = false;
+
+    bool EnableCarroTanque = true;
+    bool LoadingCarroTanque = false;
+    bool EnableGuias = true;
+    bool LoadingGuias = false;  
+    bool EnableSellos = true;
+    bool LoadingSellos = false;
+    bool EnableOfertaDiaria = true;
+    bool LoadingOfertaDiaria = false; 
+    bool EnableOperarios = true;
+    bool LoadingOperarios = false;
+    bool EnableDestino = true;
+    bool LoadingDestino = false;
+
+    OfertaDiaria ofertaDiaria = new OfertaDiaria();
+
+    public static List<CarroTanque> CarroTanques = new List<CarroTanque>();
+    public static List<Guia> Guias = new List<Guia>();
+    public static List<Sello> Sellos = new List<Sello>();
+    public static List<OfertaDiaria> OfertaDiarias = new List<OfertaDiaria>();
+    public static List<Operario> Operarios = new List<Operario>();
+    public static List<Destino> Destinos = new List<Destino>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine(ofertaDiaria);
+        var resultadoCarroTanque = await Http.GetFromJsonAsync<List<CarroTanque>>("api/carrotanque");
+        if (resultadoCarroTanque != null)
+            CarroTanques = resultadoCarroTanque;
+            LoadingCarroTanque = true;
+            EnableCarroTanque = false;
+
+        var resultadoGuia = await Http.GetFromJsonAsync<List<Guia>>("api/guia");
+        if (resultadoGuia != null)
+            Guias = resultadoGuia;
+            LoadingGuias = true;
+            EnableGuias = false;
+
+        var resultadoSellos = await Http.GetFromJsonAsync<List<Sello>>("api/sello");
+        if (resultadoSellos != null)
+            Sellos = resultadoSellos;    
+            LoadingSellos = true;
+            EnableSellos = false;
+
+        var resultadoOfertaDiarias = await Http.GetFromJsonAsync<List<OfertaDiaria>>("api/ofertaDiaria");
+        if (resultadoOfertaDiarias != null)
+            OfertaDiarias = resultadoOfertaDiarias;   
+            LoadingOfertaDiaria = true;
+            EnableOfertaDiaria = false;
+
+        var resultadoOperadores = await Http.GetFromJsonAsync<List<Operario>>("api/Operario");
+        if (resultadoOperadores != null)
+            Operarios = resultadoOperadores;
+            LoadingOperarios=true;
+            EnableOperarios=false;
+
+        var resultDestino = await Http.GetFromJsonAsync<List<Destino>>($"api/Destino");
+        if (resultDestino != null)
+            Destinos = resultDestino;
+            LoadingDestino = true;
+            EnableDestino = false;
+    }
+
+    public void previsualizarGuia()
+    {
+        previsualizarGuiaState = true;
+    }
+
+    async Task BuscarPorPlaca()
+    {
+        var id = Int32.Parse(valueOfertaDiaria);
+
+        //var placaSend = Regex.Replace(placa.ToUpper(), @"\s+", "");
+        //Console.WriteLine($"placa digitada: {Regex.Replace(placa.ToUpper(), @"\s+", "")}");
+        var resultadoPlaca = await Http.GetFromJsonAsync<OfertaDiaria>($"api/ofertaDiaria/{id}");
+
+        if (resultadoPlaca != null)
+            ofertaDiaria = resultadoPlaca;
+           
+    }
+}
+

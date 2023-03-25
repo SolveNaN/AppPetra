@@ -1,0 +1,301 @@
+﻿@using ControWell.Client.Services.BalanceService;
+@using MatBlazor
+
+
+@*<MatPaper Elevation="17" Class="Guia-view">
+*@    <div class="guia-container" style=" width:100%; height:100%">
+        @*lateral izquierdo*@
+        <div style="background-color:beige; width:5%; height:100%; border-right-style:dashed; border-width: thin">
+            <span class="circulo"/>
+        </div>
+
+        @*cuerpo*@
+        <div style="background-color:floralwhite; width:100%; height:100%; display:flex; justify-content:center;align-items:center">
+            <div style="width:98%; height:95%; border-radius:4px ;background-color:rgba(aqua,0.2); border-width: thin; border-style:solid">
+                <h6 style="width:100%; display:flex; justify-content:center; align-items:center">GUIA PARA TRANSPORTAR PRODUCTOS DERIVADOS DEL PETROLEO</h6>
+                <h6 style="width:100%; display:flex; justify-content:center; align-items:center">ECOPETROL S.A</h6>
+               
+                @*Codigo fila *@
+                <div class="flex-component" style="width:100%;height:5%; margin-bottom:7px;background-color:transparent ">
+                    <div  style="width:99%;height:100%; border-radius:7px ;  background-color:transparent ">
+                            <div class="flex-component" style="width:100%;height:100%; background-color:transparent ">
+                                <div style="width:70%;height:100%">
+                                </div>
+                                 <div class="flex-component" style="width:30%;height:100%">
+                                     <h5>N°</h5>
+                                     <h5 style="margin-left:8px"> 500</h5>
+                                     <h5 style="color:indianred; margin-left:7px">11909644</h5>
+                                     <h5>-</h5>
+                                     <h5 style="color:indianred">7</h5>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                @*primera fila *@
+                <div class="flex-component" style="width:100%;height:6%; margin-bottom:10px; background-color:transparent ">
+                    <div class="flex-component" 
+                         style="width:99%;height:100%; border-radius:7px; border-width: thin; border-style:solid;  background-color:floralwhite "
+                          >
+                            <div style ="width:40%;height:100%; border-right:2px solid  ">
+                               <p style="position:relative; top:0px;left:4px;font-size:8px; letter-spacing:1px; height:30%; margin-bottom:0px">
+                                   LUGAR Y FECHA DE EXPEDICION
+                               </p>
+                               <p style="position:relative;top:5px; font-size:12px; height:70%;text-align:center;margin-top: 0px; font-family:'Courier New', monospace;">
+                                   APIAY, 18 de febrero de 2023
+                               </p>
+                            </div>
+                            <div style ="width:30%;height:100%; border-right:2px solid  ">
+                              <p style="position:relative; top:0px;left:4px;font-size:8px; letter-spacing:1px; height:30%; margin-bottom:0px">
+                                PLANTA O CAMPO PRODUCTOR
+                              </p>
+                              <p style="position:relative;top:5px; font-size:12px; height:70%;text-align:center;margin-top: 0px;  font-family:'Courier New', monospace;">
+                                ECP-REFINERIA APIAY
+                              </p>
+                            </div>
+                            <div style ="width:30%;height:100%; ">
+                              <p style="position:relative; top:0px;left:4px;font-size:8px; letter-spacing:1px; height:30%; margin-bottom:0px">
+                                FACTURA O REMISION N°
+                              </p>
+                               <p style="
+                                   position:relative;
+                                   top:5px; font-size:10px; 
+                                   height:70%;text-align:right;
+                                   margin-top: 0px;
+                                   margin-right:10px;
+                                   font-family:'Courier New', monospace;
+                                  ">
+                                524873
+                              </p>
+                            </div>
+                        </div>
+                    </div>
+@*                    segunda division *@
+                    <div class="flex-component" style="width:100%;height:12%; margin-bottom:10px;background-color:transparent ">
+                      <div style="width:99%;height:100%; border-radius:7px; border-width: thin; border-style:solid; ">
+                        <div class="flex-component" style="width:100%;height:50%; border-bottom: 1px solid; background-color:transparent ">
+                            <div style="width:75%;height:100%; border-right:2px solid ;">
+                                <p style="position:relative; top:0px;left:4px;font-size:8px; letter-spacing:1px; height:30%; margin-bottom:0px">
+                                    DESPACHADO A: 
+                                </p>
+                                <p style="position:relative;top:5px; font-size:12px; height:70%;text-align:center;margin-top: 0px; font-family:'Courier New', monospace;">
+                                    POZO NUEVA ESPERANZA
+                                </p>
+                            </div>
+                            <div style="width:25%;height:100%; ">
+                                <p style="position:relative; top:0px;left:4px;font-size:8px; letter-spacing:1px; height:30%; margin-bottom:0px">
+                                    CODIGO SICOM
+                                </p>
+                                <p style="position:relative;top:5px; font-size:12px; height:70%;text-align:center;margin-top: 0px; font-family:'Courier New', monospace;">
+                                    N/A
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex-component" style="width:100%;height:50%; border-width: thin; background-color:transparent ">
+                            <div style="width:75%;height:100%; border-right: 2px solid  ">
+                                <p style="position:relative; top:0px;left:4px;font-size:8px; letter-spacing:1px; height:30%; margin-bottom:0px">
+                                    DIRECCION
+                                </p>
+                                <p style="position:relative;top:5px; font-size:12px; height:70%;text-align:center;margin-top: 0px; font-family:'Courier New', monospace;">
+                                    GUAMAL - META
+                                </p>
+                            </div>
+                            <div style="width:25%;height:100% ">
+                                <p style="position:relative; top:0px;left:4px;font-size:8px; letter-spacing:1px; height:30%; margin-bottom:0px">
+                                    CIUDAD
+                                </p>
+                                <p style="position:relative;top:5px; font-size:12px; height:70%;text-align:center;margin-top: 0px; font-family:'Courier New', monospace;">
+                                    GUAMAL - META
+                                </p>
+                            </div>
+                        </div>
+                       </div>
+                    </div>
+                   @* tercera division *@
+                <div class="flex-component" style="width:100%;height:12%; margin-bottom:10px;background-color:transparent ">
+                    <div style="width:99%;height:100%; border-radius:7px; border-width: thin; border-style:solid; ">
+                        <div class="flex-component" style="width:100%;height:50%; border-bottom: 1px solid; background-color:transparent ">
+                            <div style="width:75%;height:100%; border-right:2px solid ;">
+                                <p style="position:relative; top:0px;left:4px;font-size:8px; letter-spacing:1px; height:30%; margin-bottom:0px">
+                                    NOMBRE DEL CONDUCTOR
+                                </p>
+                                <p style="position:relative;top:5px; font-size:12px; height:70%;text-align:center;margin-top: 0px; font-family:'Courier New', monospace;">
+                                    GOMEZ SALAS LAUREANO ALBERTO
+                                </p>
+                            </div>
+                            <div style="width:25%;height:100%; ">
+                                <p style="position:relative; top:0px;left:4px;font-size:8px; letter-spacing:1px; height:30%; margin-bottom:0px">
+                                    CEDULA
+                                </p>
+                                <p style="position:relative;top:5px; font-size:12px; height:70%;text-align:center;margin-top: 0px; font-family:'Courier New', monospace;">
+                                    1120868180
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex-component" style="width:100%;height:50%; border-width: thin; background-color:transparent ">
+                            <div style="width:50%;height:100%; border-right: 2px solid  ">
+                                <p style="position:relative; top:0px;left:4px;font-size:8px; letter-spacing:1px; height:30%; margin-bottom:0px">
+                                    EMPRESA TRANSPORTADORA
+                                </p>
+                                <p style="position:relative;top:5px; font-size:12px; height:70%;text-align:center;margin-top: 0px; font-family:'Courier New', monospace;">
+                                    T.L.C. S.A.
+                                </p>
+                            </div>
+                            <div style="width:25%;height:100%;border-right: 2px solid ">
+                                <p style="position:relative; top:0px;left:4px;font-size:8px; letter-spacing:1px; height:30%; margin-bottom:0px">
+                                    PLACAS DEL CABEZOTE
+                                </p>
+                                <p style="position:relative;top:5px; font-size:12px; height:70%;text-align:center;margin-top: 0px; font-family:'Courier New', monospace;">
+                                    SSZ999
+                                </p>
+                            </div>
+                            <div style="width:25%;height:100% ">
+                                <p style="position:relative; top:0px;left:4px;font-size:8px; letter-spacing:1px; height:30%; margin-bottom:0px">
+                                    PLACAS DEL TANQUE
+                                </p>
+                                <p style="position:relative;top:5px; font-size:12px; height:70%;text-align:center;margin-top: 0px; font-family:'Courier New', monospace;">
+                                    R56275
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+                    @* cuarta division *@
+                <div class="flex-component" style="width:100%;height:12%; margin-bottom:10px;background-color:transparent ">
+                    <div style="width:99%;height:100%; border-radius:7px; border-width: thin; border-style:solid; ">
+                        <div class="flex-component" style="width:100%;height:50%; border-bottom: 1px solid; background-color:transparent ">
+                            <div style="width:45%;height:100%; border-right:2px solid;">
+                                <p style="position:relative; top:0px;left:4px;font-size:8px; letter-spacing:1px; height:30%; margin-bottom:0px">
+                                    LUGAR DE ORIGEN
+                                </p>
+                                <p style="position:relative;top:5px; font-size:12px; height:70%;text-align:center;margin-top: 0px; font-family:'Courier New', monospace;">
+                                    ECP-GDA-APIAY, META
+                                </p>
+                            </div>
+                            <div style="width:40%;height:100%; border-right:2px solid; border-top:2px solid  ">
+                                <p style="position:relative; top:0px;left:4px;font-size:8px; letter-spacing:1px; height:30%; margin-bottom:0px">
+                                    FECHA Y HORA DE SALIDA
+                                </p>
+                                <p style="position:relative;top:5px; font-size:12px; height:70%;text-align:center;margin-top: 0px; font-family:'Courier New', monospace;">
+                                    18 de febrero de 2023
+                                </p>
+                            </div>
+                            <div style="width:15%;height:100%; border-top: 2px solid; border-right:2px solid  ">
+                                <p style="position:relative;top:5px; font-size:12px; height:70%;text-align:center;margin-top: 0px; font-family:'Courier New', monospace;">
+                                    5:00
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex-component" style="width:100%;height:50%; border-width: thin; background-color:transparent ">
+                            <div style="width:45%;height:100%; border-right: 2px solid  ">
+                                <p style="position:relative; top:0px;left:4px;font-size:8px; letter-spacing:1px; height:30%; margin-bottom:0px">
+                                    LUGAR DE DESTINO
+                                </p>
+                                <p style="position:relative;top:5px; font-size:12px; height:70%;text-align:center;margin-top: 0px; font-family:'Courier New', monospace;">
+                                    POZO NUEVA ESPERANZA
+                                </p>
+                            </div>
+                            <div style="width:55%;height:100%; border-bottom: 2px solid; border-right:2px solid;  ">
+                                <p style="position:relative; top:0px;left:4px;font-size:8px; letter-spacing:1px; height:30%; margin-bottom:0px">
+                                    HORAS DE VIGENCIA
+                                </p>
+                                <p style="position:relative;top:5px; font-size:12px; height:70%;text-align:center;margin-top: 0px; font-family:'Courier New', monospace;">
+                                    6 HORAS
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    @* quinta division *@
+                <div class="flex-component" style="width:100%;height:20%; margin-bottom:10px;background-color:transparent ">
+                    <div style="width:99%;height:100%; border-radius:7px; border-width: thin; border-style:solid; ">
+                        <div class="flex-component" style="width:100%;height:17%; border-bottom: 1px solid; background-color:transparent ">
+                            <div style="width:65%;height:100%; border-right:2px solid;">
+                                <p style="position:relative;top:5px; font-size:10px; height:70%;text-align:center;margin-top: 0px; font-family:'Courier New', monospace;">
+                                    DESCRIPCION DEL PRODUCTO
+                                </p>
+                            </div>
+                            <div style="width:35%;height:100%;">
+                                <p style="position:relative;top:5px; font-size:10px; height:70%;text-align:center;margin-top: 0px; font-family:'Courier New', monospace;">
+                                    VOLUMEN EN BARRILES O GALONES
+                                </p>
+                            </div>
+
+                        </div>
+                        <div class="flex-component" style="width:100%;height:83%; border-width: thin; background-color:transparent ">
+                            <div style="width:65%;height:100%; border-right: 2px solid  ">
+
+                            </div>
+                            <div style="width:35%;height:100%; ">
+                                <p style="position:relative;top:5px; font-size:10px; height:70%;text-align:center;margin-top: 0px; font-family:'Courier New', monospace;">
+                                   10782,56 Gls
+                                </p>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+                    @* sexta division *@
+                    <div class="flex-component" style="width:100%;height:7.3%; margin-bottom:10px;background-color:transparent ">
+                      <div style="width:99%;height:100%; border-radius:7px; border-width: thin; border-style:solid; ">
+                        <div class="flex-component" style="width:100%;height:100%; background-color:transparent ">
+                            <div style="width:75%;height:100%; border-right: solid">
+                                <p style="position:relative; top:0px;left:4px;font-size:8px; letter-spacing:1px; height:30%; margin-bottom:0px">
+                                    OBSERVACIONES
+                                </p>
+                                <p style="position:relative;top:5px; font-size:12px; height:100%;text-align:center;margin-top: 0px; font-family:'Courier New', monospace;">
+                                    ASDASDASDASAS
+                                </p>
+                            </div>
+                            <div style="width:25%;height:100%">
+                                <p style="position:relative; top:0px;left:4px;font-size:7px; letter-spacing:1px; height:30%; margin-bottom:0px">
+                                    ZONA DE FRONTERA
+                                </p>
+                                <p style="position:relative;top:5px; font-size:10px; height:100%;text-align:center;margin-top: 0px; font-family:'Courier New', monospace;">
+                                </p>
+                            </div>
+                             
+                        </div>
+                      </div>
+                    </div>
+
+    
+            </div>
+        </div>
+
+        <div style="background-color:beige; width:5%; height:100%; border-left-style:dashed; border-width: thin">
+
+        </div>
+    </div>
+@*</MatPaper>
+*@
+<style>
+    .Guia-view{
+        width:100%;
+        height:90%;
+    }
+
+    .guia-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .flex-component {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .circulo {
+        width: 40px;
+        height: 40px;
+        -moz-border-radius: 50%;
+        -webkit-border-radius: 50%;
+        border-radius: 50%;
+        background: black;
+    }
+</style>
+
+
+@code {
+
+}

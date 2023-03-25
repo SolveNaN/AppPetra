@@ -1,0 +1,644 @@
+﻿@page "/guialist"
+
+@using System;
+@using System.Text.RegularExpressions;
+
+@using ControWell.Client.Services.GuiaService;
+@using ControWell.Shared
+@using System.Net.Http.Json
+@using MatBlazor
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject IGuiaService GuiaService
+@inject SweetAlertService Swal
+@inject IMatToaster Toaster
+
+<MatDialog @bind-IsOpen="@dialogIsOpen">
+    @if (updateguiaState)
+    {
+        <EditForm Model="guia" OnSubmit="GenerarGuias">
+            <MatDialogTitle Style="text-align:center; font-size: xx-large; width:">Actualizar Guia</MatDialogTitle>
+            <MatDialogContent Style="width:100%">
+                <p style="text-align:center;">Actualizar el numero de Guia</p>
+                <MatTextField @bind-Value="@identificadorActualizarRegex"
+                          Style="width:20%"
+                          Label="N° Identificador"
+                          Outlined="true">
+                </MatTextField>
+                <MatTextField @bind-Value="@numeroguiaActualizarRegex"
+                          Style="width:45%"
+                          Label="N° Guia"
+                          Outlined="true">
+                </MatTextField>
+
+            </MatDialogContent>
+            <MatDialogActions>
+                <MatButton Raised="true" Style="margin-right:5px" OnClick="@CloseDialog">Cancelar Operacion</MatButton>
+                <MatButton Type="submit" Outlined="true">Actualizar Guia</MatButton>
+            </MatDialogActions>
+        </EditForm>
+    }
+    else {
+    <EditForm Model="guia" OnSubmit="GenerarGuias">
+            <MatDialogTitle Style="text-align:center; font-size: xx-large; width:">Generar Guias</MatDialogTitle>
+            <MatDialogContent  Style="width:100%">
+              <p style="text-align:center;">Ingrese la primera Guia y la cantidad a generar</p>
+                
+
+                <MatTextField @bind-Value="@identificador"
+                      Style="width:20%"
+                      Label="N° Identificador"
+                      Outlined="true">
+                  </MatTextField>               
+                  <MatTextField @bind-Value="@dialogGuia"
+                      Style="width:45%"
+                      Label="N° Guia"
+                      Outlined="true">
+                  </MatTextField>         
+                @*  <MatSelectItem @bind-Value="@consecutivo" 
+                      Items="@value1Items"
+                      Style="width:40px"
+                      Label="N° Con"
+                      Outlined="true">
+                  >
+                  </MatSelectItem>*@
+                <MatNumericUpDownField @bind-Value="@cantidadGuias"
+                               Label="Cantidad"
+                               Style="width:30%"
+                               DecimalPlaces=0
+                               Outlined="true"
+                               Minimum=1 Maximum=100000>
+                </MatNumericUpDownField>
+ 
+            </MatDialogContent>
+            <MatDialogActions>
+            <MatButton Raised="true" Style="margin-right:5px" OnClick="@CloseDialog">Cancelar Operacion</MatButton>
+                <MatButton Type="submit" Outlined="true" OnClick="@GenerarGuias">Generar Guias</MatButton>
+            </MatDialogActions>
+      </EditForm>
+      }
+</MatDialog>
+
+
+
+<div class="flex-component" style="width:100%; height:90vh; background: linear-gradient(to right, #607d8b, #90a4ae);">
+    <div class="flex-component" style="width:95%;height:99%;">
+        <div style="width:33.33%;height:98%; border:solid; border-radius:8px;margin-right:10px">
+          <div style="width:100%; height:5%; text-align:center; border-bottom:solid; border-radius:5px">
+                <h4 style="width:100%; height:100%; background-color:#a0c55f; color: #2f3640">
+                 Guias Activas
+             </h4>
+          </div>
+           <div style="overflow:scroll; width:100%;height:95%;overflow-x: hidden; border-radius:5px; background-color:lavender">
+              <br/>
+            @foreach (var Guia in Guias)
+              {
+                 
+                <div style="width:100%;display:flex;justify-content:center;align-items:center;">
+                  @if(Guia.Estado==1){
+
+                        <MatAccordion Multi="true" Style="width:100%">
+                            <MatExpansionPanel>
+                                <MatExpansionPanelSummary>
+                                    <MatExpansionPanelHeader>Guia @Guia.NumeroGuia</MatExpansionPanelHeader>
+                                </MatExpansionPanelSummary>
+                                <MatExpansionPanelDetails>
+                                    <div class="flex-component">
+                                        <Button style="background-color: transparent; border: 0" @onclick="()=>updateguia(Guia)">
+                                           <MatIcon Style="color:blue ;margin-right:20px" Icon="create"></MatIcon>
+                                        </Button>
+                                            <Button style="background-color: transparent; border: 0" @onclick="()=>AnularGuia(Guia)">
+                                           <MatIcon Style="color:red;margin-right:20px" Icon="block" ></MatIcon>
+                                        </Button>
+                                        <Button style="background-color: transparent; border: 0" @onclick="()=>DeleteGuia(Guia)">
+                                           <MatIcon Style="color:darkorange" Icon="delete_outline"></MatIcon>
+                                        </Button>  
+                                    </div>
+                                </MatExpansionPanelDetails>
+                            </MatExpansionPanel>
+                        </MatAccordion>
+
+                   }
+                </div>
+              }
+          </div>
+        </div>       
+        <div style="width:33.33%;height:98%; border:solid; border-radius:8px;margin-right:10px; background-color:lavender">
+            <div style="width:100%; height:5%; text-align:center; border-bottom:solid; border-radius:5px">
+                <h4 style="width:100%; height:100%; background-color:#42a5f5; color: #2f3640">
+                    Guias Usadas
+                </h4>
+            </div>
+            <div style="overflow:scroll; width:100%;height:93%;overflow-x: hidden">
+                <br />
+                @foreach (var Guia in Guias)
+                {
+                      <div style="width:100%;display:flex;justify-content:center;align-items:center">
+                        @if(Guia.Estado==2){
+                            <MatAccordion Multi="true" Style="width:100%">
+                                <MatExpansionPanel>
+                                    <MatExpansionPanelSummary>
+                                        <MatExpansionPanelHeader>Guia @Guia.NumeroGuia</MatExpansionPanelHeader>
+                                    </MatExpansionPanelSummary>
+                                    <MatExpansionPanelDetails>
+                                        <div class="flex-component">
+                                            <Button style="background-color: transparent; border: 0" @onclick="()=>HabilitarGuia(Guia)">
+                                                <MatIcon Style="color:lawngreen;margin-right:20px" Icon="done_outline" ></MatIcon>
+                                            </Button>
+                                            <Button style="background-color: transparent; border: 0" @onclick="()=>AnularGuia(Guia)">
+                                                <MatIcon Style="color:red;margin-right:20px" Icon="block" ></MatIcon>
+                                            </Button>
+                                            <Button style="background-color: transparent; border: 0" @onclick="(()=>DeleteGuia(Guia))">
+                                                <MatIcon Style="color:darkorange" Icon="delete_outline"></MatIcon>
+                                            </Button>
+
+                                        </div>
+       
+                                    </MatExpansionPanelDetails>
+                                </MatExpansionPanel>
+                            </MatAccordion>
+                         }
+                      </div> 
+                }
+            </div>
+        </div>        
+        <div style="width:33.33%;height:98%; border:solid; border-radius:8px; background-color:lavender">
+            <div style="width:100%; height:5%; text-align:center; border-bottom:solid; border-radius:5px;">
+                <h4 style="width:100%; height:100%; background-color:#e056fd; color: #2f3640">
+                    Guias Anuladas
+                </h4>
+            </div>
+            <div style="overflow:scroll; width:100%;height:93%;overflow-x: hidden">
+                <br />
+                @foreach (var Guia in Guias)
+                {
+                    <div style="width:100%;display:flex;justify-content:center;align-items:center">
+                      @if (Guia.Estado == 3)
+                        {
+                            <MatAccordion Multi="true" Style="width:100%; border-radius:5px">
+                                <MatExpansionPanel Style="width:100%;">
+                                    <MatExpansionPanelSummary Style="width:100%">
+                                        <MatExpansionPanelHeader Style="width:10%"><p>Guia</p> <p>@Guia.NumeroGuia</p></MatExpansionPanelHeader>
+                                    </MatExpansionPanelSummary>
+                                    <MatExpansionPanelDetails>
+                                        <div class="flex-component">
+                                            <Button style="background-color: transparent; border: 0" @onclick="()=>HabilitarGuia(Guia)">
+                                                <MatIcon Style="color:greenyellow;margin-right:20px" Icon="done_outline" ></MatIcon>
+                                            </Button>
+                                            <Button style="background-color: transparent; border: 0" @onclick="()=>DeleteGuia(Guia)">
+                                                <MatIcon Style="color:darkorange" Icon="delete_outline"></MatIcon>
+                                            </Button>
+
+                                        </div>
+        
+                                    </MatExpansionPanelDetails>
+                                </MatExpansionPanel>
+                            </MatAccordion>
+                       }
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+@*Loading database*@
+@if (PozosState == false)
+{
+    <div id="db-spinner">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+}
+
+@*AGREGAR GUIAS BUTTON*@
+
+@if (state == true || PozosState == false){
+    <MatButton Style="margin-left:100px; margin-top:15px" OnClick="@OpenDialog" Raised="true">Generar Guias</MatButton>
+}else
+{
+   <MatButton Style="margin-left:100px; margin-top:15px" OnClick="@OpenDialog" Raised="true">Generar Guias</MatButton>
+}
+
+
+<style>
+/*    HOVER DATA CARD*/  
+
+    .data-hover:hover span {
+    background-color: rgba(100, 176, 161, 0.8);
+    /*background-color: #369681;*/
+    color: #eeeeee;
+    cursor: pointer;
+
+    }
+ /* FIN HOVER DATA */
+
+ .flex-component {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    }
+
+    body{
+    font-family: Arial;
+    }
+
+    input {
+    border-radius: 5px;
+    background-color: #f7fafc;
+    width: 90%;
+    height: 40px;
+    border: 0.5px dashed blue;
+
+    }
+    /* estilos de la tabla */
+
+    .table-container-scroll{
+    overflow:scroll;
+    height:500px;
+    width:100%;
+    position: relative;
+    margin-top:10px;
+    margin-left: 10px;
+    margin-bottom:10px;
+    border-radius: 5px;
+    }
+
+    table{
+    background-color: white;
+    text-align: left;
+    border-collapse: collapse;
+    width: 100%;
+
+    }
+
+    th {
+    position: relative;
+    }
+
+    th, td{
+    padding: 10px;
+    margin-left: 40px;
+    }
+
+    thead{
+    background-color: #388e3c;
+    border-bottom: solid 3px #0F362D;
+    color: #eeeeee;
+    position: sticky;
+    top: 0px;
+
+    }
+
+    tr:nth-child(even){
+    background-color: #ddd;
+    }
+
+    tr:hover td{
+    background-color: rgba(100, 176, 161, 0.8);
+    /*background-color: #369681;*/
+    color: #eeeeee;
+    }
+
+    #btn-nuevo-pozo{
+    margin-top:10px;
+    margin-left:10px;
+    }
+
+    /* estilos formulario agregar pozo*/
+    .create-pozo-container{
+    position: absolute;
+    top: 55px;
+    left: 250px;
+    padding: 12px;
+    width: 1110px;
+    height: 570px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.45);
+    }
+
+    .add-pozo-card{
+    width: 280px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(223, 230, 233,1.0);
+    border-radius: 8px;
+    color: rgba(0, 0, 0,1.0);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.45);
+
+    }
+
+    .add-pozo-card label {
+    margin-bottom: 5px;
+    margin-top: 6px;
+    }
+    .button-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    }
+
+    #db-spinner {
+    position: absolute;
+    top: 55px;
+    left: 250px;
+    padding: 12px;
+    width: 1110px;
+    height: 570px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    }
+
+</style>
+@code {
+
+    Boolean state = false;
+    Boolean update = false;
+    int id;
+    Boolean PozosState = false;
+    int consecutivo;
+    Boolean snackBarIsOpen = true;
+    Boolean updateguiaState = false;
+
+    string identificadorActualizar = "";
+    string identificadorActualizarRegex = "";
+    string numeroguiaActualizar = "";
+    string numeroguiaActualizarRegex = "";
+
+    //estados para material design
+    bool dialogIsOpen = false;
+    long FirstGuia;
+    string identificador = "";
+    int dialogGuia;
+    int cantidadGuias = 1;
+    int Num;
+
+    int[] value1Items = new[]
+    {
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+    };
+
+    public static List<Guia> Guias = new List<Guia>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var resultado = await Http.GetFromJsonAsync<List<Guia>>("api/guia");
+        if (resultado != null)
+            Guias = resultado;
+        PozosState = true;
+        Console.WriteLine("Guias:", Guias);
+    }
+
+    [Parameter]
+
+    public int? Id { get; set; }
+
+    Guia guia = new Guia();
+
+    async Task EviarGuia()
+    {
+        try
+        {
+            await GuiaService.CreateGuia(guia);
+            var resultado = await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Success",
+                    Text = "Guardado correctamente",
+                    Icon = SweetAlertIcon.Success,
+                });
+        }
+        catch (InvalidCastException e)
+        {
+            Console.WriteLine(e);
+
+            state = false;
+            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/guialist");
+        }
+        finally
+        {
+            state = false;
+            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/guialist");
+        }
+    }
+
+    async Task DeleteGuia(Guia guia)
+    {
+        Console.WriteLine("este es el id:", guia.Id);
+
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Eliminar",
+                Text = $"¿ Estas seguro que deseas eliminar la guia {guia.NumeroGuia}  ?",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Eliminar",
+                CancelButtonText = "Cancelar"
+            });
+
+        var confirmado = !string.IsNullOrEmpty(resultado.Value);
+
+        if(!confirmado)
+        {
+            Show(MatToastType.Link);
+            _title = "CANCELADO";
+            _message = "Operacion cancelada";
+
+        }else
+        {           
+            await GuiaService.DeleteGuia(guia.Id);
+            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/guialist");
+        }
+    }
+
+    async Task UpdateGuia(Guia guia)
+    {
+        await GuiaService.UpdateGuia(guia);
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Success",
+                Text = "Actualizado correctamente",
+                Icon = SweetAlertIcon.Success,
+            });
+
+        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/guialist");
+    }
+    async Task AnularGuia(Guia guia)
+    {
+        guia.NumeroGuia = guia.NumeroGuia;
+        guia.Lote = guia.Lote;
+        guia.CreatedAt = guia.CreatedAt;
+        guia.Estado = 3;
+
+        await GuiaService.UpdateGuia(guia);
+
+        Show(MatToastType.Info);
+        _title = "Guia Activada";
+        _message = $"se ha Anulado el sello:{guia.NumeroGuia}";
+
+        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/guialist");
+    }
+
+    async Task HabilitarGuia(Guia guia)
+    {
+        guia.NumeroGuia = guia.NumeroGuia;
+        guia.Lote = guia.Lote;
+        guia.CreatedAt = guia.CreatedAt;
+        guia.Estado = 1;
+
+        await GuiaService.UpdateGuia(guia);
+
+        Show(MatToastType.Info);
+        _title = "Guia Activada";
+        _message = $"se ha Activado el sello:{guia.NumeroGuia}";
+
+        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/guialist");
+    }
+
+    void updatedatarow(int _id)
+    {
+        update = true;
+        id = _id;
+    }
+
+    void updateguia(Guia guia)
+    {
+        identificadorActualizar = guia.NumeroGuia.Substring(0, 3);
+        identificadorActualizarRegex = Regex.Replace(identificadorActualizar, @"\s+", "");
+        numeroguiaActualizar = guia.NumeroGuia.Substring(3, 25);
+        numeroguiaActualizarRegex = Regex.Replace(numeroguiaActualizar, @"\s+", "");
+        dialogIsOpen = true;
+        updateguiaState = true;
+    }
+
+    void Cancelar()
+    {
+        state = false;
+        update = false;
+    }
+
+    void NevegarVariablesLista()
+    {
+        //NanigationManager.NavigateTo("/crearpozo");
+        state = true;
+    }
+    void MostrarUnGuia(int id)
+    {
+        NavigationManager.NavigateTo($"singleguia/{id}");
+    }
+
+    void OpenDialog()
+    {
+        cantidadGuias=1;
+        dialogIsOpen = true;
+    }  
+    void CloseDialog()
+    {
+       Show(MatToastType.Link);
+        _title = "CANCELADO";
+        _message = "Operacion cancelada";
+        dialogIsOpen = false;
+
+    }
+
+    async Task GenerarGuias()
+    {
+
+        Num = cantidadGuias;
+
+        DateTime FechaConHora = new DateTime(2005, 4, 23, 9, 30, 45);
+
+        for(int i=0; i<=Num ; i++)
+        {
+            //guia.identificador
+            guia.NumeroGuia = (dialogGuia + i).ToString();
+            guia.Lote = "lote1";
+            guia.Estado = Convert.ToInt16("1");
+            guia.CreatedAt = FechaConHora;
+
+            await GuiaService.CreateGuia(guia);
+            await Task.Delay(500);
+
+            Show(MatToastType.Success);
+            _title = "Guia generada";
+            _message = "se ha generado la guia " + (dialogGuia + i).ToString();
+
+            if(Num == i)
+            {
+                Show(MatToastType.Success);
+                _title = "Guias generadas";
+                _message = "se has generado las guias correctamente";
+            }
+        }
+    }
+
+    //TOATER NOTIFICATION
+
+    private string _title="";
+    private string _message="";
+    private bool _showProgressBar = true;
+    private bool _showCloseButton = true;
+    private bool _actionOnClick = true;
+    int MaxDisplayedToasts = 8;
+
+    public string _maxDisplayedToasts
+    {
+      get { return Toaster.Configuration.MaxDisplayedToasts.ToString(); }
+      set { Toaster.Configuration.MaxDisplayedToasts = Convert.ToInt32("8"); }
+    }
+
+    private string _toastPosition
+
+    {
+      get { return Toaster.Configuration.Position.ToString(); }
+      set { Toaster.Configuration.Position = (MatToastPosition)Enum.Parse(typeof(MatToastPosition), "TopRight"); }
+    }
+
+    public void Show(MatToastType type, string icon = "")
+    {
+        Toaster.Add(_message, type, _title, icon, config =>
+        {
+            config.ShowCloseButton = _showCloseButton;
+            config.ShowProgressBar = _showProgressBar;
+            config.MaximumOpacity = Convert.ToInt32("100");
+
+            config.ShowTransitionDuration = Convert.ToInt32("500");
+            config.VisibleStateDuration = Convert.ToInt32("5000");
+            config.HideTransitionDuration = Convert.ToInt32("500");
+
+            config.RequireInteraction = false;
+
+            if (_actionOnClick)
+            {
+                config.Onclick = toast =>
+                {
+                    Console.WriteLine($"Title: \"{toast.Title}\"; message: \"{toast.Message}\"; Type: {toast.Options.Type}");
+                    return Task.CompletedTask;
+                };
+            }
+        });
+    }
+
+}
+
