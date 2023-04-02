@@ -29,6 +29,15 @@ namespace ControWell.Shared
         public string FactorTemp { get; set; } = string.Empty;
         public string VolumenNeto { get; set; } = string.Empty;
         public string GuiaDeTransporteGTU { get; set; } = string.Empty;
+        public string Auxiliar { get; set; } = string.Empty;
+        public string Ciudad { get; set; } = string.Empty;
+        public string SICOM { get; set; } = string.Empty;
+        public string Direccion { get; set; } = string.Empty;
+        public string HorasVigencia { get; set; } = string.Empty;
+        public string LugarDestino { get; set; } = string.Empty;
+        public string LugarExpedicion { get; set; } = string.Empty;
+        public string PlantaProductora { get; set; } = string.Empty;
+
         public DateTime CreatedAt { get; set; }
     }
 }
