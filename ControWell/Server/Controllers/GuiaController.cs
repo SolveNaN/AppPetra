@@ -37,6 +37,38 @@ namespace ControWell.Server.Controllers
             return Ok(await GetDbGuia());
         }
 
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<List<Guia>>> UpdateGuia(Guia guia)
+        {
+            var DbGuia = await _context.Guias.FindAsync(guia.Id);
+            if (DbGuia == null)
+                return BadRequest("La guia no se encuentra");
+            DbGuia.NumeroGuia = guia.NumeroGuia;
+            DbGuia.Lote = guia.Lote;
+            DbGuia.Estado = guia.Estado;
+            DbGuia.CreatedAt = guia.CreatedAt;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(await _context.Guias.ToListAsync());
+        }
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<ActionResult<List<Guia>>> DeleteGuia(int id)
+        {
+            var DbGuia = await _context.Guias.FirstOrDefaultAsync(v => v.Id == id);
+            if (DbGuia == null)
+            {
+                return NotFound("La Guia no existe :/");
+            }
+
+            _context.Guias.Remove(DbGuia);
+            await _context.SaveChangesAsync();
+
+            return Ok(await GetDbGuia());
+        }
+
         private async Task<List<Guia>> GetDbGuia()
         {
             return await _context.Guias.ToListAsync();

@@ -55,10 +55,9 @@ namespace ControWell.Server.Controllers
             var DbCarroTanque = await _context.CarroTanques.FindAsync(carroTanque.Id);
             if (DbCarroTanque == null)
                 return BadRequest("La carroTanque no se encuentra");
-            //DbCarroTanque.NombreCarroTanque = carroTanque.NombreCarroTanque;
-            //DbCarroTanque.Ubicacion = carroTanque.Ubicacion;
-            //DbCarroTanque.Operadora = carroTanque.Operadora;
-            //DbCarroTanque.Comentario = carroTanque.Comentario;
+            DbCarroTanque.TipoVehiculo = carroTanque.TipoVehiculo;
+            DbCarroTanque.Capacidad = carroTanque.Capacidad;
+            DbCarroTanque.Estado = carroTanque.Estado;
 
             await _context.SaveChangesAsync();
 

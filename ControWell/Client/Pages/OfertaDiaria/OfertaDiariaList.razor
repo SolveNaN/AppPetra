@@ -20,7 +20,7 @@
 <div style="width:100%;display: flex; justify-content:center; align-items:center; margin-top:15px;">
     <div>
         <button class="btn btn-success" id="btn-nuevo-ofertaDiaria" @onclick="EviarOfertaDiaria">Nueva Programación</button>
-        <MatDatePicker @bind-Value="FeaturesDateTime" Label="Fecha relacionada" Outlined="true" Minimum="@DateTime.Now.AddDays(-10)"></MatDatePicker>
+        <MatDatePicker @bind-Value="FeaturesDateTime" Label="Fecha relacionada" Outlined="true" Maximum="@DateTime.Now.AddDays(2)"></MatDatePicker>
     </div>
 </div>
 <div class="table-container-scroll">

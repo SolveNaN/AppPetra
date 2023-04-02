@@ -16,8 +16,8 @@
 <MatDialog @bind-IsOpen="@dialogIsOpen">
     @if (updateselloState)
     {
-        <EditForm Model="sello" OnSubmit="GenerarSellos">
-            <MatDialogTitle Style="text-align:center; font-size: xx-large; width:">Actualizar Sello</MatDialogTitle>
+@*        <EditForm Model="sello" OnSubmit="GenerarSellos">
+*@            <MatDialogTitle Style="text-align:center; font-size: xx-large; width:">Actualizar Sello</MatDialogTitle>
             <MatDialogContent Style="width:100%">
                 <p style="text-align:center;">Actualizar el numero de Sello</p>
                 <MatTextField @bind-Value="@identificadorActualizarRegex"
@@ -34,10 +34,10 @@
             </MatDialogContent>
             <MatDialogActions>
                 <MatButton Raised="true" Style="margin-right:5px" OnClick="@CloseDialog">Cancelar Operacion</MatButton>
-                <MatButton Type="submit" Outlined="true">Actualizar</MatButton>
+            <MatButton Type="submit" OnClick="@UpdateSello" Outlined="true">Actualizar</MatButton>
             </MatDialogActions>
-        </EditForm>
-    }
+@*        </EditForm>
+*@    }
     else {
     <EditForm Model="sello" OnSubmit="GenerarSellos">
         <MatDialogTitle Style="text-align:center; font-size: xx-large">Generar Sellos</MatDialogTitle>
@@ -86,16 +86,21 @@
               {
                 <div style="width:100%;display:flex;justify-content:center;align-items:center;">
                   @if(Sello.Estado==1){
-                            <MatAccordion Multi="true" Style="width:100%">
-                                <MatExpansionPanel>
-                                    <MatExpansionPanelSummary>
-                                        <MatExpansionPanelHeader>Sello 
-                                            <div class="flex-component" style="height:20%; margin-top:5px">
-                                                <p style="margin-top:8px">@Sello.IndiceSello</p>
-                                                <p style="margin-top:8px">-</p>
-                                                <p style="margin-top:8px">@Sello.NumeroSello</p>
+                           <MatAccordion Multi="true" Style="width:100%; border-radius:5px">
+                                <MatExpansionPanel Style="width:100%;">
+                                    <MatExpansionPanelSummary Style="width:100%"> 
+                                        <div style="width:80%;height:100%; ">
+                                           <div style="width:100%;height:50%;">
+                                             <p style="font-size:15px">Sello</p>
+                                           </div>
+                                            <div style="width:100%;height:100%;">
+                                             <div class="flex-component" style="text-align:left;">
+                                              <p style="font-size:15px">@Sello.IndiceSello</p>
+                                              <p style="font-size:15px">-</p>
+                                              <p style="font-size:15px">@Sello.NumeroSello</p>
+                                             </div>
                                             </div>
-                                        </MatExpansionPanelHeader>
+                                         </div>
                                     </MatExpansionPanelSummary>
                                     <MatExpansionPanelDetails>
                                         <div class="flex-component" >
@@ -130,17 +135,21 @@
                 {
                       <div style="width:100%;display:flex;justify-content:center;align-items:center">
                         @if(Sello.Estado==2){
-                            <MatAccordion Multi="true" Style="width:100%">
-                                <MatExpansionPanel>
-                                    <MatExpansionPanelSummary>
-                                        <MatExpansionPanelHeader>
-                                            Sello
-                                            <div class="flex-component" style="height:20%; margin-top:5px">
-                                                <p style="margin-top:8px">@Sello.IndiceSello</p>
-                                                <p style="margin-top:8px">-</p>
-                                                <p style="margin-top:8px">@Sello.NumeroSello</p>
+                           <MatAccordion Multi="true" Style="width:100%; border-radius:5px">
+                                <MatExpansionPanel Style="width:100%;">
+                                    <MatExpansionPanelSummary Style="width:100%">
+                                        <div style="width:80%;height:100%; ">
+                                           <div style="width:100%;height:50%;">
+                                             <p style="font-size:15px">Sello</p>
+                                           </div>
+                                            <div style="width:100%;height:100%;">
+                                             <div class="flex-component" style="text-align:left;">
+                                              <p style="font-size:15px">@Sello.IndiceSello</p>
+                                              <p style="font-size:15px">-</p>
+                                              <p style="font-size:15px">@Sello.NumeroSello</p>
+                                             </div>
                                             </div>
-                                        </MatExpansionPanelHeader>
+                                         </div>
                                     </MatExpansionPanelSummary>
                                     <MatExpansionPanelDetails>
                                         <div class="flex-component">
@@ -165,7 +174,7 @@
         </div>        
         <div style="width:33.33%;height:98%; border:solid; border-radius:8px; background-color:lavender">
             <div style="width:100%; height:5%; text-align:center; border-bottom:solid; border-radius:5px;">
-                <h4 style="width:100%; height:100%; background-color:#f8bbd0; color: #2f3640">
+                <h4 style="width:100%; height:100%; ; background-color:#e056fd; color: #2f3640">
                     Sellos Anulados
                 </h4>
             </div>
@@ -176,17 +185,21 @@
                     <div style="width:100%;display:flex;justify-content:center;align-items:center">
                         @if (Sello.Estado == 3)
                        {
-                            <MatAccordion Multi="true" Style="width:100%">
-                                <MatExpansionPanel>
-                                    <MatExpansionPanelSummary>
-                                        <MatExpansionPanelHeader>
-                                            Sello
-                                            <div class="flex-component" style="height:20%; margin-top:5px">
-                                                <p style="margin-top:8px">@Sello.IndiceSello</p>
-                                                <p style="margin-top:8px">-</p>
-                                                <p style="margin-top:8px">@Sello.NumeroSello</p>
+                           <MatAccordion Multi="true" Style="width:100%; border-radius:5px">
+                                <MatExpansionPanel Style="width:100%;">
+                                    <MatExpansionPanelSummary Style="width:100%">                                  
+                                            <div style="width:80%;height:100%; ">
+                                                <div style="width:100%;height:50%;">
+                                                    <p style="font-size:15px">Sello</p>
+                                                </div>
+                                                <div style="width:100%;height:100%;">
+                                                    <div class="flex-component" style="text-align:left;">
+                                                        <p style="font-size:15px">@Sello.IndiceSello</p>
+                                                        <p style="font-size:15px">-</p>
+                                                        <p style="font-size:15px">@Sello.NumeroSello</p>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </MatExpansionPanelHeader>
                                     </MatExpansionPanelSummary>
                                     <MatExpansionPanelDetails>
                                         <div class="flex-component">
@@ -375,6 +388,11 @@
     string identificadorActualizarRegex = "";
     string numeroselloActualizar = "";
     string numeroselloActualizarRegex = "";
+    int idUpdate;
+    string loteUpdate = "";
+    int estadoSelloUpdate;
+    DateTime createdAtUpdate;
+
 
     //estados para material design
     bool dialogIsOpen = false;
@@ -462,13 +480,14 @@
 
     }
 
-    async Task UpdateSello(Sello sello)
+    async Task UpdateSello()
     {
         sello.IndiceSello = identificadorActualizarRegex;
         sello.NumeroSello = numeroselloActualizarRegex;
-        sello.Lote = sello.Lote;
-        sello.CreatedAt = sello.CreatedAt;
-        sello.Estado = sello.Estado;
+        sello.Lote = loteUpdate;
+        sello.CreatedAt = createdAtUpdate;
+        sello.Estado = estadoSelloUpdate;
+        sello.Id = idUpdate;
 
         await SelloService.UpdateSello(sello);
         var resultado = await Swal.FireAsync(new SweetAlertOptions
@@ -489,7 +508,7 @@
         sello.Lote = sello.Lote;
         sello.CreatedAt = sello.CreatedAt;
         sello.Estado = 3;
-        
+
         await SelloService.UpdateSello(sello);
 
         Show(MatToastType.Info);
@@ -500,14 +519,14 @@
         NavigationManager.NavigateTo("/sellolist");
     }
 
-      async Task HabilitarSello(Sello sello)
+    async Task HabilitarSello(Sello sello)
     {
         sello.IndiceSello = sello.IndiceSello;
         sello.NumeroSello = sello.NumeroSello;
         sello.Lote = sello.Lote;
         sello.CreatedAt = sello.CreatedAt;
         sello.Estado = 1;
-        
+
         await SelloService.UpdateSello(sello);
 
         Show(MatToastType.Info);
@@ -536,6 +555,11 @@
         identificadorActualizarRegex = Regex.Replace(identificadorActualizar, @"\s+", "");
         numeroselloActualizar = sello.NumeroSello;
         numeroselloActualizarRegex = Regex.Replace(numeroselloActualizar, @"\s+", "");
+        idUpdate = sello.Id;
+        createdAtUpdate = sello.CreatedAt;
+        loteUpdate = sello.Lote;
+        estadoSelloUpdate = sello.Estado;
+
         dialogIsOpen = true;
         updateselloState = true;
     }

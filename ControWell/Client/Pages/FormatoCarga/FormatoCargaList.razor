@@ -20,6 +20,7 @@
        <thead>
             <tr>
             <th style="width:8%">Guia</th>
+            <th style="width:8%">Operador</th>
             <th style="width:80px;position:sticky; left:0; background-color:#388e3c">ITEM</th>
             <th style="width:17%;position:sticky; left:70px; background-color:#388e3c">FECHA DE CARGUE</th>
             <th style="width:10%;position:sticky; left:240px; background-color:#388e3c">H. ENTRADA</th>
@@ -55,6 +56,38 @@
                                 @onclick="()=>VerGuia(FormatoCarga)">
                               <i class="fa-solid fa-file-invoice"></i>
                        </button>
+                  </div>
+                </td>              
+                <td>
+                  <div style="display:flex; justify-content:center; align-items: center; width:100%;">
+                            <button type="button" 
+                                    class="btn btn-primary" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#exampleModal" 
+                                    style="font-size:18px"
+                                    data-toggle="tooltip" title="Operario"
+                                    @onclick="()=>VerOperario(FormatoCarga)"
+                               >
+                                <i class="fa-solid fa-user fa-sm"></i>
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Despachado por:</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                           <p style="color:mediumblue">@auxiliar</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                   </div>
                 </td>
                <td style="position:sticky; left:0 ;text-align: center;">@FormatoCarga.Id</td>
@@ -532,8 +565,8 @@
         justify-content: center;
         align-items: center;
     }
-
 </style>
+
 @code {
 
     Boolean state = false;
@@ -563,6 +596,7 @@
     string factorTemp = "";
     string volumenNeto = "";
     string guiaTransporteGTU = "";
+    string auxiliar = "";
 
     int guiaId ;
     string NumeroGuia = "";
@@ -681,6 +715,11 @@
     void MostrarUnFormatoCarga(int id)
     {
         NavigationManager.NavigateTo($"singleformatocarga/{id}");
+    }
+
+    void VerOperario(FormatoCarga formatoCarga)
+    {
+        auxiliar = formatoCarga.Auxiliar;
     }
 
     void VerGuia(FormatoCarga formatoCarga)

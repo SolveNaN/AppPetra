@@ -16,8 +16,8 @@
 <MatDialog @bind-IsOpen="@dialogIsOpen">
     @if (updateguiaState)
     {
-        <EditForm Model="guia" OnSubmit="GenerarGuias">
-            <MatDialogTitle Style="text-align:center; font-size: xx-large; width:">Actualizar Guia</MatDialogTitle>
+@*        <EditForm Model="guia" OnSubmit="UpdateGuia">
+*@            <MatDialogTitle Style="text-align:center; font-size: xx-large; width:">Actualizar Guia</MatDialogTitle>
             <MatDialogContent Style="width:100%">
                 <p style="text-align:center;">Actualizar el numero de Guia</p>
                 <MatTextField @bind-Value="@identificadorActualizarRegex"
@@ -34,10 +34,10 @@
             </MatDialogContent>
             <MatDialogActions>
                 <MatButton Raised="true" Style="margin-right:5px" OnClick="@CloseDialog">Cancelar Operacion</MatButton>
-                <MatButton Type="submit" Outlined="true">Actualizar Guia</MatButton>
+                <MatButton Type="submit" OnClick="@UpdateGuia" Outlined="true">Actualizar Guia</MatButton>
             </MatDialogActions>
-        </EditForm>
-    }
+@*        </EditForm>
+*@    }
     else {
     <EditForm Model="guia" OnSubmit="GenerarGuias">
             <MatDialogTitle Style="text-align:center; font-size: xx-large; width:">Generar Guias</MatDialogTitle>
@@ -79,8 +79,6 @@
       }
 </MatDialog>
 
-
-
 <div class="flex-component" style="width:100%; height:90vh; background: linear-gradient(to right, #607d8b, #90a4ae);">
     <div class="flex-component" style="width:95%;height:99%;">
         <div style="width:33.33%;height:98%; border:solid; border-radius:8px;margin-right:10px">
@@ -97,11 +95,18 @@
                 <div style="width:100%;display:flex;justify-content:center;align-items:center;">
                   @if(Guia.Estado==1){
 
-                        <MatAccordion Multi="true" Style="width:100%">
-                            <MatExpansionPanel>
-                                <MatExpansionPanelSummary>
-                                    <MatExpansionPanelHeader>Guia @Guia.NumeroGuia</MatExpansionPanelHeader>
-                                </MatExpansionPanelSummary>
+                           <MatAccordion Multi="true" Style="width:100%; border-radius:5px">
+                                <MatExpansionPanel Style="width:100%;">
+                                    <MatExpansionPanelSummary Style="width:100%">
+                                        <div style="width:80%;height:100%">
+                                          <div style="height:50%; width:80%">
+                                            <p style="height:50%; font-size:15px">Guia</p>
+                                          </div> 
+                                          <div style="height:50%; width:80%">
+                                            <p style="height:50%; font-size:15px">@Guia.NumeroGuia</p>
+                                          </div>
+                                        </div>
+                                    </MatExpansionPanelSummary>
                                 <MatExpansionPanelDetails>
                                     <div class="flex-component">
                                         <Button style="background-color: transparent; border: 0" @onclick="()=>updateguia(Guia)">
@@ -135,10 +140,17 @@
                 {
                       <div style="width:100%;display:flex;justify-content:center;align-items:center">
                         @if(Guia.Estado==2){
-                            <MatAccordion Multi="true" Style="width:100%">
-                                <MatExpansionPanel>
-                                    <MatExpansionPanelSummary>
-                                        <MatExpansionPanelHeader>Guia @Guia.NumeroGuia</MatExpansionPanelHeader>
+                            <MatAccordion Multi="true" Style="width:100%; border-radius:5px">
+                                <MatExpansionPanel Style="width:100%;">
+                                    <MatExpansionPanelSummary Style="width:100%">
+                                        <div style="width:80%;height:100%">
+                                          <div style="height:50%; width:80%">
+                                            <p style="height:50%; font-size:15px">Guia</p>
+                                          </div> 
+                                          <div style="height:50%; width:80%">
+                                            <p style="height:50%; font-size:15px">@Guia.NumeroGuia</p>
+                                          </div>
+                                        </div>
                                     </MatExpansionPanelSummary>
                                     <MatExpansionPanelDetails>
                                         <div class="flex-component">
@@ -178,7 +190,14 @@
                             <MatAccordion Multi="true" Style="width:100%; border-radius:5px">
                                 <MatExpansionPanel Style="width:100%;">
                                     <MatExpansionPanelSummary Style="width:100%">
-                                        <MatExpansionPanelHeader Style="width:10%"><p>Guia</p> <p>@Guia.NumeroGuia</p></MatExpansionPanelHeader>
+                                        <div style="width:80%;height:100%">
+                                          <div style="height:50%; width:80%">
+                                            <p style="height:50%; font-size:15px">Guia</p>
+                                          </div> 
+                                          <div style="height:50%; width:80%">
+                                            <p style="height:50%; font-size:15px">@Guia.NumeroGuia</p>
+                                          </div>
+                                        </div>
                                     </MatExpansionPanelSummary>
                                     <MatExpansionPanelDetails>
                                         <div class="flex-component">
@@ -188,7 +207,6 @@
                                             <Button style="background-color: transparent; border: 0" @onclick="()=>DeleteGuia(Guia)">
                                                 <MatIcon Style="color:darkorange" Icon="delete_outline"></MatIcon>
                                             </Button>
-
                                         </div>
         
                                     </MatExpansionPanelDetails>
@@ -372,6 +390,10 @@
     string identificadorActualizarRegex = "";
     string numeroguiaActualizar = "";
     string numeroguiaActualizarRegex = "";
+    int idGuiaUpdate;
+    string loteGuiaUpdate = "";
+    DateTime createdAtUpdate;
+    int estadoUpdate ;
 
     //estados para material design
     bool dialogIsOpen = false;
@@ -441,8 +463,6 @@
 
     async Task DeleteGuia(Guia guia)
     {
-        Console.WriteLine("este es el id:", guia.Id);
-
         var resultado = await Swal.FireAsync(new SweetAlertOptions
             {
                 Title = "Eliminar",
@@ -469,8 +489,16 @@
         }
     }
 
-    async Task UpdateGuia(Guia guia)
+    async Task UpdateGuia()
     {
+        guia.NumeroGuia = identificadorActualizarRegex + numeroguiaActualizarRegex;
+        guia.Id = idGuiaUpdate;
+        guia.Lote = loteGuiaUpdate;
+        guia.Estado = estadoUpdate;
+        guia.CreatedAt = createdAtUpdate;
+
+
+        Console.WriteLine(guia.NumeroGuia);
         await GuiaService.UpdateGuia(guia);
         var resultado = await Swal.FireAsync(new SweetAlertOptions
             {
@@ -478,10 +506,10 @@
                 Text = "Actualizado correctamente",
                 Icon = SweetAlertIcon.Success,
             });
-
         NavigationManager.NavigateTo("/");
         NavigationManager.NavigateTo("/guialist");
     }
+
     async Task AnularGuia(Guia guia)
     {
         guia.NumeroGuia = guia.NumeroGuia;
@@ -526,8 +554,13 @@
     {
         identificadorActualizar = guia.NumeroGuia.Substring(0, 3);
         identificadorActualizarRegex = Regex.Replace(identificadorActualizar, @"\s+", "");
-        numeroguiaActualizar = guia.NumeroGuia.Substring(3, 25);
+        numeroguiaActualizar = guia.NumeroGuia.Substring(3,15);
         numeroguiaActualizarRegex = Regex.Replace(numeroguiaActualizar, @"\s+", "");
+        idGuiaUpdate = guia.Id;
+        loteGuiaUpdate = guia.Lote;
+        estadoUpdate = guia.Estado;
+        createdAtUpdate= guia.CreatedAt;
+
         dialogIsOpen = true;
         updateguiaState = true;
     }

@@ -39,8 +39,7 @@ namespace ControWell.Client.Services.GuiaService
         public async Task DeleteGuia(int id)
         {
             var result = await _http.DeleteAsync($"api/guia/{id}");
-
-            //await SetGuia(result);
+            await SetGuia(result);
         }
 
         public async Task UpdateGuia(Guia guia)

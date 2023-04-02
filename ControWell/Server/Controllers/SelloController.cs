@@ -31,6 +31,39 @@ namespace ControWell.Server.Controllers
             return Ok(await GetDbSello());
         }
 
+        [HttpPut("{id}")]
+        public async Task<ActionResult<List<Sello>>> UpdateSello(Sello sello)
+        {
+            var DbSello = await _context.Sellos.FindAsync(sello.Id);
+            if (DbSello == null)
+                return BadRequest("EL sello no se encuentra");
+            DbSello.NumeroSello = sello.NumeroSello;
+            DbSello.IndiceSello = sello.IndiceSello;
+            DbSello.Lote = sello.Lote;
+            DbSello.Estado = sello.Estado;
+            DbSello.CreatedAt = sello.CreatedAt;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(await _context.Sellos.ToListAsync());
+        }
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<ActionResult<List<Sello>>> DeleteSello(int id)
+        {
+            var DbSello = await _context.Sellos.FirstOrDefaultAsync(v => v.Id == id);
+            if (DbSello == null)
+            {
+                return NotFound("La Sello no existe :/");
+            }
+
+            _context.Sellos.Remove(DbSello);
+            await _context.SaveChangesAsync();
+
+            return Ok(await GetDbSello());
+        }
+
+
         private async Task<List<Sello>> GetDbSello()
         {
             return await _context.Sellos.ToListAsync();
