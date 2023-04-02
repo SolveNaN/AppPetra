@@ -2,10 +2,7 @@
 {
     public interface IBalanceService
     {
-        List<Balance> Balances { get; set; }
-        List<Tanque> Tanques { get; set; }
-        List<Pozo> Pozos { get; set; }
-        List<TipoMovimiento> Movimientos { get; set; }
+
 
         Task<Balance> GetSingleBalance(int id);
 

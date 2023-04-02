@@ -18,7 +18,7 @@ namespace ControWell.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<List<TipoMovimiento>>> GetTipoMovimiento()
         {
-            var movimiento = await _context.Movimientos.ToListAsync();
+            var movimiento = await _context.TipoMovimientos.ToListAsync();
             return Ok(movimiento);
         }
 
@@ -27,7 +27,7 @@ namespace ControWell.Server.Controllers
         [Route("{id}")]
         public async Task<ActionResult<List<TipoMovimiento>>> GetSingleTipoMovimiento(int id)
         {
-            var movimiento = await _context.Movimientos.FirstOrDefaultAsync(p => p.Id == id);
+            var movimiento = await _context.TipoMovimientos.FirstOrDefaultAsync(p => p.Id == id);
             if (movimiento == null)
             {
                 return NotFound("El movimiento no ha sido creado :/");
@@ -41,7 +41,7 @@ namespace ControWell.Server.Controllers
         public async Task<ActionResult<TipoMovimiento>> CreateTipoMovimiento(TipoMovimiento movimiento)
         {
 
-            _context.Movimientos.Add(movimiento);
+            _context.TipoMovimientos.Add(movimiento);
             await _context.SaveChangesAsync();
             return Ok(await GetDbTipoMovimiento());
         }
@@ -50,7 +50,7 @@ namespace ControWell.Server.Controllers
         public async Task<ActionResult<List<TipoMovimiento>>> UpdateTipoMovimiento(TipoMovimiento movimiento)
         {
 
-            var DbTipoMovimiento = await _context.Movimientos.FindAsync(movimiento.Id);
+            var DbTipoMovimiento = await _context.TipoMovimientos.FindAsync(movimiento.Id);
             if (DbTipoMovimiento == null)
                 return BadRequest("El Tipo de Movimiento no se encuentra");
             DbTipoMovimiento.NombreMovimiento = movimiento.NombreMovimiento;
@@ -58,7 +58,7 @@ namespace ControWell.Server.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok(await _context.Movimientos.ToListAsync());
+            return Ok(await _context.TipoMovimientos.ToListAsync());
 
 
         }
@@ -68,13 +68,13 @@ namespace ControWell.Server.Controllers
         [Route("{id}")]
         public async Task<ActionResult<List<TipoMovimiento>>> DeleteTipoMovimiento(int id)
         {
-            var DbTipoMovimiento = await _context.Movimientos.FirstOrDefaultAsync(v => v.Id == id);
+            var DbTipoMovimiento = await _context.TipoMovimientos.FirstOrDefaultAsync(v => v.Id == id);
             if (DbTipoMovimiento == null)
             {
                 return NotFound("El Tipo de movimiento no existe :/");
             }
 
-            _context.Movimientos.Remove(DbTipoMovimiento);
+            _context.TipoMovimientos.Remove(DbTipoMovimiento);
             await _context.SaveChangesAsync();
 
             return Ok(await GetDbTipoMovimiento());
@@ -83,7 +83,7 @@ namespace ControWell.Server.Controllers
 
         private async Task<List<TipoMovimiento>> GetDbTipoMovimiento()
         {
-            return await _context.Movimientos.ToListAsync();
+            return await _context.TipoMovimientos.ToListAsync();
         }
     }
 }

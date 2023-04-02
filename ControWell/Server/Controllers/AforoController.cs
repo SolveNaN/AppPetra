@@ -49,7 +49,7 @@ namespace ControWell.Server.Controllers
         //Consulta por nivel
         [HttpGet]
         [Route("{Nivel}")]
-        public async Task<ActionResult<List<AforoTK>>> ConsultaNivel(float nivel)
+        public async Task<ActionResult<List<AforoTK>>> ConsultaNivel(decimal nivel)
         {
             var aforo = from af in _context.AforoTKs
                         where af.Nivel == nivel
